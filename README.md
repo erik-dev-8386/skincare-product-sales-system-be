@@ -18,11 +18,11 @@ Our Skincare Product Sales System is designed to help customers find and purchas
 * **Skincare Routines**: Suggests suitable skincare routines based on the customer's skin type.
 * **Product Recommendations**: Recommends suitable products to buy based on the skincare routine.
 * **Product Comparison**: Allows customers to compare different products before making a purchase decision.
-* **Order Management**: Manages the sales process from order placement to order completion.
-* **Payment and Cancellation Policies**: Manages payment methods and order cancellations.
+* **Order Management**: Manages the sales process from orders placement to orders completion.
+* **Payment and Cancellation Policies**: Manages payment methods and orders cancellations.
 * **Promotions and Rewards**: Manages promotions and loyalty points.
 * **Rating and Feedback**: Collects customer ratings and feedback.
-* **Customer Profile Management**: Manages customer profiles and order history.
+* **Customer Profile Management**: Manages customer profiles and orders history.
 * **Dashboard & Reports**: Provides detailed reports and dashboards for better management.
 
 ## 🔗 Repository:
