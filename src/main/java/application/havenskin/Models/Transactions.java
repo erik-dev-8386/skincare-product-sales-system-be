@@ -1,4 +1,4 @@
-package application.havenskin.BusinessObject.Models;
+package application.havenskin.Models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -19,6 +19,9 @@ public class Transactions {
 
     @Column(name = "transaction_time")
     private LocalDateTime transactionTime;
+
+    @Column(name = "type")
+    private byte type;
 
     @NotNull
     @Column(name = "order_id", length = 50)

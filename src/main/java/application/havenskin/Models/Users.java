@@ -1,5 +1,6 @@
-package application.havenskin.BusinessObject.Models;
+package application.havenskin.Models;
 
+import application.havenskin.Enums.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
@@ -25,6 +26,12 @@ public class Users {
     @Column(name = "last_name", length = 50)
     private String lastName;
 
+    @Column(name = "username", length = 50)
+    private String username;
+
+    @Column(name = "password", length = 50)
+    private String password;
+
     @Column(name = "gender", length = 10)
     private String gender;
 
@@ -34,7 +41,8 @@ public class Users {
     @Column(name = "birth_date")
     private LocalDate birthDate;
 
-    @Column(name = "email", length = 100)
+    @NotNull
+    @Column(name = "email", length = 100, unique = true)
     private String email;
 
     @Column(name = "phone_number")
@@ -48,8 +56,8 @@ public class Users {
     private String image;
 
     @NotNull
-    @Column(name = "role")
-    private byte role;
+    @Column(name = "role", nullable = false)
+    private Role role;
 
     @Column(name = "status")
     private byte status;
@@ -65,4 +73,7 @@ public class Users {
 
     @OneToMany(mappedBy = "users")
     private List<Feedbacks> feedbacks;
+
+    @OneToMany(mappedBy = "users")
+    private List<PartPlans> partPlans;
 }

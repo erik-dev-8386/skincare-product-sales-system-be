@@ -1,4 +1,4 @@
-package application.havenskin.BusinessObject.Models;
+package application.havenskin.Models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -38,4 +38,12 @@ public class Blogs {
 
     @OneToMany(mappedBy = "blog")
     private List<BlogImages> blogImages;
+
+    @NotNull
+    @Column(name = "blog_category_id", length = 50)
+    private String blogCategoryId;
+
+    @ManyToOne
+    @JoinColumn(name = "blog_category_id", referencedColumnName = "blog_category_id", insertable = false, updatable = false)
+    private BlogCategories blogCategories;
 }

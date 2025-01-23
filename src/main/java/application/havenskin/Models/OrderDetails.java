@@ -1,4 +1,4 @@
-package application.havenskin.BusinessObject.Models;
+package application.havenskin.Models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

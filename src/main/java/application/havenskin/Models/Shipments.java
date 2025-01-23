@@ -1,4 +1,4 @@
-package application.havenskin.BusinessObject.Models;
+package application.havenskin.Models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -14,12 +14,6 @@ public class Shipments {
 
     @Column(name = "shipment_code", length = 50)
     private String shipmentCode;
-
-    @Column(name = "address", length = 255)
-    private String address;
-
-    @Column(name = "shipping_fee", length = 50)
-    private double shippingFee;
 
     @Column(name = "shipment_date", length = 50)
     private String shipmentDate;

@@ -1,4 +1,4 @@
-package application.havenskin.BusinessObject.Models;
+package application.havenskin.Models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -54,14 +54,6 @@ public class Products {
     private byte status;
 
     @NotNull
-    @Column(name = "discount_id", length = 50)
-    private String discountId;
-
-    @ManyToOne
-    @JoinColumn(name = "discount_id", referencedColumnName = "discount_id", insertable = false, updatable = false)
-    private Discounts discounts;
-
-    @NotNull
     @Column(name = "category_id", length = 50)
     private String categoryId;
 
@@ -84,6 +76,14 @@ public class Products {
     @ManyToOne
     @JoinColumn(name = "skin_type_id", referencedColumnName = "skin_type_id", insertable = false, updatable = false)
     private SkinTypes skinTypes;
+
+    @NotNull
+    @Column(name = "promotion_id", length = 50)
+    private String promotionId;
+
+    @ManyToOne
+    @JoinColumn(name = "promotion_id", referencedColumnName = "promotion_id", insertable = false, updatable = false)
+    private Promotions promotions;
 
     @OneToMany(mappedBy = "products")
     private List<ProductImages> productImages;

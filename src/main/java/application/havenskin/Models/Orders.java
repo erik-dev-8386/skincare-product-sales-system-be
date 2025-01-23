@@ -1,4 +1,4 @@
-package application.havenskin.BusinessObject.Models;
+package application.havenskin.Models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -34,8 +34,11 @@ public class Orders {
     @Column(name = "cancel_time")
     private LocalDateTime cancelTime;
 
-    @Column(name = "type")
-    private byte type;
+    @Column(name = "shipping_fee", length = 50)
+    private double shippingFee;
+
+    @Column(name = "address", length = 255)
+    private String address;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)

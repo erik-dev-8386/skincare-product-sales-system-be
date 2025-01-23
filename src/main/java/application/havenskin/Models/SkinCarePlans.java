@@ -1,16 +1,18 @@
-package application.havenskin.BusinessObject.Models;
+package application.havenskin.Models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.util.List;
+
 @Entity
-@Table(name = "PlanSkinCares")
+@Table(name = "SkinCarePlans")
 @Data
-public class PlanSkinCares {
+public class SkinCarePlans {
     @Id
-    @Column(name = "plan_skin_care_id", length = 50)
-    private String planSkinCareId;
+    @Column(name = "skin_care_plan_id", length = 50)
+    private String skinCarePlanId;
 
     @NotNull
     @Column(name = "skin_type_id", length = 50)
@@ -19,11 +21,11 @@ public class PlanSkinCares {
     @Column(name = "description", length = 250)
     private String description;
 
-    @Column(name = "result_test_id", length = 50)
-    private String resultTestId;
-
     @OneToOne
     @JoinColumn(name = "skin_type_id", referencedColumnName = "skin_type_id", insertable = false, updatable = false)
     private SkinTypes skinType;
+
+    @OneToMany(mappedBy = "skinCarePlans")
+    private List<PartPlans> partPlans;
 
 }

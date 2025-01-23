@@ -1,4 +1,4 @@
-package application.havenskin.BusinessObject.Models;
+package application.havenskin.Models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -34,7 +34,7 @@ public class SkinTypes {
     private List<ResultTests> resultTests;
 
     @OneToOne(mappedBy = "skinType")
-    private PlanSkinCares planSkinCare;
+    private SkinCarePlans planSkinCare;
 
     @OneToMany(mappedBy = "skinTypes")
     private List<Products> products;

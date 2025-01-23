@@ -1,13 +1,14 @@
-package application.havenskin.BusinessObject.Models;
+package application.havenskin.Models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Entity
-@Table(name = "ProductImages")
+@Table(name = "SkinTypeImages")
 @Data
-public class ProductImages {
+public class SkinTypeImages {
+
     @Id
     @Column(name = "image_id", length = 50)
     private String imageId;
@@ -19,10 +20,11 @@ public class ProductImages {
     private String description;
 
     @NotNull
-    @Column(name = "product_id", length = 50)
-    private String productId;
+    @Column(name = "skin_type_id", length = 50)
+    private String skinTypeId;
 
     @ManyToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "product_id", insertable = false, updatable = false)
-    private Products products;
+    @JoinColumn(name = "skin_type_id", referencedColumnName = "skin_type_id", insertable = false, updatable = false)
+    private SkinTypes skinType;
+
 }
