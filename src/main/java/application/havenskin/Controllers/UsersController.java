@@ -1,7 +1,10 @@
 package application.havenskin.Controllers;
 
-import application.havenskin.BusinessObject.Models.Users;
+import application.havenskin.Models.Users;
+import application.havenskin.Repositories.UsersRepository;
 import application.havenskin.Services.UsersService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,9 +13,11 @@ import java.util.List;
 @RequestMapping("/users")
 public class UsersController {
     private final UsersService usersService;
+    private final UsersRepository usersRepository;
 
-    public UsersController(UsersService usersService) {
+    public UsersController(UsersService usersService, UsersRepository usersRepository) {
         this.usersService = usersService;
+        this.usersRepository = usersRepository;
     }
 
     @GetMapping
@@ -20,7 +25,7 @@ public class UsersController {
         return usersService.getAllUsers();
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/{getId}")
     public Users getUserById(@PathVariable String userId) {
         return usersService.getUserById(userId);
     }
@@ -30,8 +35,27 @@ public class UsersController {
         return usersService.saveUser(user);
     }
 
-    @DeleteMapping("/{userId}")
+    @DeleteMapping("/{deleteId}")
     public void deleteUser(@PathVariable String userId) {
         usersService.deleteUser(userId);
     }
+
+    @GetMapping("/login")
+    public Users getUserInfo(@AuthenticationPrincipal OAuth2User principal) {
+        if (principal == null) {
+            throw new RuntimeException("User is not authenticated");
+        }
+
+        String email = principal.getAttribute("email");
+        System.out.println("Email from OAuth2User: " + email);
+
+        return usersRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found in database"));
+
+    }
+
+    @GetMapping("/logout")
+    public String logout() {
+        return "You have been logged out successfully!";
+    }
+
 }

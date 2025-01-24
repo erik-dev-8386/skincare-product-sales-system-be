@@ -1,6 +1,6 @@
 package application.havenskin.Controllers;
 
-import application.havenskin.BusinessObject.Models.Orders;
+import application.havenskin.Models.Orders;
 import application.havenskin.Services.OrderService;
 import org.springframework.web.bind.annotation.*;
 

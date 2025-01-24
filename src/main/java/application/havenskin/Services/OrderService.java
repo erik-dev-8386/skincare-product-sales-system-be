@@ -1,6 +1,6 @@
 package application.havenskin.Services;
 
-import application.havenskin.BusinessObject.Models.Orders;
+import application.havenskin.Models.Orders;
 import application.havenskin.Repositories.OrderRepository;
 import org.springframework.stereotype.Service;
 
