@@ -1,5 +1,6 @@
 package application.havenskin.BusinessObject.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -24,5 +25,6 @@ public class Brands {
     private String country;
 
     @OneToMany(mappedBy = "brands")
+    @JsonIgnore
     private List<Products> products;
 }

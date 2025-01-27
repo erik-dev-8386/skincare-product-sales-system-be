@@ -29,7 +29,7 @@ public class SkinTypeController {
         response.setResult(skinTypeService.createSkinType(skinTypes));
         return response;
     }
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public Response<SkinTypes> getSkinTypeById(@PathVariable String id) {
         Response<SkinTypes> response = new Response<>();
         response.setCode(200);
@@ -37,7 +37,17 @@ public class SkinTypeController {
         response.setResult(skinTypeService.getSkinTypeById(id));
         return response;
     }
-    @PostMapping("/{id}")
+
+    @GetMapping("/name/{skinName}")
+    public Response<SkinTypes> getSkinTypeByName(@PathVariable String skinName) {
+        Response<SkinTypes> response = new Response<>();
+        response.setCode(200);
+        response.setMessage("OK");
+        response.setResult(skinTypeService.getSkinTypeByName(skinName));
+        return response;
+    }
+
+    @PutMapping("/{id}")
     public Response<SkinTypes> updateSkinType(@PathVariable String id, @RequestBody SkinTypes skinTypes) {
         Response<SkinTypes> response = new Response<>();
         response.setCode(200);
@@ -46,11 +56,13 @@ public class SkinTypeController {
         return response;
     }
     @DeleteMapping("/{id}")
-    public void deleteSkinType(@PathVariable String id) {
+    public String deleteSkinType(@PathVariable String id) {
         skinTypeService.deleteSkinType(id);
+        return "SkinType has been deleted successfully";
     }
     @DeleteMapping
-    public void deleteAllSkinTypes() {
+    public String deleteAllSkinTypes() {
         skinTypeService.deleteAllSkinTypes();
+        return "All SkinTypes deleted";
     }
 }
