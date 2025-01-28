@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 public class Feedbacks {
     @Id
     @Column(name = "feedback_id", length = 50)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String feedbackId;
 
     @Column(name = "feedback_content", length = 255)

@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 public class Transactions {
     @Id
     @Column(name = "transaction_id", length = 50)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String transactionId;
 
     @Column(name = "transaction_status")
@@ -23,6 +24,9 @@ public class Transactions {
     @NotNull
     @Column(name = "order_id", length = 50)
     private String orderId;
+
+    @Column(name="transaction_type", length = 50)
+    private String transactionType;
 
     @OneToOne
     @JoinColumn(name = "order_id", referencedColumnName = "order_id", insertable = false, updatable = false)

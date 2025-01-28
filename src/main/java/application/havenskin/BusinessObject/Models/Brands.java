@@ -11,6 +11,7 @@ import java.util.List;
 public class Brands {
     @Id
     @Column(name = "brand_id", length = 50)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String brandId;
 
     @Column(name = "brand_name", length = 50)

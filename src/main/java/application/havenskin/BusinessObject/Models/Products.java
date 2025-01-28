@@ -14,6 +14,7 @@ import java.util.List;
 public class Products {
     @Id
     @Column(name = "product_id", length = 50)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String productId;
 
     @Column(name = "product_name", length = 50)
@@ -90,5 +91,4 @@ public class Products {
 
     @OneToMany(mappedBy = "products")
     private List<Feedbacks> feedbacks;
-
 }

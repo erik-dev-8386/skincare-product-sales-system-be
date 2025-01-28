@@ -10,6 +10,7 @@ import lombok.Data;
 public class Answers {
     @Id
     @Column(name = "answer_id", length = 50)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String answerId;
 
     @Column(name = "answer_content", length = 50)

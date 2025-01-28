@@ -15,6 +15,7 @@ public class Users {
 
     @Id
     @Column(name = "user_id", length = 50)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String userId;
 
     @NotNull
@@ -65,4 +66,8 @@ public class Users {
 
     @OneToMany(mappedBy = "users")
     private List<Feedbacks> feedbacks;
+
+    @OneToMany(mappedBy = "user")
+    private List<SkinCaresPlan> skinCaresPlan;
+
 }

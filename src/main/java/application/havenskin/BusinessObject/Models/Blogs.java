@@ -13,6 +13,7 @@ import java.util.List;
 public class Blogs {
     @Id
     @Column(name = "blog_id", length = 50)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String blogId;
 
     @Column(name = "blog_title", length = 50)
@@ -38,4 +39,8 @@ public class Blogs {
 
     @OneToMany(mappedBy = "blog")
     private List<BlogImages> blogImages;
+
+    @ManyToOne
+    @JoinColumn(name = "blog_category_id", referencedColumnName = "blog_category_id", nullable = false)
+    private BlogCategory blogCategory;
 }

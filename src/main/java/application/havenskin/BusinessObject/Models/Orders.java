@@ -14,6 +14,7 @@ public class Orders {
 
     @Id
     @Column(name = "order_id", length = 50)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String orderId;
 
     @NotNull
@@ -34,8 +35,11 @@ public class Orders {
     @Column(name = "cancel_time")
     private LocalDateTime cancelTime;
 
-    @Column(name = "type")
-    private byte type;
+    @Column(name = "address", length = 50)
+    private String address;
+
+    @Column(name = "shipment_free")
+    private double shipmentFree;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)

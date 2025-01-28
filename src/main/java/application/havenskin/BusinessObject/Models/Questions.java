@@ -12,6 +12,7 @@ import java.util.List;
 public class Questions {
     @Id
     @Column(name = "question_id", length = 50)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String questionId;
 
     @Column(name = "question_content", length = 50)
@@ -19,13 +20,4 @@ public class Questions {
 
     @Column(name = "max_mark")
     private Double maxMark;
-
-    @NotNull
-    @Column(name = "skin_test_id", length = 50)
-    private String skinTestId;
-
-    @ManyToOne
-    @JoinColumn(name = "skin_test_id", referencedColumnName = "skin_test_id", insertable = false, updatable = false)
-    private SkinTests skinTest;
-
 }

@@ -13,6 +13,7 @@ import java.util.List;
 public class Discounts {
     @Id
     @Column(name = "discount_id", length = 50)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String discountId;
 
     @Column(name = "discount_name", length = 50)
@@ -38,8 +39,8 @@ public class Discounts {
     @Column(name = "actual_end_time")
     private LocalDateTime actualEndTime;
 
-    @Column(name = "percent")
-    private double percent;
+    @Column(name = "discount_percent")
+    private double discountPercent;
 
     @Column(name = "status")
     private byte status;

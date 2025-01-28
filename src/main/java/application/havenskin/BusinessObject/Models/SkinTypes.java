@@ -12,6 +12,7 @@ import java.util.List;
 public class SkinTypes {
     @Id
     @Column(name = "skin_type_id", length = 50)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String skinTypeId;
 
     @NotNull
@@ -34,7 +35,7 @@ public class SkinTypes {
     private List<ResultTests> resultTests;
 
     @OneToOne(mappedBy = "skinType")
-    private PlanSkinCares planSkinCare;
+    private SkinCaresPlan planSkinCare;
 
     @OneToMany(mappedBy = "skinTypes")
     private List<Products> products;

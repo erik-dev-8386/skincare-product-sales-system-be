@@ -10,6 +10,7 @@ import lombok.Data;
 public class OrderDetails {
     @Id
     @Column(name = "order_detail_id", length = 50)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String orderDetailId;
 
     @NotNull

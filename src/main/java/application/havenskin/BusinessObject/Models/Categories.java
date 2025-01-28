@@ -11,6 +11,7 @@ import java.util.List;
 public class Categories {
     @Id
     @Column(name = "category_id", length = 50)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String categoryId;
 
     @Column(name = "category_name", length = 50)
