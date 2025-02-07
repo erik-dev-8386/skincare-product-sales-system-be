@@ -2,7 +2,6 @@ package application.havenskin.controller;
 
 import application.havenskin.BusinessObject.Models.Categories;
 import application.havenskin.DTORequest.CategoryDTO;
-import application.havenskin.response.Response;
 import application.havenskin.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,36 +14,20 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
     @GetMapping
-    public Response<List<Categories>> getAllCategories() {
-        Response<List<Categories>> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(categoryService.getAllCategories());
-        return response;
+    public List<Categories> getAllCategories() {
+        return categoryService.getAllCategories();
     }
     @PostMapping
-    public Response<Categories> addCategory(@RequestBody Categories categories) {
-        Response<Categories> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(categoryService.addCategories(categories));
-        return response;
+    public Categories addCategory(@RequestBody Categories categories) {
+        return categoryService.addCategories(categories);
     }
     @GetMapping("/{id}")
-    public Response<Categories> getCategoryById(@PathVariable String id) {
-        Response<Categories> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(categoryService.getCategoriesById(id));
-        return response;
+    public Categories getCategoryById(@PathVariable String id) {
+       return categoryService.getCategoriesById(id);
     }
     @PutMapping("/{id}")
-    public Response<Categories> updateCategory(@PathVariable String id, @RequestBody CategoryDTO categories) {
-        Response<Categories> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(categoryService.updateCategories(id, categories));
-        return response;
+    public Categories updateCategory(@PathVariable String id, @RequestBody CategoryDTO categories) {
+        return categoryService.updateCategories(id, categories);
     }
     @DeleteMapping("/{id}")
     public void deleteCategory(@PathVariable String id) {
@@ -52,12 +35,8 @@ public class CategoryController {
     }
 
     @PostMapping("/add-list-category")
-    public Response<List<Categories>> addListCategory(@RequestBody List<Categories> categories) {
-        Response<List<Categories>> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(categoryService.addListOfCategory(categories));
-        return response;
+    public List<Categories> addListCategory(@RequestBody List<Categories> categories) {
+        return categoryService.addListOfCategory(categories);
     }
 }
 

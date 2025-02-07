@@ -20,6 +20,7 @@ public class BlogCategory {
     @Column(name = "description")
     private String description;
 
+
     @OneToMany(mappedBy = "blogCategory")
     private List<Blogs> blogs;
 }

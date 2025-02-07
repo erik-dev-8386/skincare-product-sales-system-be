@@ -3,6 +3,7 @@ package application.havenskin.service;
 import application.havenskin.BusinessObject.Models.Brands;
 
 import application.havenskin.DTORequest.BrandDTO;
+import application.havenskin.Enums.BrandEnums;
 import application.havenskin.mapper.Mapper;
 import application.havenskin.repository.BrandsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BrandService {
@@ -48,12 +50,19 @@ public class BrandService {
 //        Brands a = mapper.toBrands(brand);
 //        a.setBrandId(x.getBrandId());
 //        return brandsRepository.save(a);
-    public void deleteBrand(String id){
+    public Brands deleteBrand(String id){
 //        Brands brand = brandsRepository.findById(id).get();
-        if(!brandsRepository.existsById(id)){
-            throw new RuntimeException("Brand not found");
+//        if(!brandsRepository.existsById(id)){
+//            throw new RuntimeException("Brand not found");
+//        }
+//        brandsRepository.deleteById(id);
+        Optional<Brands> brand = brandsRepository.findById(id);
+        if(brand.isPresent()){
+            Brands x = brand.get();
+            x.setStatus(BrandEnums.Inactive.getValue());
+            return brandsRepository.save(x);
         }
-        brandsRepository.deleteById(id);
+        return null;
     }
 
     public void deleteAllBrands(){

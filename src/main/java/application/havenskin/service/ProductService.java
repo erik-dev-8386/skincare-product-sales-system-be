@@ -3,10 +3,12 @@ package application.havenskin.service;
 import application.havenskin.BusinessObject.Models.Categories;
 import application.havenskin.BusinessObject.Models.Products;
 import application.havenskin.DTORequest.ProductDTO;
+import application.havenskin.Enums.ProductEnums;
 import application.havenskin.mapper.Mapper;
 import application.havenskin.repository.ProductsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,8 +39,15 @@ public class ProductService {
         return productsRepository.save(products);
     }
 
-    public void deleteProduct(String id) {
-        productsRepository.deleteById(id);
+    public Products deleteProduct(String id) {
+        //productsRepository.deleteById(id);
+        Optional<Products> products = productsRepository.findById(id);
+        if (products.isPresent()) {
+            Products x = products.get();
+            x.setStatus(ProductEnums.OUT_OF_STOCK.getValue());
+            return productsRepository.save(x);
+        }
+        return null;
     }
 
     public List<Products> getProductsByCategory(String id) {
@@ -56,4 +65,14 @@ public class ProductService {
     public List<Products> addListOfProducts(List<Products> products) {
         return productsRepository.saveAll(products);
     }
+
+    public List<Products> getBestSellerProducts() {
+        int max = productsRepository.findAll().stream().mapToInt(Products::getQuantity).max().orElse(0);
+        return productsRepository.finfByQuantiy(max);
+    }
+
+//    @Transactional
+//    public Products byProduct(String productName) {
+//        Products x = productsRepository.findByProductName()
+//    }
 }

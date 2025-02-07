@@ -2,12 +2,14 @@ package application.havenskin.service;
 
 import application.havenskin.BusinessObject.Models.Orders;
 import application.havenskin.DTORequest.OrderDTO;
+import application.havenskin.Enums.OrderEnums;
 import application.havenskin.mapper.Mapper;
 import application.havenskin.repository.OrdersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderService {
@@ -29,8 +31,15 @@ public class OrderService {
         mapper.updateOrders(x, order);
         return ordersRepository.save(x);
     }
-    public void deleteOrder(String id) {
-        ordersRepository.deleteById(id);
+    public Orders deleteOrder(String id) {
+        //ordersRepository.deleteById(id);
+        Optional<Orders> x = ordersRepository.findById(id);
+        if (x.isPresent()) {
+            Orders order = x.get();
+            order.setStatus(OrderEnums.CANCELLED.getOrder_status());
+            return ordersRepository.save(order);
+        }
+        return null;
     }
     public List<Orders> addListOfOrders(List<Orders> orders) {
         return ordersRepository.saveAll(orders);

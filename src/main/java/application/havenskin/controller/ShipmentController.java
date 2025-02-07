@@ -2,7 +2,6 @@ package application.havenskin.controller;
 
 import application.havenskin.BusinessObject.Models.Shipments;
 import application.havenskin.DTORequest.ShipmentDTO;
-import application.havenskin.response.Response;
 import application.havenskin.service.ShipmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,57 +16,37 @@ public class ShipmentController {
     private ShipmentService shipmentService;
 
     @GetMapping
-    public Response<List<Shipments>> getAllShipments() {
-        Response<List<Shipments>> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(shipmentService.getAllShipments());
-        return response;
+    public List<Shipments> getAllShipments() {
+        return shipmentService.getAllShipments();
     }
 
     @PostMapping
-    public Response<Shipments> addShipment(@RequestBody Shipments shipment) {
-        Response<Shipments> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(shipmentService.createShipment(shipment));
-        return response;
+    public Shipments addShipment(@RequestBody Shipments shipment) {
+       return shipmentService.createShipment(shipment);
     }
 
     @GetMapping("/{id}")
-    public Response<Shipments> getShipmentById(@PathVariable String id) {
-        Response<Shipments> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(shipmentService.getShipmentById(id));
-        return response;
+    public Shipments getShipmentById(@PathVariable String id) {
+       return shipmentService.getShipmentById(id);
     }
 
     @PutMapping("/{id}")
-    public Response<Shipments> updateShipment(@PathVariable String id, @RequestBody ShipmentDTO shipment) {
-        Response<Shipments> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(shipmentService.updateShipment(id, shipment));
-        return response;
+    public Shipments updateShipment(@PathVariable String id, @RequestBody ShipmentDTO shipment) {
+        return shipmentService.updateShipment(id, shipment);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteShipment(@PathVariable String id) {
+    public Shipments deleteShipment(@PathVariable String id) {
 //        Response<Shipments> response = new Response<>();
 //        response.setCode(200);
 //        response.setMessage("OK");
 //        response.setResult(null);
 //        return response;
-        shipmentService.deleteShipment(id);
+        return shipmentService.deleteShipment(id);
     }
     @PostMapping("/add-list-shipment")
-    public Response<List<Shipments>> addListShipment(@RequestBody List<Shipments> shipments) {
-        Response<List<Shipments>> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(shipmentService.addListOfShipments(shipments));
-        return response;
+    public List<Shipments> addListShipment(@RequestBody List<Shipments> shipments) {
+        return shipmentService.addListOfShipments(shipments);
     }
 
     @GetMapping("/{shipmentID}")

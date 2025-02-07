@@ -1,5 +1,7 @@
 package application.havenskin.BusinessObject.Models;
 
+import application.havenskin.Enums.DiscountEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -42,9 +44,11 @@ public class Discounts {
     @Column(name = "discount_percent")
     private double discountPercent;
 
+    @NotNull
     @Column(name = "status")
-    private byte status;
+    private byte status = DiscountEnum.ACTIVE.getDiscount_status();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "discounts")
     private List<Products> products;
 }

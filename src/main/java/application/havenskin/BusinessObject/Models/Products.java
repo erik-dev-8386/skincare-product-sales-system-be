@@ -1,5 +1,6 @@
 package application.havenskin.BusinessObject.Models;
 
+import application.havenskin.Enums.ProductEnums;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -51,8 +52,9 @@ public class Products {
     @Column(name = "net_weight")
     private double netWeight;
 
+    @NotNull
     @Column(name = "status")
-    private byte status;
+    private Byte status = ProductEnums.AVAILABLE.getValue();
 
     @NotNull
     @Column(name = "discount_id", length = 50)

@@ -1,5 +1,6 @@
 package application.havenskin.BusinessObject.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -27,7 +28,12 @@ public class Shipments {
     @Column(name = "order_id", length = 50)
     private String orderId;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "order_id", referencedColumnName = "order_id", insertable = false, updatable = false)
     private Orders orders;
+
+    @NotNull
+    @Column(name = "status")
+    private Byte status;
 }

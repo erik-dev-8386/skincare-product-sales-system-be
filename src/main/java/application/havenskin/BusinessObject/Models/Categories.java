@@ -1,6 +1,9 @@
 package application.havenskin.BusinessObject.Models;
 
+import application.havenskin.Enums.CategoryEnums;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.util.List;
@@ -23,8 +26,11 @@ public class Categories {
     @Column(name = "usage_instruction", length = 255)
     private String usageInstruction;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "categories")
     private List<Products> products;
 
-
+    @NotNull
+    @Column(name = "status", length = 20)
+    private Byte status = CategoryEnums.ACTIVE.getStatus();
 }

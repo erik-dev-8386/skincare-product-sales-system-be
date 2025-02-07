@@ -9,4 +9,5 @@ import java.util.List;
 public interface ProductsRepository extends JpaRepository<Products, String> {
     List<Products> findByCategoryId(String id);
     List<Products> findByBrandId(String id);
+    List<Products> finfByQuantiy(Integer quantiy);
 }

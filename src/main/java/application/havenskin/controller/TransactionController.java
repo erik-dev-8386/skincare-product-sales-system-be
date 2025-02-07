@@ -2,7 +2,6 @@ package application.havenskin.controller;
 
 import application.havenskin.BusinessObject.Models.Transactions;
 import application.havenskin.DTORequest.TransactionDTO;
-import application.havenskin.response.Response;
 import application.havenskin.service.OrderService;
 import application.havenskin.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,36 +15,20 @@ public class TransactionController {
     @Autowired
     private TransactionService transactionService;
     @GetMapping
-    public Response<List<Transactions>> getAllTransactions() {
-        Response<List<Transactions>> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(transactionService.getAllTransactions());
-        return response;
+    public List<Transactions> getAllTransactions() {
+        return transactionService.getAllTransactions();
     }
     @PostMapping
-    public Response<Transactions> addTransactions(@RequestBody Transactions transactions) {
-        Response<Transactions> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(transactionService.addTransaction(transactions));
-        return response;
+    public Transactions addTransactions(@RequestBody Transactions transactions) {
+        return transactionService.addTransaction(transactions);
     }
     @GetMapping("/{id}")
-    public Response<Transactions> getTransactionById(@PathVariable String id) {
-        Response<Transactions> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(transactionService.getTransactionById(id));
-        return response;
+    public Transactions getTransactionById(@PathVariable String id) {
+        return transactionService.getTransactionById(id);
     }
     @PutMapping("/{id}")
-    public Response<Transactions> updateTransactionById(@PathVariable String id, @RequestBody TransactionDTO transactions) {
-        Response<Transactions> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(transactionService.updateTransaction(id, transactions));
-        return response;
+    public Transactions updateTransactionById(@PathVariable String id, @RequestBody TransactionDTO transactions) {
+        return transactionService.updateTransaction(id, transactions);
     }
     @DeleteMapping
     public void deleteTransactionById(@PathVariable String id) {
@@ -53,11 +36,7 @@ public class TransactionController {
     }
     @PostMapping("/add-list-transactions")
     public List<Transactions> addListOfTransactions(@RequestBody List<Transactions> transactions) {
-        Response<List<Transactions>> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(transactionService.addListOfTransactions(transactions));
-        return transactions;
+        return transactionService.addListOfTransactions(transactions);
     }
 
 }

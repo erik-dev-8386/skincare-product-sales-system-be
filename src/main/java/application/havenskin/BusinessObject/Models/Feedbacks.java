@@ -36,4 +36,7 @@ public class Feedbacks {
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     private Users users;
+
+    @Column(name = "status", length = 20)
+    private byte status;
 }

@@ -2,12 +2,15 @@ package application.havenskin.service;
 
 import application.havenskin.BusinessObject.Models.OrderDetails;
 import application.havenskin.DTORequest.OrderDetailDTO;
+import application.havenskin.Enums.OrderDetailEnums;
 import application.havenskin.mapper.Mapper;
 import application.havenskin.repository.OrderDetailsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderDetailsService {
@@ -32,11 +35,18 @@ public class OrderDetailsService {
         mapper.updateOrderDetails(x, orderDetails);
     return orderDetailsRepository.save(x);
     }
-    public void deleteOrderDetails(String id) {
-        if (!orderDetailsRepository.existsById(id)) {
-            throw new RuntimeException("Order not found");
+    public OrderDetails deleteOrderDetails(String id) {
+//        if (!orderDetailsRepository.existsById(id)) {
+//            throw new RuntimeException("Order not found");
+//        }
+//        orderDetailsRepository.deleteById(id);
+        Optional<OrderDetails> orderDetailsOption = orderDetailsRepository.findById(id);
+        if(orderDetailsOption.isPresent()) {
+            OrderDetails x = orderDetailsOption.get();
+            x.setStatus(OrderDetailEnums.INACTIVE.getValue());
+            return orderDetailsRepository.save(x);
         }
-        orderDetailsRepository.deleteById(id);
+        return null;
     }
     public List<OrderDetails> addListOfOrderDetails(List<OrderDetails> orderDetails) {
         return orderDetailsRepository.saveAll(orderDetails);

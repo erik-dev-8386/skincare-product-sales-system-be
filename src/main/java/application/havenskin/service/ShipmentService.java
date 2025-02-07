@@ -1,13 +1,16 @@
 package application.havenskin.service;
 
+import application.havenskin.BusinessObject.Models.Orders;
 import application.havenskin.BusinessObject.Models.Shipments;
 import application.havenskin.DTORequest.ShipmentDTO;
+import application.havenskin.Enums.ShipmentEnums;
 import application.havenskin.mapper.Mapper;
 import application.havenskin.repository.ShipmentsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ShipmentService {
@@ -29,11 +32,18 @@ public class ShipmentService {
         mapper.updateShipments(x, shipment);
         return shipmentsRepository.save(x);
     }
-    public void deleteShipment(String id) {
-        if(!shipmentsRepository.existsById(id)) {
-            throw new RuntimeException("Shipment with id " + id + " does not exist");
+    public Shipments deleteShipment(String id) {
+//        if(!shipmentsRepository.existsById(id)) {
+//            throw new RuntimeException("Shipment with id " + id + " does not exist");
+//        }
+//        shipmentsRepository.deleteById(id);
+        Optional<Shipments> x = shipmentsRepository.findById(id);
+        if (x.isPresent()) {
+            Shipments shipment = x.get();
+            shipment.setStatus(ShipmentEnums.FAILED_DELIVERY.getShipment_status());
+            return shipmentsRepository.save(shipment);
         }
-        shipmentsRepository.deleteById(id);
+        return null;
     }
     public List<Shipments> addListOfShipments(List<Shipments> shipments) {
         return shipmentsRepository.saveAll(shipments);

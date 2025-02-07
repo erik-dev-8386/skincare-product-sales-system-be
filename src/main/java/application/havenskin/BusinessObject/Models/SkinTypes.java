@@ -1,5 +1,6 @@
 package application.havenskin.BusinessObject.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -28,15 +29,19 @@ public class SkinTypes {
     @Column(name = "max_mark")
     private double maxMark;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "skinType")
     private List<SkinTypeImages> skinTypeImages;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "skinType")
     private List<ResultTests> resultTests;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "skinType")
     private SkinCaresPlan planSkinCare;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "skinTypes")
     private List<Products> products;
 }

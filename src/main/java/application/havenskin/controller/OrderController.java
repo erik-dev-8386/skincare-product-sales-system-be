@@ -2,7 +2,6 @@ package application.havenskin.controller;
 
 import application.havenskin.BusinessObject.Models.Orders;
 import application.havenskin.DTORequest.OrderDTO;
-import application.havenskin.response.Response;
 import application.havenskin.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,49 +14,29 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
     @GetMapping
-    public Response<List<Orders>> getAllOrder(){
-        Response<List<Orders>> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(orderService.getAllOrders());
-        return response;
+    public List<Orders> getAllOrder(){
+        return orderService.getAllOrders();
     }
     @PostMapping
-    public Response<Orders> createOrder(@RequestBody Orders order){
-        Response<Orders> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(orderService.createOrder(order));
-        return response;
+    public Orders createOrder(@RequestBody Orders order){
+        return orderService.createOrder(order);
     }
     @GetMapping("/id")
-    public Response<Orders> getOrderById(@PathVariable String id){
-        Response<Orders> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(orderService.getOrderById(id));
-        return response;
+    public Orders getOrderById(@PathVariable String id){
+     return orderService.getOrderById(id);
     }
 
     @PutMapping("/id")
-    public Response<Orders> updateOrder(@PathVariable  String id,@RequestBody OrderDTO order){
-        Response<Orders> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(orderService.updateOrder(id, order));
-        return response;
+    public Orders updateOrder(@PathVariable  String id,@RequestBody OrderDTO order){
+        return orderService.updateOrder(id, order);
     }
     @DeleteMapping("/id")
-    public void deleteOrder(@PathVariable String id){
-        orderService.deleteOrder(id);
+    public Orders deleteOrder(@PathVariable String id){
+        return orderService.deleteOrder(id);
     }
     @PostMapping("/add-list-order")
-    public Response<List<Orders>> addListOrder(@RequestBody List<Orders> orders){
-        Response<List<Orders>> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(orderService.addListOfOrders(orders));
-        return response;
+    public List<Orders> addListOrder(@RequestBody List<Orders> orders){
+       return orderService.addListOfOrders(orders);
     }
 
     @GetMapping("/{id}")
