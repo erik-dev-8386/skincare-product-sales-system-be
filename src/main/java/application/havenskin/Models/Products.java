@@ -78,12 +78,12 @@ public class Products {
     private SkinTypes skinTypes;
 
     @NotNull
-    @Column(name = "promotion_id", length = 50)
+    @Column(name = "discount_id", length = 50)
     private String promotionId;
 
     @ManyToOne
-    @JoinColumn(name = "promotion_id", referencedColumnName = "promotion_id", insertable = false, updatable = false)
-    private Promotions promotions;
+    @JoinColumn(name = "discount_id", referencedColumnName = "discount_id", insertable = false, updatable = false)
+    private Discounts discounts;
 
     @OneToMany(mappedBy = "products")
     private List<ProductImages> productImages;
