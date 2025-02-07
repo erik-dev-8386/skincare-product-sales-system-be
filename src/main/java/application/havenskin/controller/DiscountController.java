@@ -29,7 +29,7 @@ public class DiscountController {
         response.setResult(discountService.createDiscount(discount));
         return response;
     }
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public Response<Discounts> getDiscountById(@PathVariable String id){
         Response<Discounts> response = new Response<>();
         response.setCode(200);
@@ -37,7 +37,17 @@ public class DiscountController {
         response.setResult(discountService.getDiscountById(id));
         return response;
     }
-    @PostMapping("/{id}")
+
+    @GetMapping("/name/{discountName}")
+    public Response<Discounts> getDiscountByName(@PathVariable String discountName){
+        Response<Discounts> response = new Response<>();
+        response.setCode(200);
+        response.setMessage("OK");
+        response.setResult(discountService.getDiscountByName(discountName));
+        return response;
+    }
+
+    @PutMapping("/{id}")
     public Response<Discounts> updateDiscount(@PathVariable String id, @RequestBody Discounts discount){
         Response<Discounts> response = new Response<>();
         response.setCode(200);
@@ -46,7 +56,8 @@ public class DiscountController {
         return response;
     }
     @DeleteMapping("/{id}")
-    public void deleteDiscount(@PathVariable String id){
+    public String deleteDiscount(@PathVariable String id){
         discountService.deleteDiscount(id);
+        return "Discount has been deleted successfully";
     }
 }

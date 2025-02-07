@@ -1,5 +1,6 @@
 package application.havenskin.service;
 
+import application.havenskin.BusinessObject.Models.Brands;
 import application.havenskin.BusinessObject.Models.Categories;
 import application.havenskin.repository.CategoriesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,26 +16,39 @@ public class CategoryService {
     public List<Categories> getAllCategories() {
         return categoriesRepository.findAll();
     }
+
     public Categories getCategoriesById(String id) {
-        return categoriesRepository.getById(id);
+        return categoriesRepository.findById(id).get();
     }
+
     public Categories addCategories(Categories categories) {
         return categoriesRepository.save(categories);
     }
-    public Categories updateCategories(String id, Categories categories) {
-        if(getCategoriesById(id) == null){
-            throw new RuntimeException("Category does not exist");
+
+    public Categories updateCategory(String id, Categories category) {
+        Categories existingCategory = categoriesRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+        if(category.getCategoryName() != null){
+            existingCategory.setCategoryName(category.getCategoryName());
         }
-        return categoriesRepository.save(categories);
+        if(category.getUsageInstruction() != null){
+            existingCategory.setUsageInstruction(category.getUsageInstruction());
+        }
+        if(category.getDescription() != null){
+            existingCategory.setDescription(category.getDescription());
+        }
+        return categoriesRepository.save(existingCategory);
     }
+
     public void deleteCategories(String id) {
         categoriesRepository.deleteById(id);
     }
-    public String getCategoriesByName(String name) {
-        if(categoriesRepository.findBycategoryName(name) == null){
+
+    public Categories getCategoriesByName(String name) {
+        if(categoriesRepository.findByCategoryName(name) == null){
             throw new RuntimeException("Category does not exist");
         }
-        return categoriesRepository.findBycategoryName(name).getCategoryId();
+        return categoriesRepository.findByCategoryName(name);
     }
 
 }

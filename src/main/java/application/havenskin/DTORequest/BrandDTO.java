@@ -1,7 +1,6 @@
 package application.havenskin.DTORequest;
 
 import application.havenskin.BusinessObject.Models.Products;
-import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.List;
