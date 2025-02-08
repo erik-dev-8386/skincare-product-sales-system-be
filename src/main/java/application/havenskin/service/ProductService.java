@@ -18,7 +18,8 @@ public class ProductService {
     private CategoryService categoryService;
 
     public List<Products> getAllProducts() {
-        return productsRepository.findAll();
+//        return productsRepository.findAll();
+        return productsRepository.findByStatus((byte) 1);
     }
 
     public Products getProductById(String id) {
@@ -86,8 +87,11 @@ public class ProductService {
         return productsRepository.save(existingProduct);
     }
 
-    public void deleteProduct(String id) {
-        productsRepository.deleteById(id);
+    public void softDeleteProduct(String id) {
+        Products products = productsRepository.findById(id)
+                        .orElseThrow(() -> new RuntimeException("Product not found"));
+        products.setStatus((byte) 0);
+        productsRepository.save(products);
     }
 
     public List<Products> getProductsByCategoryName(String categoryName) {

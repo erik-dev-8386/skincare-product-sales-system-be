@@ -14,45 +14,29 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
     @GetMapping
-    public Response<List<Categories>> getAllCategories() {
-        Response<List<Categories>> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(categoryService.getAllCategories());
-        return response;
+    public List<Categories> getAllCategories() {
+        return categoryService.getAllCategories();
     }
     @PostMapping
-    public Response<Categories> addCategory(@RequestBody Categories categories) {
-        Response<Categories> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(categoryService.addCategories(categories));
-        return response;
+    public Categories addCategory(@RequestBody Categories categories) {
+        return categoryService.addCategories(categories);
     }
+
     @GetMapping("/id/{id}")
-    public Response<Categories> getCategoryById(@PathVariable String id) {
-        Response<Categories> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(categoryService.getCategoriesById(id));
-        return response;
+    public Categories getCategoryById(@PathVariable String id) {
+        return categoryService.getCategoriesById(id);
     }
+
     @GetMapping("/name/{categoryName}")
-    public Response<Categories> getCategoryByName(@PathVariable String categoryName) {
-        Response<Categories> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(categoryService.getCategoriesByName(categoryName));
-        return response;
+    public Categories getCategoryByName(@PathVariable String categoryName) {
+        return categoryService.getCategoriesByName(categoryName);
     }
+
     @PutMapping("/{id}")
-    public Response<Categories> updateCategory(@PathVariable String id, @RequestBody Categories category) {
-        Response<Categories> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(categoryService.updateCategory(id, category));
-        return response;
+    public Categories updateCategory(@PathVariable String id, @RequestBody Categories category) {
+        return categoryService.updateCategory(id, category);
     }
+
     @DeleteMapping("/{id}")
     public String deleteCategory(@PathVariable String id) {
         categoryService.deleteCategories(id);

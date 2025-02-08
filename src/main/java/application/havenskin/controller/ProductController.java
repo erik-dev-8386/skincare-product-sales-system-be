@@ -26,21 +26,13 @@ public class ProductController {
     private ProductsRepository productsRepository;
 
     @GetMapping
-    public Response<List<Products>> getAllProducts() {
-        Response<List<Products>> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(productService.getAllProducts());
-        return response;
+    public List<Products> getAllProducts() {
+        return productService.getAllProducts();
     }
 
     @PostMapping
-    public Response<Products> addProduct(@RequestBody Products product) {
-        Response<Products> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(productService.addProduct(product));
-        return response;
+    public Products addProduct(@RequestBody Products product) {
+        return productService.addProduct(product);
     }
 
     //    @PostMapping("/{id}")
@@ -52,96 +44,50 @@ public class ProductController {
 //        return response;
 //    }
     @PutMapping("/{id}")
-    public Response<Products> updateProduct(@PathVariable String id, @RequestBody Products product) {
-        Response<Products> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(productService.updateProduct(id, product));
-        return response;
+    public Products updateProduct(@PathVariable String id, @RequestBody Products product) {
+        return productService.updateProduct(id, product);
     }
 
     @GetMapping("/id/{id}")
-    public Response<Products> getProductById(@PathVariable String id) {
-        Response<Products> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(productService.getProductById(id));
-        return response;
+    public Products getProductById(@PathVariable String id) {
+        return productService.getProductById(id);
     }
 
     @GetMapping("/name/{productName}")
-    public Response<Products> getProductByName(@PathVariable String productName) {
-        Response<Products> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(productService.getProductByName(productName));
-        return response;
+    public Products getProductByName(@PathVariable String productName) {
+        return productService.getProductByName(productName);
     }
 
     @DeleteMapping("/{id}")
     public String deleteProduct(@PathVariable String id) {
-        productService.deleteProduct(id);
+        productService.softDeleteProduct(id);
         return "Product has been deleted successfully";
     }
 
-    //    @PutMapping("/{name}")
-//    @PutMapping("/category/{name}")
-
-//    @GetMapping("/category/{categoryName}")
-//    public Response<List<Products>> getProductByCategoryName(@PathVariable String name) {
-//        Response<List<Products>> response = new Response<>();
-//        String id = categoryService.getCategoriesByName(name);
-//        response.setCode(200);
-//        response.setMessage("OK");
-//        response.setResult(productService.getProductsByCategoryId(id));
-//        return response;
-//    }
-
     @GetMapping("/category/{categoryName}")
-    public Response<List<Products>> getProductByCategoryName(@PathVariable String categoryName) {
-        Response<List<Products>> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(productService.getProductsByCategoryName(categoryName));
-        return response;
+    public List<Products> getProductByCategoryName(@PathVariable String categoryName) {
+        return productService.getProductsByCategoryName(categoryName);
     }
 
     //@GetMapping("/test/{brandName}")
     @GetMapping("/brand/name/{brandName}")
-    public Response<List<Products>> getProductByBrandName(@PathVariable String brandName) {
-        Response<List<Products>> response = new Response<>();
-      //  String id = brandService.getBrandsByName(brandName);
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(productService.getProductsByBrandName(brandName));
-        return response;
+    public List<Products> getProductByBrandName(@PathVariable String brandName) {
+        return productService.getProductsByBrandName(brandName);
     }
 
     @GetMapping("/brand/country/{countryName}")
-    public Response<List<Products>> getProductByBrandCountry(@PathVariable String countryName) {
-        Response<List<Products>> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(productService.getProductsByBrandCountry(countryName));
-        return response;
+    public List<Products> getProductByBrandCountry(@PathVariable String countryName) {
+        return productService.getProductsByBrandCountry(countryName);
     }
 
     @GetMapping("/skin-name/{skinName}")
-    public Response<List<Products>> getProductsBySkinName(@PathVariable String skinName) {
-        Response<List<Products>> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(productService.getProductsBySkinName(skinName));
-        return response;
+    public List<Products> getProductsBySkinName(@PathVariable String skinName) {
+        return productService.getProductsBySkinName(skinName);
     }
 
     @GetMapping("/discount-name/{discountName}")
-    public Response<List<Products>> getProductsByDiscountName(@PathVariable String discountName) {
-        Response<List<Products>> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(productService.getProductsByDiscountName(discountName));
-        return response;
+    public List<Products> getProductsByDiscountName(@PathVariable String discountName) {
+        return productService.getProductsByDiscountName(discountName);
     }
 
 

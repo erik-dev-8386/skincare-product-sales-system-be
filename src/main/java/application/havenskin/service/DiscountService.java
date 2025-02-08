@@ -27,32 +27,35 @@ public class DiscountService {
     public Discounts updateDiscount(String id,Discounts discount) {
         Discounts existingDiscount = discountsRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Discount not found"));
-        if (existingDiscount.getDiscountName() != null) {
+        if (discount.getDiscountName() != null) {
             existingDiscount.setDiscountName(discount.getDiscountName());
         }
-        if (existingDiscount.getActualEndTime() != null) {
+        if (discount.getActualEndTime() != null) {
             existingDiscount.setActualEndTime(discount.getActualEndTime());
         }
-        if (existingDiscount.getActualStartTime() != null) {
+        if (discount.getActualStartTime() != null) {
             existingDiscount.setActualStartTime(discount.getActualStartTime());
         }
-        if (existingDiscount.getDiscountCode() != null) {
+        if (discount.getDiscountCode() != null) {
             existingDiscount.setDiscountCode(discount.getDiscountCode());
         }
-        if (existingDiscount.getDiscountPercent() != 0) {
+        if (discount.getDiscountPercent() != 0) {
             existingDiscount.setDiscountPercent(discount.getDiscountPercent());
         }
-        if (existingDiscount.getDescription() != null) {
+        if (discount.getDescription() != null) {
             existingDiscount.setDescription(discount.getDescription());
         }
-        if (existingDiscount.getDeletedTime() != null) {
+        if (discount.getDeletedTime() != null) {
             existingDiscount.setDeletedTime(discount.getDeletedTime());
         }
-        if (existingDiscount.getStatus() != 0) {
+        if (discount.getStatus() != 0) {
             existingDiscount.setStatus(discount.getStatus());
         }
+        if (discount.getCreatedTime() != null) {
+            existingDiscount.setCreatedTime(discount.getCreatedTime());
+        }
 
-        return discountsRepository.save(discount);
+        return discountsRepository.save(existingDiscount);
     }
     public void deleteDiscount(String id) {
         if(getDiscountById(id) == null) {

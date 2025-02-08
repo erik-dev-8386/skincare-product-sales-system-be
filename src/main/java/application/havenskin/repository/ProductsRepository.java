@@ -31,4 +31,6 @@ public interface ProductsRepository extends JpaRepository<Products, String> {
 
     //lấy danh sách sản phẩm theo categoryName
     List<Products> findProductsByCategories_CategoryName(String categoryName);
+
+    List<Products> findByStatus(byte status);
 }

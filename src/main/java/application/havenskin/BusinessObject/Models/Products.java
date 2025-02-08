@@ -51,8 +51,8 @@ public class Products {
     @Column(name = "net_weight")
     private double netWeight;
 
-    @Column(name = "status")
-    private byte status;
+    @Column(name = "status", columnDefinition = "BYTE DEFAULT 1") //1: Active, 0: Deleted
+    private byte status = 1;
 
     @NotNull
     @Column(name = "discount_id", length = 50)

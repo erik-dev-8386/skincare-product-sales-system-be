@@ -56,13 +56,13 @@ public class BrandService {
         return brandsRepository.save(existingBrand);
     }
 
-    public void deleteBrand(String id){
-        Brands brand = brandsRepository.findById(id).get();
-        if(brand == null){
-            throw new RuntimeException("Brand not found");
-        }
-        brandsRepository.deleteById(id);
-    }
+//    public void deleteBrand(String id){
+//        Brands brand = brandsRepository.findById(id).get();
+//        if(brand == null){
+//            throw new RuntimeException("Brand not found");
+//        }
+//        brandsRepository.deleteById(id);
+//    }
 
     public void deleteBrandsById(String id){
         brandsRepository.deleteById(id);

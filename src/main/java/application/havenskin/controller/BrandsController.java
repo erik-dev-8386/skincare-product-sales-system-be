@@ -14,55 +14,31 @@ public class BrandsController {
     @Autowired
     private BrandService brandService;
     @GetMapping
-    public Response<List<Brands>> getAllBrands() {
-        Response<List<Brands>> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(brandService.getAllBrands());
-        return response;
+    public List<Brands> getAllBrands() {
+        return brandService.getAllBrands();
     }
     @PostMapping
-    public Response<Brands> createBrand(@RequestBody Brands brand) {
-        Response<Brands> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(brandService.createBrand(brand));
-        return response;
+    public Brands createBrand(@RequestBody Brands brand) {
+        return brandService.createBrand(brand);
     }
     @GetMapping("/id/{id}")
-    public Response<Brands> getBrandById(@PathVariable String id) {
-        Response<Brands> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(brandService.getBrandById(id));
-        return response;
+    public Brands getBrandById(@PathVariable String id) {
+        return brandService.getBrandById(id);
     }
 
     @GetMapping("/name/{brandName}")
-    public Response<Brands> getBrandByName(@PathVariable String brandName) {
-        Response<Brands> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(brandService.getBrandByName(brandName));
-        return response;
+    public Brands getBrandByName(@PathVariable String brandName) {
+        return brandService.getBrandByName(brandName);
     }
 
     @GetMapping("/country/{countryName}")
-    public Response<List<Brands>> getBrandsByCountry(@PathVariable String countryName) {
-        Response<List<Brands>> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(brandService.getBrandsByCountry(countryName));
-        return response;
+    public List<Brands> getBrandsByCountry(@PathVariable String countryName) {
+        return brandService.getBrandsByCountry(countryName);
     }
 
     @PutMapping("/{id}")
-    public Response<Brands> updateBrand(@PathVariable String id, @RequestBody Brands brand) {
-        Response<Brands> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(brandService.updateBrand(id, brand));
-        return response;
+    public Brands updateBrand(@PathVariable String id, @RequestBody Brands brand) {
+        return brandService.updateBrand(id, brand);
     }
     @DeleteMapping("/{id}")
     public String deleteBrand(@PathVariable String id) {

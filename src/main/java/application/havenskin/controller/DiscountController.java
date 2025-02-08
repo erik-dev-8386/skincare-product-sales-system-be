@@ -14,47 +14,30 @@ public class DiscountController {
     @Autowired
     private DiscountService discountService;
     @GetMapping
-    public Response<List<Discounts>> getAllDiscount(){
-        Response<List<Discounts>> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(discountService.getAllDiscounts());
-        return response;
+    public List<Discounts> getAllDiscount(){
+        return discountService.getAllDiscounts();
     }
+
     @PostMapping
-    public Response<Discounts> addDiscount(@RequestBody Discounts discount){
-        Response<Discounts> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(discountService.createDiscount(discount));
-        return response;
+    public Discounts addDiscount(@RequestBody Discounts discount){
+        return discountService.createDiscount(discount);
     }
+
     @GetMapping("/id/{id}")
-    public Response<Discounts> getDiscountById(@PathVariable String id){
-        Response<Discounts> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(discountService.getDiscountById(id));
-        return response;
+    public Discounts getDiscountById(@PathVariable String id){
+        return discountService.getDiscountById(id);
     }
 
     @GetMapping("/name/{discountName}")
-    public Response<Discounts> getDiscountByName(@PathVariable String discountName){
-        Response<Discounts> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(discountService.getDiscountByName(discountName));
-        return response;
+    public Discounts getDiscountByName(@PathVariable String discountName){
+        return discountService.getDiscountByName(discountName);
     }
 
     @PutMapping("/{id}")
-    public Response<Discounts> updateDiscount(@PathVariable String id, @RequestBody Discounts discount){
-        Response<Discounts> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(discountService.updateDiscount(id, discount));
-        return response;
+    public Discounts updateDiscount(@PathVariable String id, @RequestBody Discounts discount){
+        return discountService.updateDiscount(id, discount);
     }
+
     @DeleteMapping("/{id}")
     public String deleteDiscount(@PathVariable String id){
         discountService.deleteDiscount(id);

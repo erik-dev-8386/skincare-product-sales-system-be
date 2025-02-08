@@ -14,52 +14,36 @@ public class SkinTypeController {
     @Autowired
     private SkinTypeService skinTypeService;
     @GetMapping
-    public Response<List<SkinTypes>> getAllSkinTypes() {
-        Response<List<SkinTypes>> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(skinTypeService.getAllSkinTypes());
-        return response;
+    public List<SkinTypes> getAllSkinTypes() {
+        return skinTypeService.getAllSkinTypes();
     }
+
     @PostMapping
-    public Response<SkinTypes> addSkinType(@RequestBody SkinTypes skinTypes) {
-        Response<SkinTypes> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(skinTypeService.createSkinType(skinTypes));
-        return response;
+    public SkinTypes addSkinType(@RequestBody SkinTypes skinTypes) {
+        return skinTypeService.createSkinType(skinTypes);
     }
+
     @GetMapping("/id/{id}")
-    public Response<SkinTypes> getSkinTypeById(@PathVariable String id) {
-        Response<SkinTypes> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(skinTypeService.getSkinTypeById(id));
-        return response;
+    public SkinTypes getSkinTypeById(@PathVariable String id) {
+        return skinTypeService.getSkinTypeById(id);
     }
 
     @GetMapping("/name/{skinName}")
-    public Response<SkinTypes> getSkinTypeByName(@PathVariable String skinName) {
-        Response<SkinTypes> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(skinTypeService.getSkinTypeByName(skinName));
-        return response;
+    public SkinTypes getSkinTypeByName(@PathVariable String skinName) {
+        return skinTypeService.getSkinTypeByName(skinName);
     }
 
     @PutMapping("/{id}")
-    public Response<SkinTypes> updateSkinType(@PathVariable String id, @RequestBody SkinTypes skinTypes) {
-        Response<SkinTypes> response = new Response<>();
-        response.setCode(200);
-        response.setMessage("OK");
-        response.setResult(skinTypeService.updateSkinType(id, skinTypes));
-        return response;
+    public SkinTypes updateSkinType(@PathVariable String id, @RequestBody SkinTypes skinTypes) {
+        return skinTypeService.updateSkinType(id, skinTypes);
     }
+
     @DeleteMapping("/{id}")
     public String deleteSkinType(@PathVariable String id) {
         skinTypeService.deleteSkinType(id);
         return "SkinType has been deleted successfully";
     }
+
     @DeleteMapping
     public String deleteAllSkinTypes() {
         skinTypeService.deleteAllSkinTypes();
