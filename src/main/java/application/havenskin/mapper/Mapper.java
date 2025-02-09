@@ -1,8 +1,7 @@
 package application.havenskin.mapper;
 
-import application.havenskin.BusinessObject.Models.*;
-import application.havenskin.DTORequest.*;
-import org.mapstruct.Mapping;
+import application.havenskin.dataAccess.*;
+import application.havenskin.models.*;
 import org.mapstruct.MappingTarget;
 
 @org.mapstruct.Mapper(componentModel = "spring")
@@ -30,4 +29,5 @@ public interface Mapper {
     void updateBlogs(@MappingTarget Blogs blogs, BlogDTO blogDTO);
     Feedbacks toFeedbacks(FeedbackDTO feedbackDTO);
     void updateFeedbacks(@MappingTarget Feedbacks feedbacks, FeedbackDTO feedbackDTO);
+    Users toUsers(UserDTO userDTO);
 }
