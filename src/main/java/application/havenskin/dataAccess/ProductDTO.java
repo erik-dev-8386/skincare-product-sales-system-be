@@ -1,6 +1,12 @@
 package application.havenskin.dataAccess;
 
+import application.havenskin.enums.ProductEnums;
 import application.havenskin.models.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -8,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 @Data
 public class ProductDTO {
+
     private String productName;
 
     private double unitPrice;
@@ -17,7 +24,6 @@ public class ProductDTO {
     private String description;
 
     private String ingredients;
-
 
     private int quantity;
 
@@ -31,7 +37,7 @@ public class ProductDTO {
 
     private double netWeight;
 
-    private byte status;
+    private Byte status = ProductEnums.AVAILABLE.getValue();
 
     private String discountId;
 

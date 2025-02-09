@@ -4,6 +4,11 @@ import application.havenskin.models.Products;
 import application.havenskin.models.ResultTests;
 import application.havenskin.models.SkinCaresPlan;
 import application.havenskin.models.SkinTypeImages;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.Column;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.util.List;
