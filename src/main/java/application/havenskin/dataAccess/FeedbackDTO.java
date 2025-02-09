@@ -2,9 +2,10 @@ package application.havenskin.dataAccess;
 
 import application.havenskin.models.Products;
 import application.havenskin.models.Users;
+import lombok.Data;
 
 import java.time.LocalDateTime;
-
+@Data
 public class FeedbackDTO {
 
     private String feedbackContent;

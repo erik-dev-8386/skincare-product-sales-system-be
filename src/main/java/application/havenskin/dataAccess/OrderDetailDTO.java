@@ -2,8 +2,9 @@ package application.havenskin.dataAccess;
 
 import application.havenskin.models.Orders;
 import application.havenskin.models.Products;
+import lombok.Data;
 
-
+@Data
 public class OrderDetailDTO {
     private int quantity;
 

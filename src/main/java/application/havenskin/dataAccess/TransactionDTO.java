@@ -4,9 +4,10 @@ import application.havenskin.models.Orders;
 import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import lombok.Data;
 
 import java.time.LocalDateTime;
-
+@Data
 public class TransactionDTO {
     private byte transactionStatus;
 

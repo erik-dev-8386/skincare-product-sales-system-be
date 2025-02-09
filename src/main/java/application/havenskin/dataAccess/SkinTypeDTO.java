@@ -4,9 +4,10 @@ import application.havenskin.models.Products;
 import application.havenskin.models.ResultTests;
 import application.havenskin.models.SkinCaresPlan;
 import application.havenskin.models.SkinTypeImages;
+import lombok.Data;
 
 import java.util.List;
-
+@Data
 public class SkinTypeDTO {
     private String skinName;
 

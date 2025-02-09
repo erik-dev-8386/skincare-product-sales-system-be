@@ -4,11 +4,12 @@ import application.havenskin.models.OrderDetails;
 import application.havenskin.models.Shipments;
 import application.havenskin.models.Transactions;
 import application.havenskin.models.Users;
+import lombok.Data;
 
 
 import java.time.LocalDateTime;
 import java.util.List;
-
+@Data
 public class OrderDTO {
     private LocalDateTime orderTime;
 
