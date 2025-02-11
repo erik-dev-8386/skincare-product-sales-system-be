@@ -27,12 +27,12 @@ public class DiscountService {
         return discountsRepository.save(discount);
     }
     public Discounts updateDiscount(String id, DiscountDTO discount) {
-       Discounts x = discountsRepository.findByDiscountId(id);
-       if(x == null) {
-          throw new RuntimeException("Discount not found");
-       }
-       mapper.updateDiscounts(x, discount);
-       return discountsRepository.save(x);
+        Discounts x = discountsRepository.findByDiscountId(id);
+        if(x == null) {
+            throw new RuntimeException("Discount not found");
+        }
+        mapper.updateDiscounts(x, discount);
+        return discountsRepository.save(x);
     }
     public Discounts deleteDiscount(String id) {
 //        if(getDiscountById(id) == null) {
@@ -49,5 +49,9 @@ public class DiscountService {
     }
     public List<Discounts> addListDiscounts(List<Discounts> discounts) {
         return discountsRepository.saveAll(discounts);
+    }
+
+    public Discounts getDiscountByName(String name) {
+        return discountsRepository.findByDiscountName(name);
     }
 }

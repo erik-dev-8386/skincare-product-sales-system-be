@@ -7,9 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+@CrossOrigin(origins = "http://localhost:5174")
 
 @RestController
-@RequestMapping("/haven-skin/transaction")
+@RequestMapping("/haven-skin/transactions")
 public class TransactionController {
     @Autowired
     private TransactionService transactionService;

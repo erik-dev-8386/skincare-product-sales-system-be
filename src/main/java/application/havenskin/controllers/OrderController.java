@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:5174")
 @RestController
-@RequestMapping("/haven-skin/order")
+@RequestMapping("/haven-skin/orders")
 public class OrderController {
     @Autowired
     private OrderService orderService;
@@ -23,7 +23,7 @@ public class OrderController {
     }
     @GetMapping("/id")
     public Orders getOrderById(@PathVariable String id){
-     return orderService.getOrderById(id);
+        return orderService.getOrderById(id);
     }
 
     @PutMapping("/id")
@@ -36,7 +36,7 @@ public class OrderController {
     }
     @PostMapping("/add-list-order")
     public List<Orders> addListOrder(@RequestBody List<Orders> orders){
-       return orderService.addListOfOrders(orders);
+        return orderService.addListOfOrders(orders);
     }
 
     @GetMapping("/{id}")

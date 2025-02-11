@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SkinTypesRepository extends JpaRepository<SkinTypes, String> {
     SkinTypes findBySkinTypeId(String id);
+    SkinTypes findBySkinName(String skinName);
 }

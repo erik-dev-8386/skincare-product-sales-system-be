@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:5174")
 @RestController
 @RequestMapping("/haven-skin/shipment")
 public class ShipmentController {
@@ -22,12 +22,12 @@ public class ShipmentController {
 
     @PostMapping
     public Shipments addShipment(@RequestBody Shipments shipment) {
-       return shipmentService.createShipment(shipment);
+        return shipmentService.createShipment(shipment);
     }
 
     @GetMapping("/{id}")
     public Shipments getShipmentById(@PathVariable String id) {
-       return shipmentService.getShipmentById(id);
+        return shipmentService.getShipmentById(id);
     }
 
     @PutMapping("/{id}")

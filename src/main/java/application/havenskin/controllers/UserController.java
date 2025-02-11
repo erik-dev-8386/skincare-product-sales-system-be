@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:5174")
 @RestController
 @RequestMapping("/haven-skin/users")
 public class UserController {
@@ -24,7 +24,7 @@ public class UserController {
     }
     @PostMapping
     public Users createUser(@RequestBody UserDTO user) {
-      return userService.createUser(user);
+        return userService.createUser(user);
     }
     @GetMapping("/login")
     public AuthencationResponse login(@RequestBody AuthencationRequest x) {

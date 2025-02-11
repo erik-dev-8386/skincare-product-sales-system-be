@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:5174")
 @RestController
 @RequestMapping("/haven-skin/skin-types")
 public class SkinTypeController {
@@ -23,7 +23,7 @@ public class SkinTypeController {
     }
     @GetMapping("/{id}")
     public SkinTypes getSkinTypeById(@PathVariable String id) {
-       return skinTypeService.getSkinTypeById(id);
+        return skinTypeService.getSkinTypeById(id);
     }
     @PutMapping("/{id}")
     public SkinTypes updateSkinType(@PathVariable String id, @RequestBody SkinTypeDTO skinTypes) {

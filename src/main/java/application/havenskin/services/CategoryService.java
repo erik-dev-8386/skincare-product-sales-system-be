@@ -1,5 +1,6 @@
 package application.havenskin.services;
 
+import application.havenskin.enums.CategoryEnums;
 import application.havenskin.models.Categories;
 import application.havenskin.dataAccess.CategoryDTO;
 import application.havenskin.mapper.Mapper;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryService {
@@ -25,20 +27,26 @@ public class CategoryService {
         return categoriesRepository.save(categories);
     }
     public Categories updateCategories(String id, CategoryDTO categories) {
-       Categories x = categoriesRepository.findById(id).orElseThrow(()->new RuntimeException("Category not found"));
-       mapper.updateCategories(x, categories);
-       return categoriesRepository.save(x);
+        Categories x = categoriesRepository.findById(id).orElseThrow(()->new RuntimeException("Category not found"));
+        mapper.updateCategories(x, categories);
+        return categoriesRepository.save(x);
     }
-    public void deleteCategories(String id) {
-        categoriesRepository.deleteById(id);
-    }
-    public String getCategoriesByName(String name) {
-        if(categoriesRepository.findBycategoryName(name) == null){
-            throw new RuntimeException("Category does not exist");
+    public Categories deleteCategories(String id) {
+        Optional<Categories> x = categoriesRepository.findById(id);
+        if (x.isPresent()) {
+            Categories categories = x.get();
+            categories.setStatus(CategoryEnums.INACTIVE.getStatus());
+            return categoriesRepository.save(categories);
         }
-        return categoriesRepository.findBycategoryName(name).getCategoryId();
+        throw new RuntimeException("Category not found");
     }
     public List<Categories> addListOfCategory(List<Categories> categoriesList) {
         return categoriesRepository.saveAll(categoriesList);
+    }
+    public Categories getCategoriesByName(String name) {
+        if(categoriesRepository.findByCategoryName(name) == null){
+            throw new RuntimeException("Category does not exist");
+        }
+        return categoriesRepository.findByCategoryName(name);
     }
 }
