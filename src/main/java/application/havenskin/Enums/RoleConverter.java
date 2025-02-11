@@ -1,4 +1,4 @@
-package application.havenskin.Enums;
+package application.havenskin.enums;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;

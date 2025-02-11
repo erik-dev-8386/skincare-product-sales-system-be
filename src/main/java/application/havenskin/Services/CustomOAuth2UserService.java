@@ -1,8 +1,8 @@
-package application.havenskin.Services;
+package application.havenskin.services;
 
-import application.havenskin.Enums.Role;
-import application.havenskin.Models.Users;
-import application.havenskin.Repositories.UsersRepository;
+import application.havenskin.enums.Role;
+import application.havenskin.models.Users;
+import application.havenskin.repositories.UserRepository;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -11,10 +11,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
-    private final UsersRepository usersRepository;
+    private final UserRepository usersRepository;
 
-    // Constructor để inject UsersRepository
-    public CustomOAuth2UserService(UsersRepository usersRepository) {
+    // Constructor để inject UserRepository
+    public CustomOAuth2UserService(UserRepository usersRepository) {
         this.usersRepository = usersRepository;
     }
 
@@ -38,7 +38,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             newUser.setEmail(email);
             newUser.setFirstName(oAuth2User.getAttribute("given_name"));
             newUser.setLastName(oAuth2User.getAttribute("family_name"));
-            newUser.setRole(Role.CUSTOMER);
+            newUser.setRole(Role.CUSTOMER.getValue());
             return usersRepository.save(newUser);
         });
 

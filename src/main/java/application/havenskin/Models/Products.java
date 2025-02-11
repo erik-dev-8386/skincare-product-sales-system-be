@@ -1,5 +1,6 @@
-package application.havenskin.Models;
+package application.havenskin.models;
 
+import application.havenskin.enums.ProductEnums;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -14,6 +15,7 @@ import java.util.List;
 public class Products {
     @Id
     @Column(name = "product_id", length = 50)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String productId;
 
     @Column(name = "product_name", length = 50)
@@ -50,8 +52,17 @@ public class Products {
     @Column(name = "net_weight")
     private double netWeight;
 
+    @NotNull
     @Column(name = "status")
-    private byte status;
+    private Byte status = ProductEnums.AVAILABLE.getValue();
+
+    @NotNull
+    @Column(name = "discount_id", length = 50)
+    private String discountId;
+
+    @ManyToOne
+    @JoinColumn(name = "discount_id", referencedColumnName = "discount_id", insertable = false, updatable = false)
+    private Discounts discounts;
 
     @NotNull
     @Column(name = "category_id", length = 50)
@@ -77,18 +88,9 @@ public class Products {
     @JoinColumn(name = "skin_type_id", referencedColumnName = "skin_type_id", insertable = false, updatable = false)
     private SkinTypes skinTypes;
 
-    @NotNull
-    @Column(name = "discount_id", length = 50)
-    private String promotionId;
-
-    @ManyToOne
-    @JoinColumn(name = "discount_id", referencedColumnName = "discount_id", insertable = false, updatable = false)
-    private Discounts discounts;
-
     @OneToMany(mappedBy = "products")
     private List<ProductImages> productImages;
 
     @OneToMany(mappedBy = "products")
     private List<Feedbacks> feedbacks;
-
 }

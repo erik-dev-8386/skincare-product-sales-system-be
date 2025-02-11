@@ -1,6 +1,6 @@
-package application.havenskin.DataAccess;
+package application.havenskin.dataAccess;
 
-import application.havenskin.Models.Users;
+import application.havenskin.models.Users;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

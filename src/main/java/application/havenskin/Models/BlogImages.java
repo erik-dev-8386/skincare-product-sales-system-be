@@ -1,4 +1,4 @@
-package application.havenskin.Models;
+package application.havenskin.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -10,6 +10,7 @@ import lombok.Data;
 public class BlogImages {
     @Id
     @Column(name = "image_id", length = 50)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String imageId;
 
     @Column(name = "image_url", length = 255)

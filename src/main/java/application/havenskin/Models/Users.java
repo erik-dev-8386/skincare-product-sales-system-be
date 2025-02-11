@@ -1,6 +1,6 @@
-package application.havenskin.Models;
+package application.havenskin.models;
 
-import application.havenskin.Enums.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
@@ -16,6 +16,7 @@ public class Users {
 
     @Id
     @Column(name = "user_id", length = 50)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String userId;
 
     @NotNull
@@ -26,12 +27,6 @@ public class Users {
     @Column(name = "last_name", length = 50)
     private String lastName;
 
-    @Column(name = "username", length = 50)
-    private String username;
-
-    @Column(name = "password", length = 50)
-    private String password;
-
     @Column(name = "gender", length = 10)
     private String gender;
 
@@ -41,9 +36,11 @@ public class Users {
     @Column(name = "birth_date")
     private LocalDate birthDate;
 
-    @NotNull
-    @Column(name = "email", length = 100, unique = true)
+    @Column(name = "email", length = 100)
     private String email;
+
+    @Column(name = "password",length = 100)
+    private String password;
 
     @Column(name = "phone_number")
     private int phoneNumber;
@@ -56,24 +53,31 @@ public class Users {
     private String image;
 
     @NotNull
-    @Column(name = "role", nullable = false)
-    private Role role;
+    @Column(name = "role")
+    private byte role;
 
     @Column(name = "status")
     private byte status;
 
+
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Orders> orders;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<ResultTests> resultTests;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Blogs> blogs;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "users")
     private List<Feedbacks> feedbacks;
 
-    @OneToMany(mappedBy = "users")
-    private List<PartPlans> partPlans;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<SkinCaresPlan> skinCaresPlan;
+
 }

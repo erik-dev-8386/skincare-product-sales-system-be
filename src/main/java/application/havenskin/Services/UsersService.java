@@ -1,8 +1,8 @@
-package application.havenskin.Services;
+package application.havenskin.services;
 
-import application.havenskin.Models.Users;
-import application.havenskin.DataAccess.UserServiceResponseDto;
-import application.havenskin.Repositories.UsersRepository;
+import application.havenskin.models.Users;
+import application.havenskin.dataAccess.UserServiceResponseDto;
+import application.havenskin.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -13,10 +13,10 @@ import java.util.Optional;
 
 @Service
 public class UsersService {
-    private final UsersRepository usersRepository;
+    private final UserRepository usersRepository;
     private static final Logger logger = LoggerFactory.getLogger(UsersService.class);
 
-    public UsersService(UsersRepository usersRepository) {
+    public UsersService(UserRepository usersRepository) {
         this.usersRepository = usersRepository;
     }
 

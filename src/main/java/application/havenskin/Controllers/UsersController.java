@@ -1,61 +1,99 @@
-package application.havenskin.Controllers;
+package application.havenskin.controllers;
 
-import application.havenskin.Models.Users;
-import application.havenskin.Repositories.UsersRepository;
-import application.havenskin.Services.UsersService;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+import application.havenskin.models.Users;
+import application.havenskin.repositories.UserRepository;
+import application.havenskin.services.UsersService;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
 public class UsersController {
     private final UsersService usersService;
-    private final UsersRepository usersRepository;
+    private final UserRepository usersRepository;
 
-    public UsersController(UsersService usersService, UsersRepository usersRepository) {
+    @Value("${spring.security.oauth2.client.registration.google.client-id}")
+    private String googleClientId;
+    // Thêm CLIENT_ID vào application.properties
+    //private String googleClientId;
+
+    @Autowired
+    public UsersController(UsersService usersService, UserRepository usersRepository) {
         this.usersService = usersService;
         this.usersRepository = usersRepository;
     }
 
+    // Lấy danh sách tất cả người dùng
     @GetMapping
     public List<Users> getAllUsers() {
         return usersService.getAllUsers();
     }
 
-    @GetMapping("/{getId}")
+    // Lấy thông tin người dùng theo ID
+    @GetMapping("/{userId}")
     public Users getUserById(@PathVariable String userId) {
         return usersService.getUserById(userId);
     }
 
+    // Tạo người dùng mới
     @PostMapping
     public Users createUser(@RequestBody Users user) {
         return usersService.saveUser(user);
     }
 
-    @DeleteMapping("/{deleteId}")
+    // Xóa người dùng (chỉ cập nhật trạng thái, không xóa thật)
+    @DeleteMapping("/{userId}")
     public void deleteUser(@PathVariable String userId) {
         usersService.deleteUser(userId);
     }
 
-    @GetMapping("/login")
-    public Users getUserInfo(@AuthenticationPrincipal OAuth2User principal) {
-        if (principal == null) {
-            throw new RuntimeException("User is not authenticated");
+    // Đăng nhập với Google Credential (thay cho phương thức getUserInfo cũ)
+    @PostMapping("/login/google")
+    public Users loginWithGoogle(@RequestBody String credential) {
+        try {
+            GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(
+                    new NetHttpTransport(),
+                    JacksonFactory.getDefaultInstance())
+                    .setAudience(Collections.singletonList(googleClientId))
+                    .build();
+
+            GoogleIdToken idToken = verifier.verify(credential);
+            if (idToken == null) {
+                throw new RuntimeException("Invalid token");
+            }
+
+            GoogleIdToken.Payload payload = idToken.getPayload();
+            String email = payload.getEmail();
+            String firstName = (String) payload.get("given_name");
+            String lastName = (String) payload.get("family_name");
+
+            Optional<Users> userOptional = usersRepository.findByEmail(email);
+            return userOptional.orElseGet(() -> {
+                Users newUser = new Users();
+                newUser.setEmail(email);
+                newUser.setFirstName(firstName);
+                newUser.setLastName(lastName);
+                newUser.setRole((byte) 2); // CUSTOMER role
+                return usersRepository.save(newUser);
+            });
+
+        } catch (Exception e) {
+            throw new RuntimeException("Authentication failed: " + e.getMessage());
         }
-
-        String email = principal.getAttribute("email");
-        System.out.println("Email from OAuth2User: " + email);
-
-        return usersRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found in database"));
-
     }
 
+    // Đăng xuất
     @GetMapping("/logout")
     public String logout() {
         return "You have been logged out successfully!";
     }
-
 }

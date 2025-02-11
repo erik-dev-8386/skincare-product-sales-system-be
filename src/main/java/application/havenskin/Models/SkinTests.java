@@ -1,4 +1,4 @@
-package application.havenskin.Models;
+package application.havenskin.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -13,6 +13,7 @@ import java.util.List;
 public class SkinTests {
     @Id
     @Column(name = "skin_test_id", length = 50)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String skinTestId;
 
     @Column(name = "test_name", length = 50)
@@ -30,7 +31,6 @@ public class SkinTests {
 
     @Column(name = "status")
     private byte status;
-
 
     @OneToMany(mappedBy = "skinTest")
     private List<Answers> answers;

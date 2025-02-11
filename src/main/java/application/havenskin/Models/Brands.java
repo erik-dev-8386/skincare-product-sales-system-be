@@ -1,6 +1,9 @@
-package application.havenskin.Models;
+package application.havenskin.models;
 
+import application.havenskin.enums.BrandEnums;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.util.List;
@@ -11,6 +14,7 @@ import java.util.List;
 public class Brands {
     @Id
     @Column(name = "brand_id", length = 50)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String brandId;
 
     @Column(name = "brand_name", length = 50)
@@ -22,6 +26,11 @@ public class Brands {
     @Column(name = "country", length = 50)
     private String country;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "brands")
     private List<Products> products;
+
+    @NotNull
+    @Column(name = "status", length = 20)
+    private Byte status = BrandEnums.ACTIVE.getValue();
 }

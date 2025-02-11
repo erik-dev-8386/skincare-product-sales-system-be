@@ -1,4 +1,4 @@
-package application.havenskin.Models;
+package application.havenskin.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 public class Feedbacks {
     @Id
     @Column(name = "feedback_id", length = 50)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String feedbackId;
 
     @Column(name = "feedback_content", length = 255)
@@ -35,4 +36,7 @@ public class Feedbacks {
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     private Users users;
+
+    @Column(name = "status", length = 20)
+    private byte status;
 }

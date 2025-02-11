@@ -1,4 +1,4 @@
-package application.havenskin.Config;
+package application.havenskin.config;
 
 import jakarta.servlet.http.HttpServletRequest;
 

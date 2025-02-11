@@ -1,6 +1,6 @@
-package application.havenskin.Controllers;
+package application.havenskin.controllers;
 
-import application.havenskin.Config.Config;
+import application.havenskin.config.Config;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,7 +44,7 @@ public class VnPayController {
 
         vnp_Params.put("vnp_Locale", "vn");
         vnp_Params.put("vnp_ReturnUrl", "http://localhost:8080/vnpays/return");
-        //vnp_Params.put("vnp_ReturnUrl", Config.vnp_ReturnUrl);
+        //vnp_Params.put("vnp_ReturnUrl", config.vnp_ReturnUrl);
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
         Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));

@@ -1,5 +1,7 @@
-package application.havenskin.Models;
+package application.havenskin.models;
 
+import application.havenskin.enums.OrderDetailEnums;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -10,6 +12,7 @@ import lombok.Data;
 public class OrderDetails {
     @Id
     @Column(name = "order_detail_id", length = 50)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String orderDetailId;
 
     @NotNull
@@ -23,15 +26,22 @@ public class OrderDetails {
     @Column(name = "product_id", length = 50)
     private String productId;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "product_id", insertable = false, updatable = false)
     private Products products;
 
+    @JsonIgnore
     @NotNull
     @Column(name = "order_id", length = 50)
     private String orderId;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "order_id", referencedColumnName = "order_id", insertable = false, updatable = false)
     private Orders orders;
+
+    @NotNull
+    @Column(name = "status")
+    private Byte status = OrderDetailEnums.ACTIVE.getValue();
 }

@@ -1,37 +1,41 @@
-package application.havenskin.Controllers;
+package application.havenskin.controllers;
 
-import application.havenskin.Models.Orders;
-import application.havenskin.Services.TransactionService;
+import application.havenskin.dataAccess.TransactionDTO;
+import application.havenskin.models.Transactions;
+import application.havenskin.services.TransactionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/transactions")
+@RequestMapping("/haven-skin/transaction")
 public class TransactionController {
-    private final TransactionService transactionService;
-
-    public TransactionController(TransactionService transactionService) {
-        this.transactionService = transactionService;
-    }
-
+    @Autowired
+    private TransactionService transactionService;
     @GetMapping
-    public List<Orders> getAllOrders() {
-        return transactionService.getAllOrders();
+    public List<Transactions> getAllTransactions() {
+        return transactionService.getAllTransactions();
     }
-
-    @GetMapping("/{orderId}")
-    public Orders getOrderById(@PathVariable String orderId) {
-        return transactionService.getOrderById(orderId);
-    }
-
     @PostMapping
-    public Orders createOrder(@RequestBody Orders orders) {
-        return transactionService.saveOrder(orders);
+    public Transactions addTransactions(@RequestBody Transactions transactions) {
+        return transactionService.addTransaction(transactions);
+    }
+    @GetMapping("/{id}")
+    public Transactions getTransactionById(@PathVariable String id) {
+        return transactionService.getTransactionById(id);
+    }
+    @PutMapping("/{id}")
+    public Transactions updateTransactionById(@PathVariable String id, @RequestBody TransactionDTO transactions) {
+        return transactionService.updateTransaction(id, transactions);
+    }
+    @DeleteMapping
+    public void deleteTransactionById(@PathVariable String id) {
+        transactionService.deleteTransaction(id);
+    }
+    @PostMapping("/add-list-transactions")
+    public List<Transactions> addListOfTransactions(@RequestBody List<Transactions> transactions) {
+        return transactionService.addListOfTransactions(transactions);
     }
 
-    @DeleteMapping("/{orderId}")
-    public void deleteOrder(@PathVariable String orderId) {
-        transactionService.deleteOrder(orderId);
-    }
 }

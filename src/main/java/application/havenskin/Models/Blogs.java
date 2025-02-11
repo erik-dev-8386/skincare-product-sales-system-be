@@ -1,5 +1,6 @@
-package application.havenskin.Models;
+package application.havenskin.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -13,6 +14,7 @@ import java.util.List;
 public class Blogs {
     @Id
     @Column(name = "blog_id", length = 50)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String blogId;
 
     @Column(name = "blog_title", length = 50)
@@ -32,6 +34,7 @@ public class Blogs {
     @Column(name = "deleted_time")
     private LocalDateTime deletedTime;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     private Users user;
@@ -39,11 +42,7 @@ public class Blogs {
     @OneToMany(mappedBy = "blog")
     private List<BlogImages> blogImages;
 
-    @NotNull
-    @Column(name = "blog_category_id", length = 50)
-    private String blogCategoryId;
-
     @ManyToOne
-    @JoinColumn(name = "blog_category_id", referencedColumnName = "blog_category_id", insertable = false, updatable = false)
-    private BlogCategories blogCategories;
+    @JoinColumn(name = "blog_category_id", referencedColumnName = "blog_category_id", nullable = false)
+    private BlogCategory blogCategory;
 }

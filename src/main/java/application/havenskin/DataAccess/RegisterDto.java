@@ -1,4 +1,4 @@
-package application.havenskin.DataAccess;
+package application.havenskin.dataAccess;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;

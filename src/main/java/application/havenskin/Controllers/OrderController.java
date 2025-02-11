@@ -1,37 +1,46 @@
-package application.havenskin.Controllers;
+package application.havenskin.controllers;
 
-import application.havenskin.Models.Orders;
-import application.havenskin.Services.OrderService;
+import application.havenskin.dataAccess.OrderDTO;
+import application.havenskin.models.Orders;
+import application.havenskin.services.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("/haven-skin/order")
 public class OrderController {
-    private final OrderService orderService;
-
-    public OrderController(OrderService orderService) {
-        this.orderService = orderService;
-    }
-
+    @Autowired
+    private OrderService orderService;
     @GetMapping
-    public List<Orders> getAllOrders() {
+    public List<Orders> getAllOrder(){
         return orderService.getAllOrders();
     }
-
-    @GetMapping("/{orderId}")
-    public Orders getOrderById(@PathVariable String orderId) {
-        return orderService.getOrderById(orderId);
-    }
-
     @PostMapping
-    public Orders createOrder(@RequestBody Orders orders) {
-        return orderService.saveOrder(orders);
+    public Orders createOrder(@RequestBody Orders order){
+        return orderService.createOrder(order);
+    }
+    @GetMapping("/id")
+    public Orders getOrderById(@PathVariable String id){
+     return orderService.getOrderById(id);
     }
 
-    @DeleteMapping("/{orderId}")
-    public void deleteOrder(@PathVariable String orderId) {
-        orderService.deleteOrder(orderId);
+    @PutMapping("/id")
+    public Orders updateOrder(@PathVariable  String id,@RequestBody OrderDTO order){
+        return orderService.updateOrder(id, order);
+    }
+    @DeleteMapping("/id")
+    public Orders deleteOrder(@PathVariable String id){
+        return orderService.deleteOrder(id);
+    }
+    @PostMapping("/add-list-order")
+    public List<Orders> addListOrder(@RequestBody List<Orders> orders){
+       return orderService.addListOfOrders(orders);
+    }
+
+    @GetMapping("/{id}")
+    public int ShowQuantityByOrderId(@PathVariable String id){
+        return orderService.ShowQuantityByOrderId(id);
     }
 }

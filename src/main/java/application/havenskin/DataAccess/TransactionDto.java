@@ -1,8 +1,19 @@
-package application.havenskin.DataAccess;
+package application.havenskin.dataAccess;
 
-import jakarta.validation.constraints.NotBlank;
+import application.havenskin.models.Orders;
+import lombok.Data;
 
-public class TransactionDto {
-    @NotBlank(message = "type is required")
-    private String type;
+import java.time.LocalDateTime;
+@Data
+public class TransactionDTO {
+
+    private byte transactionStatus;
+
+    private LocalDateTime transactionTime;
+
+    private String orderId;
+
+    private String transactionType;
+
+    private Orders orders;
 }

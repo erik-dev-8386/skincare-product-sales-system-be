@@ -1,34 +1,44 @@
-package application.havenskin.Services;
+package application.havenskin.services;
 
-import application.havenskin.Models.Orders;
-import application.havenskin.Repositories.OrderRepository;
-import application.havenskin.Repositories.TransactionRepository;
+import application.havenskin.dataAccess.TransactionDTO;
+import application.havenskin.mapper.Mapper;
+import application.havenskin.models.Transactions;
+import application.havenskin.repositories.TransactionsRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class TransactionService {
-    private final TransactionRepository transactionRepository;
-
-    public TransactionService(TransactionRepository transactionRepository) {
-        this.transactionRepository = transactionRepository;
+    @Autowired
+    private TransactionsRepository transactionsRepository;
+    @Autowired
+    private Mapper mapper;
+    public List<Transactions> getAllTransactions() {
+        return transactionsRepository.findAll();
     }
-
-    public List<Orders> getAllOrders() {
-        return transactionRepository.findAll();
+    public Transactions getTransactionById(String id) {
+        if(!transactionsRepository.existsById(id)) {
+            throw new RuntimeException("Transaction not found");
+        }
+        return transactionsRepository.findById(id).get();
     }
-
-    public Orders getOrderById(String orderId) {
-        return transactionRepository.findById(orderId).orElse(null);
+    public Transactions addTransaction(Transactions transaction) {
+        return transactionsRepository.save(transaction);
     }
-
-    public Orders saveOrder(Orders orders) {
-        return transactionRepository.save(orders);
+    public Transactions updateTransaction(String id, TransactionDTO transaction) {
+        Transactions x = transactionsRepository.findById(id).orElseThrow(() -> new RuntimeException("Transaction not found"));
+        mapper.updateTransactions(x, transaction);
+        return transactionsRepository.save(x);
     }
-
-    public void deleteOrder(String orderId) {
-        transactionRepository.deleteById(orderId);
+    public void deleteTransaction(String id) {
+        if(!transactionsRepository.existsById(id)) {
+            throw new RuntimeException("Transaction not found");
+        }
+        transactionsRepository.deleteById(id);
     }
-
+    public List<Transactions> addListOfTransactions(List<Transactions> transactions) {
+        return transactionsRepository.saveAll(transactions);
+    }
 }

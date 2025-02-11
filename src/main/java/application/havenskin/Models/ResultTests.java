@@ -1,4 +1,4 @@
-package application.havenskin.Models;
+package application.havenskin.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 public class ResultTests {
     @Id
     @Column(name = "result_test_id", length = 50)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String resultTestId;
 
     @Column(name = "total_mark")

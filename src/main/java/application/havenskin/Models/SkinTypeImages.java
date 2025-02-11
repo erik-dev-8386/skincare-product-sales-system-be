@@ -1,4 +1,4 @@
-package application.havenskin.Models;
+package application.havenskin.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -11,6 +11,7 @@ public class SkinTypeImages {
 
     @Id
     @Column(name = "image_id", length = 50)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String imageId;
 
     @Column(name = "image_url", length = 255)

@@ -1,7 +1,9 @@
-package application.havenskin.Repositories;
+package application.havenskin.repositories;
 
-import application.havenskin.Models.SkinCarePlans;
+import application.havenskin.models.SkinCaresPlan;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface PlanSkinCareRepository extends JpaRepository<SkinCarePlans, String> {
+@Repository
+public interface PlanSkinCareRepository extends JpaRepository<SkinCaresPlan, String> {
 }

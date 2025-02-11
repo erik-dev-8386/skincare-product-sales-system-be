@@ -1,4 +1,4 @@
-package application.havenskin.Models;
+package application.havenskin.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 public class Transactions {
     @Id
     @Column(name = "transaction_id", length = 50)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String transactionId;
 
     @Column(name = "transaction_status")
@@ -20,12 +21,12 @@ public class Transactions {
     @Column(name = "transaction_time")
     private LocalDateTime transactionTime;
 
-    @Column(name = "type")
-    private byte type;
-
     @NotNull
     @Column(name = "order_id", length = 50)
     private String orderId;
+
+    @Column(name="transaction_type", length = 50)
+    private String transactionType;
 
     @OneToOne
     @JoinColumn(name = "order_id", referencedColumnName = "order_id", insertable = false, updatable = false)

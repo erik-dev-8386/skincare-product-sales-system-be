@@ -1,4 +1,4 @@
-package application.havenskin.Enums;
+package application.havenskin.enums;
 
 public enum Role {
     ADMIN((byte) 1),

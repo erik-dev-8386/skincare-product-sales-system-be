@@ -1,4 +1,4 @@
-package application.havenskin.DataAccess;
+package application.havenskin.dataAccess;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

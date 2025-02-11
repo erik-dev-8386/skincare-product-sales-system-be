@@ -1,7 +1,6 @@
-package application.havenskin.Models;
+package application.havenskin.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Entity
@@ -10,6 +9,7 @@ import lombok.Data;
 public class Questions {
     @Id
     @Column(name = "question_id", length = 50)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String questionId;
 
     @Column(name = "question_content", length = 50)
@@ -17,6 +17,4 @@ public class Questions {
 
     @Column(name = "max_mark")
     private Double maxMark;
-
-
 }
