@@ -37,6 +37,10 @@ public class ProductService {
         return productsRepository.save(products);
     }
 
+    public Products getProductByName(String name) {
+        return productsRepository.findByProductName(name);
+    }
+
     public Products deleteProduct(String id) {
         //productsRepository.deleteById(id);
         Optional<Products> products = productsRepository.findById(id);
@@ -67,6 +71,40 @@ public class ProductService {
     public List<Products> getBestSellerProducts() {
         int max = productsRepository.findAll().stream().mapToInt(Products::getQuantity).max().orElse(0);
         return productsRepository.findByQuantity(max);
+    }
+    public List<Products> getProductsByCategoryName(String categoryName) {
+        if (productsRepository.findProductsByCategories_CategoryName(categoryName) == null) {
+            throw new RuntimeException("Product not found");
+        }
+        return productsRepository.findProductsByCategories_CategoryName(categoryName);
+    }
+
+    public List<Products> getProductsByBrandName(String brandName) {
+        if (productsRepository.findByBrands_BrandName(brandName) == null) {
+            throw new RuntimeException("Product not found with " + brandName);
+        }
+        return productsRepository.findByBrands_BrandName(brandName);
+    }
+
+    public List<Products> getProductsByBrandCountry(String country){
+        if(productsRepository.findByCountry(country) == null){
+            throw new RuntimeException("Product not found with " + country);
+        }
+        return productsRepository.findByCountry(country);
+    }
+
+    public List<Products> getProductsBySkinName(String skinName) {
+        if (productsRepository.findBySkinName(skinName) == null) {
+            throw new RuntimeException("Product not found with " + skinName);
+        }
+        return productsRepository.findBySkinName(skinName);
+    }
+
+    public List<Products> getProductsByDiscountName(String discountName) {
+        if (productsRepository.findProductsByDiscounts_DiscountName(discountName) == null) {
+            throw new RuntimeException("Product not found with " + discountName);
+        }
+        return productsRepository.findProductsByDiscounts_DiscountName(discountName);
     }
 
 //    @Transactional

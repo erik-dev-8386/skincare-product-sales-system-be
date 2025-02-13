@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/haven-skin/order-details")
 public class OrderDetailsController {
@@ -24,11 +24,11 @@ public class OrderDetailsController {
     }
     @GetMapping("/{id}")
     public OrderDetails getOrderDetailsById(@PathVariable String id) {
-       return orderDetailsService.getOrderDetailsByID(id);
+        return orderDetailsService.getOrderDetailsByID(id);
     }
     @PutMapping("/{id}")
     public OrderDetails updateOrderDetails(@PathVariable String id, @RequestBody OrderDetailDTO orderDetails) {
-       return orderDetailsService.updateOrderDetails(id, orderDetails);
+        return orderDetailsService.updateOrderDetails(id, orderDetails);
     }
     @DeleteMapping("/{id}")
     public OrderDetails deleteOrderDetailsByID(@PathVariable String id) {
@@ -36,6 +36,6 @@ public class OrderDetailsController {
     }
     @PostMapping("/add-list-order-details")
     public List<OrderDetails> addOrderDetailsList(@RequestBody List<OrderDetails> orderDetailsList) {
-       return orderDetailsService.addListOfOrderDetails(orderDetailsList);
+        return orderDetailsService.addListOfOrderDetails(orderDetailsList);
     }
 }

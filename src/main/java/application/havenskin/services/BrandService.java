@@ -67,14 +67,27 @@ public class BrandService {
         brandsRepository.deleteAll();
     }
     public String getBrandsByName(String name){
-        if(brandsRepository.findBybrandName(name) == null){
+        if(brandsRepository.findByBrandName(name) == null){
             throw new RuntimeException("Brand not found");
         }
-        return brandsRepository.findBybrandName(name).getBrandId();
+        return brandsRepository.findByBrandName(name).getBrandId();
     }
 
     public List<Brands> addBrands(List<Brands> x){
         return brandsRepository.saveAll(x);
+    }
+    public Brands getBrandByName(String name){
+        if(brandsRepository.findByBrandName(name) == null){
+            throw new RuntimeException("Brand not found");
+        }
+        return brandsRepository.findByBrandName(name);
+    }
+
+    public List<Brands> getBrandsByCountry(String country){
+        if(brandsRepository.findByCountry(country) == null){
+            throw new RuntimeException("Brand not found");
+        }
+        return brandsRepository.findByCountry(country);
     }
 
 }

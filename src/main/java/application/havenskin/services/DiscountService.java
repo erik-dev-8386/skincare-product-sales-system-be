@@ -50,4 +50,7 @@ public class DiscountService {
     public List<Discounts> addListDiscounts(List<Discounts> discounts) {
         return discountsRepository.saveAll(discounts);
     }
+    public Discounts getDiscountByName(String name) {
+        return discountsRepository.findByDiscountName(name);
+    }
 }

@@ -7,7 +7,6 @@ import java.time.LocalDate;
 import java.util.List;
 @Data
 public class UserDTO {
-
     private String firstName;
 
     private String lastName;
@@ -43,5 +42,4 @@ public class UserDTO {
     private List<Feedbacks> feedbacks;
 
     private List<SkinCaresPlan> skinCaresPlan;
-
 }

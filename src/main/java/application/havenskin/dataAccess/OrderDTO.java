@@ -31,5 +31,4 @@ public class OrderDTO {
     private List<Shipments> shipments;
 
     private Transactions transactions;
-
 }

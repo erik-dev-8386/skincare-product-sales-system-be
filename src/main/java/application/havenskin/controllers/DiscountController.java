@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/haven-skin/discounts")
 public class DiscountController {
@@ -15,7 +15,7 @@ public class DiscountController {
     private DiscountService discountService;
     @GetMapping
     public List<Discounts> getAllDiscount(){
-       return discountService.getAllDiscounts();
+        return discountService.getAllDiscounts();
     }
     @PostMapping
     public Discounts addDiscount(@RequestBody Discounts discount){
@@ -36,6 +36,11 @@ public class DiscountController {
 
     @PostMapping("/add-list-discount")
     public List<Discounts> addListDiscount(@RequestBody List<Discounts> discounts){
-       return discountService.addListDiscounts(discounts);
+        return discountService.addListDiscounts(discounts);
     }
+    @GetMapping("/name/{discountName}")
+    public Discounts getDiscountByName(@PathVariable String discountName){
+        return discountService.getDiscountByName(discountName);
+    }
+
 }
