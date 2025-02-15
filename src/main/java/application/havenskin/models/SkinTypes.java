@@ -1,6 +1,5 @@
 package application.havenskin.models;
 
-import application.havenskin.enums.BrandEnums;
 import application.havenskin.enums.SkinTypeEnums;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -49,5 +48,5 @@ public class SkinTypes {
 
     @NotNull
     @Column(name = "status", length = 20)
-    private Byte status = SkinTypeEnums.
+    private Byte status = SkinTypeEnums.ACTIVE.getSkin_type_status();
 }
