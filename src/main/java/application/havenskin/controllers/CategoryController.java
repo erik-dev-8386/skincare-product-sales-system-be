@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
-@RequestMapping("/haven-skin/category")
+@RequestMapping("/haven-skin/categories")
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
@@ -40,7 +40,7 @@ public class CategoryController {
         return categoryService.getCategoriesByName(categoryName);
     }
 
-    @PostMapping("/add-list-category")
+    @PostMapping("/add-list-categories")
     public List<Categories> addListCategory(@RequestBody List<Categories> categories) {
         return categoryService.addListOfCategory(categories);
     }

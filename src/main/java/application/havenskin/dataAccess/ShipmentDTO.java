@@ -1,25 +1,36 @@
 package application.havenskin.dataAccess;
 
-import application.havenskin.models.Orders;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ShipmentDTO {
+    private String expectedDeliveryTime;
 
-    private String shipmentCode;
+    private Double fee;
 
-    private String shipmentDate;
+    private String coupon;
 
-    private String shipmentStatus;
+    private Double insurance;
 
-    private String orderId;
+    private Double mainService;
 
-    private Orders orders;
+    private Double r2s;
 
-    private Byte status;
+    private Double returnFee;
+
+    private Double stationDo;
+
+    private Double stationPu;
+
+    private String orderCode;
+
+    private String sortCode;
+
+    private Double totalFee;
+
+    private String transType;
 }

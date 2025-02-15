@@ -34,7 +34,7 @@ public class OrderController {
     public Orders deleteOrder(@PathVariable String id){
         return orderService.deleteOrder(id);
     }
-    @PostMapping("/add-list-order")
+    @PostMapping("/add-list-orders")
     public List<Orders> addListOrder(@RequestBody List<Orders> orders){
         return orderService.addListOfOrders(orders);
     }

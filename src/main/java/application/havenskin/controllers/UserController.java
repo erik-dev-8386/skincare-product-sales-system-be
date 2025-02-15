@@ -30,4 +30,8 @@ public class UserController {
     public AuthencationResponse login(@RequestBody AuthencationRequest x) {
         return authenticationService.authenticate(x);
     }
+    @PostMapping("/add-list-users")
+    public List<Users> addListUsers(@RequestBody List<Users> users) {
+        return userService.addListUsers(users);
+    }
 }

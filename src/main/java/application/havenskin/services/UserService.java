@@ -45,4 +45,8 @@ public class UserService {
         }
         userRepository.deleteById(id);
     }
+
+    public List<Users> addListUsers(List<Users> users) {
+        return userRepository.saveAll(users);
+    }
 }

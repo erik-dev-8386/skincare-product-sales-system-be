@@ -34,7 +34,7 @@ public class DiscountController {
         return discountService.deleteDiscount(id);
     }
 
-    @PostMapping("/add-list-discount")
+    @PostMapping("/add-list-discounts")
     public List<Discounts> addListDiscount(@RequestBody List<Discounts> discounts){
         return discountService.addListDiscounts(discounts);
     }

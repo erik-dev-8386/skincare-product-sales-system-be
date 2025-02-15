@@ -5,24 +5,53 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "Shipments")
-@Data
 public class Shipments {
     @Id
-    @Column(name = "shipment_id", length = 50)
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "shipment_id")
     private String shipmentId;
 
-    @Column(name = "shipment_code", length = 50)
-    private String shipmentCode;
+    @Column(name = "expected_delivery_time")
+    private String expectedDeliveryTime;
 
+    @Column(name = "fee")
+    private Double fee;
 
-    @Column(name = "shipment_date", length = 50)
-    private String shipmentDate;
+    @Column(name = "coupon")
+    private String coupon;
 
-    @Column(name = "shipment_status", length = 50)
-    private String shipmentStatus;
+    @Column(name = "insurance")
+    private Double insurance;
+
+    @Column(name = "main_service")
+    private Double mainService;
+
+    @Column(name = "r2s")
+    private Double r2s;
+
+    @Column(name = "returnFee")
+    private Double returnFee;
+
+    @Column(name = "station_do")
+    private Double stationDo;
+
+    @Column(name = "station_pu")
+    private Double stationPu;
+
+    @Column(name = "order_code")
+    private String orderCode;
+
+    @Column(name = "sort_code")
+    private String sortCode;
+
+    @Column(name = "total_fee")
+    private Double totalFee;
+
+    @Column(name = "trans_type")
+    private String transType;
 
     @NotNull
     @Column(name = "order_id", length = 50)

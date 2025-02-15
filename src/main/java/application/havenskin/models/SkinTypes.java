@@ -1,5 +1,7 @@
 package application.havenskin.models;
 
+import application.havenskin.enums.BrandEnums;
+import application.havenskin.enums.SkinTypeEnums;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -44,4 +46,8 @@ public class SkinTypes {
     @JsonIgnore
     @OneToMany(mappedBy = "skinTypes")
     private List<Products> products;
+
+    @NotNull
+    @Column(name = "status", length = 20)
+    private Byte status = SkinTypeEnums.
 }
