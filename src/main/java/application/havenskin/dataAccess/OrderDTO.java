@@ -1,6 +1,7 @@
 package application.havenskin.dataAccess;
 
 import application.havenskin.models.OrderDetails;
+import application.havenskin.models.Shipments;
 import application.havenskin.models.Transactions;
 import application.havenskin.models.Users;
 import lombok.Data;

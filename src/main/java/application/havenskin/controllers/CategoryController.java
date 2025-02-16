@@ -4,6 +4,7 @@ import application.havenskin.models.Categories;
 import application.havenskin.dataAccess.CategoryDTO;
 import application.havenskin.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,10 +14,13 @@ import java.util.List;
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
+
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public List<Categories> getAllCategories() {
         return categoryService.getAllCategories();
     }
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @PostMapping
     public Categories addCategory(@RequestBody Categories categories) {
         return categoryService.addCategories(categories);
@@ -25,10 +29,12 @@ public class CategoryController {
     public Categories getCategoryById(@PathVariable String id) {
         return categoryService.getCategoriesById(id);
     }
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @PutMapping("/{id}")
     public Categories updateCategory(@PathVariable String id, @RequestBody CategoryDTO categories) {
         return categoryService.updateCategories(id, categories);
     }
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @DeleteMapping("/{id}")
     public Categories deleteCategory(@PathVariable String id)
     {
@@ -40,6 +46,7 @@ public class CategoryController {
         return categoryService.getCategoriesByName(categoryName);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @PostMapping("/add-list-categories")
     public List<Categories> addListCategory(@RequestBody List<Categories> categories) {
         return categoryService.addListOfCategory(categories);
