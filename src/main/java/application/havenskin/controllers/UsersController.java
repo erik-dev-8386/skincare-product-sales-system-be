@@ -1,5 +1,6 @@
 package application.havenskin.controllers;
 
+import application.havenskin.models.Orders;
 import application.havenskin.models.Users;
 import application.havenskin.repositories.UserRepository;
 import application.havenskin.services.UsersService;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/haven-skin/users")
 public class UsersController {
     private final UsersService usersService;
     private final UserRepository usersRepository;
@@ -54,6 +55,11 @@ public class UsersController {
     @DeleteMapping("/{userId}")
     public void deleteUser(@PathVariable String userId) {
         usersService.deleteUser(userId);
+    }
+
+    @PostMapping("/add-list-user")
+    public List<Users> addListUser(@RequestBody List<Users> users){
+        return usersService.addListOfUsers(users);
     }
 
     // Đăng nhập với Google Credential (thay cho phương thức getUserInfo cũ)

@@ -1,9 +1,12 @@
 package application.havenskin.controllers;
 
 import application.havenskin.dataAccess.OrderDTO;
+import application.havenskin.enums.OrderEnums;
 import application.havenskin.models.Orders;
 import application.havenskin.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,6 +37,7 @@ public class OrderController {
     public Orders deleteOrder(@PathVariable String id){
         return orderService.deleteOrder(id);
     }
+
     @PostMapping("/add-list-order")
     public List<Orders> addListOrder(@RequestBody List<Orders> orders){
         return orderService.addListOfOrders(orders);
@@ -42,5 +46,14 @@ public class OrderController {
     @GetMapping("/{id}")
     public int ShowQuantityByOrderId(@PathVariable String id){
         return orderService.ShowQuantityByOrderId(id);
+    }
+
+    @PutMapping("/{id}/status")
+    public ResponseEntity<?> updateOrderStatus(@PathVariable String id, @RequestParam byte status) {
+        boolean updated = orderService.updateOrderStatus(id, status);
+        if (updated) {
+            return ResponseEntity.ok("Cập nhật trạng thái thành công");
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Không tìm thấy đơn hàng hoặc lỗi xảy ra");
     }
 }

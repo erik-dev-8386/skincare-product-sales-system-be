@@ -25,7 +25,7 @@ public class Products {
     private double unitPrice;
 
     @Column(name = "discount_price")
-    private double discountPrice;
+    private Double discountPrice;
 
     @Column(name = "description", length = 255)
     private String description;

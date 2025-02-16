@@ -18,6 +18,7 @@ public class OrderDetailsController {
     public List<OrderDetails> getOrderDetails() {
         return orderDetailsService.getAllOrderDetails();
     }
+
     @PostMapping
     public OrderDetails createOrderDetails(@RequestBody OrderDetails orderDetails) {
         return orderDetailsService.addOrderDetails(orderDetails);

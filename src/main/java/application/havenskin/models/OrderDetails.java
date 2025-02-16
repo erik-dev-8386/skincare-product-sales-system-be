@@ -31,7 +31,6 @@ public class OrderDetails {
     @JoinColumn(name = "product_id", referencedColumnName = "product_id", insertable = false, updatable = false)
     private Products products;
 
-    @JsonIgnore
     @NotNull
     @Column(name = "order_id", length = 50)
     private String orderId;

@@ -107,8 +107,4 @@ public class ProductService {
         return productsRepository.findProductsByDiscounts_DiscountName(discountName);
     }
 
-//    @Transactional
-//    public Products byProduct(String productName) {
-//        Products x = productsRepository.findByProductName()
-//    }
 }

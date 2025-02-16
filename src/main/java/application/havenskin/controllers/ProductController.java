@@ -6,6 +6,8 @@ import application.havenskin.services.BrandService;
 import application.havenskin.services.CategoryService;
 import application.havenskin.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,10 +21,12 @@ public class ProductController {
     private CategoryService categoryService;
     @Autowired
     private BrandService brandService;
+
     @GetMapping
     public List<Products> getAllProducts() {
         return productService.getAllProducts();
     }
+
     @PostMapping
     public Products addProduct(@RequestBody Products product) {
         return productService.addProduct(product);
@@ -46,10 +50,12 @@ public class ProductController {
     public List<Products> addListProducts(@RequestBody List<Products> x) {
         return productService.addListOfProducts(x);
     }
+
     @GetMapping("/max-quantity")
     public List<Products> getMaxQuantity() {
         return productService.getBestSellerProducts();
     }
+
     @GetMapping("/category/{categoryName}")
     public List<Products> getProductByCategoryName(@PathVariable String categoryName) {
         return productService.getProductsByCategoryName(categoryName);
@@ -75,4 +81,5 @@ public class ProductController {
     public List<Products> getProductsByDiscountName(@PathVariable String discountName) {
         return productService.getProductsByDiscountName(discountName);
     }
+
 }

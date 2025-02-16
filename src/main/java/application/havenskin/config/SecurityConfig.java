@@ -14,26 +14,35 @@ public class SecurityConfig {
     public SecurityConfig(ClientRegistrationRepository clientRegistrationRepository) {
         this.clientRegistrationRepository = clientRegistrationRepository;
     }
-
     @Bean
+
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/users/login", "/users/logout", "/vnpays/pay").permitAll() // CHO PHÉP KHÔNG CẦN LOGIN
-                        .anyRequest().authenticated()
-                )
-                .oauth2Login(oauth2 -> oauth2 //
-                        .loginPage("/oauth2/authorization/google") // Tùy chỉnh trang login
-                )
-                .logout(logout -> logout
-                        .logoutSuccessHandler(oidcLogoutSuccessHandler()) // Xử lý logout với OAuth2
-                        .invalidateHttpSession(true)
-                        .deleteCookies("JSESSIONID")
-                )
+                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll()) // Mở toàn bộ API
                 .csrf(csrf -> csrf.disable());
 
         return http.build();
     }
+
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        http
+//                .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers("/users/login", "/users/logout", "/vnpays/pay").permitAll() // CHO PHÉP KHÔNG CẦN LOGIN
+//                        .anyRequest().authenticated()
+//                )
+//                .oauth2Login(oauth2 -> oauth2 //
+//                        .loginPage("/oauth2/authorization/google") // Tùy chỉnh trang login
+//                )
+//                .logout(logout -> logout
+//                        .logoutSuccessHandler(oidcLogoutSuccessHandler()) // Xử lý logout với OAuth2
+//                        .invalidateHttpSession(true)
+//                        .deleteCookies("JSESSIONID")
+//                )
+//                .csrf(csrf -> csrf.disable());
+//
+//        return http.build();
+//    }
 
     /**
      * Xử lý logout thành công cho OIDC
@@ -45,42 +54,3 @@ public class SecurityConfig {
         return handler;
     }
 }
-
-/*@Configuration
-public class SecurityConfig {
-    private final ClientRegistrationRepository clientRegistrationRepository;
-
-    public SecurityConfig(ClientRegistrationRepository clientRegistrationRepository) {
-        this.clientRegistrationRepository = clientRegistrationRepository;
-    }
-
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/users/login", "/users/logout").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .oauth2Login(oauth2 -> oauth2 //
-                        .loginPage("/oauth2/authorization/google") // Tùy chỉnh trang login
-                )
-                .logout(logout -> logout
-                        .logoutSuccessHandler(oidcLogoutSuccessHandler()) // Xử lý logout với OAuth2
-                        .invalidateHttpSession(true)
-                        .deleteCookies("JSESSIONID")
-                )
-                .csrf(csrf -> csrf.disable());
-
-        return http.build();
-    }
-
-    /**
-     * Xử lý logout thành công cho OIDC
-     */
-    /*private OidcClientInitiatedLogoutSuccessHandler oidcLogoutSuccessHandler() {
-        OidcClientInitiatedLogoutSuccessHandler handler =
-                new OidcClientInitiatedLogoutSuccessHandler(clientRegistrationRepository);
-        handler.setPostLogoutRedirectUri("http://localhost:8080/users/login"); // URL sau khi logout
-        return handler;
-    }
-}*/

@@ -42,8 +42,8 @@ public class Users {
     @Column(name = "password",length = 100)
     private String password;
 
-    @Column(name = "phone_number")
-    private int phoneNumber;
+    @Column(name = "phone_number", length = 15)
+    private String phoneNumber;
 
     @Max(5)
     @Column(name = "rating")
@@ -58,7 +58,6 @@ public class Users {
 
     @Column(name = "status")
     private byte status;
-
 
     @JsonIgnore
     @OneToMany(mappedBy = "user")

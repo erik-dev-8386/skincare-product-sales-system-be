@@ -1,5 +1,6 @@
 package application.havenskin.services;
 
+import application.havenskin.models.Orders;
 import application.havenskin.models.Users;
 import application.havenskin.dataAccess.UserServiceResponseDto;
 import application.havenskin.repositories.UserRepository;
@@ -30,6 +31,10 @@ public class UsersService {
 
     public Users saveUser(Users user) {
         return usersRepository.save(user);
+    }
+
+    public List<Users> addListOfUsers(List<Users> users) {
+        return usersRepository.saveAll(users);
     }
 
     public UserServiceResponseDto getById(String id) {
