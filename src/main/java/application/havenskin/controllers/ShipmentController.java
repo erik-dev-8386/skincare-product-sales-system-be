@@ -6,6 +6,7 @@ import application.havenskin.models.Shipments;
 import application.havenskin.services.ShipmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,12 +20,12 @@ public class ShipmentController {
 
     @Autowired
     private ShipmentService shipmentService;
-
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public List<Shipments> getAllShipments() {
         return shipmentService.getAllShipments();
     }
-
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @PostMapping
     public Shipments addShipment(@RequestBody Shipments shipment) {
         return shipmentService.createShipment(shipment);
@@ -34,8 +35,8 @@ public class ShipmentController {
 //    public Shipments getShipmentById(@PathVariable String id) {
 //        return shipmentService.getShipmentById(id);
 //    }
-
-    @PutMapping("/{id}")
+@PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
+@PutMapping("/{id}")
     public Shipments updateShipment(@PathVariable String id, @RequestBody ShipmentDTO shipment) {
         return shipmentService.updateShipment(id, shipment);
     }

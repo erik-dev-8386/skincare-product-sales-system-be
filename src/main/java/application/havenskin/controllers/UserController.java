@@ -26,7 +26,7 @@ public class UserController {
     public Users createUser(@RequestBody UserDTO user) {
         return userService.createUser(user);
     }
-    @GetMapping("/login")
+    @PostMapping("/login")
     public AuthencationResponse login(@RequestBody AuthencationRequest x) {
         return authenticationService.authenticate(x);
     }

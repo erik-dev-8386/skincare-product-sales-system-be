@@ -1,22 +1,26 @@
 package application.havenskin.enums;
 
 public enum Role {
-    ;
+    ADMIN((byte) 1),
+    STAFF((byte) 2),
+    CUSTOMER((byte) 3);
 
+    private final byte value;
 
-
-
-    private byte role;
-
-    Role(byte role) {
-        this.role = role;
+    Role(byte value) {
+        this.value = value;
     }
 
-    public byte getRole() {
-        return role;
+    public byte getValue() {
+        return value;
     }
 
-    public void setRole(byte role) {
-        this.role = role;
+    public static Role fromValue(byte value) {
+        for (Role role : Role.values()) {
+            if (role.value == value) {
+                return role;
+            }
+        }
+        throw new IllegalArgumentException("Unknown role value: " + value);
     }
 }
