@@ -7,6 +7,8 @@ import application.havenskin.models.Users;
 import application.havenskin.services.AuthenticationService;
 import application.havenskin.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +26,12 @@ public class UserController {
     }
     @PostMapping
     public Users createUser(@RequestBody UserDTO user) {
+        Users newUser = new Users();
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        newUser.setFirstName(user.getFirstName());
+        newUser.setLastName(user.getLastName());
+        newUser.setEmail(user.getEmail());
+        newUser.setPassword(passwordEncoder.encode(user.getPassword()));
         return userService.createUser(user);
     }
     @PostMapping("/login")

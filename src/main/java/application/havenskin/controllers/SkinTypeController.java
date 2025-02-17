@@ -47,4 +47,9 @@ public class SkinTypeController {
     public List<SkinTypes> addSkinTypeList(@RequestBody List<SkinTypes> skinTypes) {
         return skinTypeService.addListOfSkinTypes(skinTypes);
     }
+
+    @GetMapping("/list-name-skin-types")
+    public List<String> listSkinTypeNames() {
+        return skinTypeService.getAllSkinTypeNames();
+    }
 }

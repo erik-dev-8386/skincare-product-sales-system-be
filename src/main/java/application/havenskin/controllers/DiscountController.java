@@ -48,5 +48,9 @@ public class DiscountController {
     public Discounts getDiscountByName(@PathVariable String discountName){
         return discountService.getDiscountByName(discountName);
     }
+    @GetMapping("/list-name-discounts")
+    public List<String> getListDiscountByName(){
+        return discountService.getDiscountsByName();
+    }
 
 }

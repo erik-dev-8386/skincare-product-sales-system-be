@@ -42,4 +42,7 @@ public class SkinTypeService {
     public List<SkinTypes> addListOfSkinTypes(List<SkinTypes> x) {
         return skinTypeRepository.saveAll(x);
     }
+    public List<String> getAllSkinTypeNames() {
+        return skinTypeRepository.findAllBySkinTypeByName();
+    }
 }

@@ -10,7 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/haven-skin/brands")
 public class BrandsController {
@@ -57,5 +57,9 @@ public class BrandsController {
     @GetMapping("/country/{countryName}")
     public List<Brands> getBrandsByCountry(@PathVariable String countryName) {
         return brandService.getBrandsByCountry(countryName);
+    }
+    @GetMapping("/list-name-brands")
+    public List<String> getBrandsByListName() {
+        return brandService.getAllBrandByName();
     }
 }

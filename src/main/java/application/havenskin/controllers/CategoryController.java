@@ -51,5 +51,9 @@ public class CategoryController {
     public List<Categories> addListCategory(@RequestBody List<Categories> categories) {
         return categoryService.addListOfCategory(categories);
     }
+    @GetMapping("/list-name-categories")
+    public List<String> listCategoryName(){
+        return categoryService.getAllCategoriesNames();
+    }
 }
 

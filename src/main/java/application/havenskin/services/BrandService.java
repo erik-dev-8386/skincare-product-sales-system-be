@@ -84,5 +84,7 @@ public class BrandService {
         return brandsRepository.findByCountry(country);
     }
 
-
+    public List<String> getAllBrandByName(){
+        return  brandsRepository.findAllByBrandName();
+    }
 }
