@@ -62,10 +62,11 @@ public class UsersController {
         return usersService.addListOfUsers(users);
     }
 
-    // Đăng nhập với Google Credential (thay cho phương thức getUserInfo cũ)
     @PostMapping("/login/google")
     public Users loginWithGoogle(@RequestBody String credential) {
         try {
+            System.out.println("Received Token: " + credential); // Debug token
+
             GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(
                     new NetHttpTransport(),
                     JacksonFactory.getDefaultInstance())
@@ -74,28 +75,34 @@ public class UsersController {
 
             GoogleIdToken idToken = verifier.verify(credential);
             if (idToken == null) {
-                throw new RuntimeException("Invalid token");
+                throw new RuntimeException("Invalid Google token");
             }
 
             GoogleIdToken.Payload payload = idToken.getPayload();
-            String email = payload.getEmail();
-            String firstName = (String) payload.get("given_name");
-            String lastName = (String) payload.get("family_name");
-
-            Optional<Users> userOptional = usersRepository.findByEmail(email);
-            return userOptional.orElseGet(() -> {
-                Users newUser = new Users();
-                newUser.setEmail(email);
-                newUser.setFirstName(firstName);
-                newUser.setLastName(lastName);
-                newUser.setRole((byte) 2); // CUSTOMER role
-                return usersRepository.save(newUser);
-            });
+            return processUser(payload);
 
         } catch (Exception e) {
+            e.printStackTrace(); // In lỗi ra console
             throw new RuntimeException("Authentication failed: " + e.getMessage());
         }
     }
+
+    private Users processUser(GoogleIdToken.Payload payload) {
+        String email = payload.getEmail();
+        String firstName = (String) payload.get("given_name");
+        String lastName = (String) payload.get("family_name");
+
+        Optional<Users> userOptional = usersRepository.findByEmail(email);
+        return userOptional.orElseGet(() -> {
+            Users newUser = new Users();
+            newUser.setEmail(email);
+            newUser.setFirstName(firstName);
+            newUser.setLastName(lastName);
+            newUser.setRole((byte) 2); // CUSTOMER role
+            return usersRepository.save(newUser);
+        });
+    }
+
 
     // Đăng xuất
     @GetMapping("/logout")
