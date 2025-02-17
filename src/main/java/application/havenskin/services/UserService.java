@@ -28,9 +28,15 @@ public class UserService {
     }
 
     public Users createUser(UserDTO user) {
-        Users x = mapper.toUsers(user);
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-        x.setPassword(passwordEncoder.encode(user.getPassword()));
+//        Users x = mapper.toUsers(user);
+//        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+//        x.setPassword(passwordEncoder.encode(user.getPassword()));
+//        return userRepository.save(x);
+        Users x = new Users();
+        x.setFirstName(user.getFirstName());
+        x.setLastName(user.getLastName());
+        x.setPassword(new BCryptPasswordEncoder(10).encode(user.getPassword()));
+        x.setEmail(user.getEmail());
         return userRepository.save(x);
     }
     public Users updateUser(String id,Users user) {
