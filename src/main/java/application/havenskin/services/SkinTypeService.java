@@ -46,4 +46,7 @@ public class SkinTypeService {
     public List<String> getAllSkinTypeNames() {
         return skinTypeRepository.findAllBySkinTypeByName();
     }
+    public String getSkinTypeNameByName(String name) {
+        return skinTypeRepository.findBySkinName(name).getSkinTypeId();
+    }
 }

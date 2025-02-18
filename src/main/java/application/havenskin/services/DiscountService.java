@@ -52,8 +52,8 @@ public class DiscountService {
         return discountsRepository.saveAll(discounts);
     }
 
-    public Discounts getDiscountByName(String name) {
-        return discountsRepository.findByDiscountName(name);
+    public String getDiscountByName(String name) {
+        return discountsRepository.findByDiscountName(name).getDiscountId();
     }
 
     public List<String> getDiscountsByName() {

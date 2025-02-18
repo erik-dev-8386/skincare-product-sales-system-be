@@ -1,10 +1,8 @@
 package application.havenskin.controllers;
 
-
-import application.havenskin.models.Brands;
 import application.havenskin.dataAccess.BrandDTO;
-import application.havenskin.repositories.BrandsRepository;
-import application.havenskin.services.BrandService;
+import application.havenskin.models.Brands;
+import application.havenskin.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -51,8 +49,8 @@ public class BrandsController {
         return brandService.addBrands(brands);
     }
     @GetMapping("/name/{brandName}")
-    public Brands getBrandByName(@PathVariable String brandName) {
-        return brandService.getBrandByName(brandName);
+    public String getBrandByName(@PathVariable String brandName) {
+        return brandService.getBrandsByName(brandName);
     }
     @GetMapping("/country/{countryName}")
     public List<Brands> getBrandsByCountry(@PathVariable String countryName) {

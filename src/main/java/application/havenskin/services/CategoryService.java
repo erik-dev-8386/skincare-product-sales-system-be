@@ -44,11 +44,11 @@ public class CategoryService {
     public List<Categories> addListOfCategory(List<Categories> categoriesList) {
         return categoriesRepository.saveAll(categoriesList);
     }
-    public Categories getCategoriesByName(String name) {
+    public String getCategoriesByName(String name) {
         if(categoriesRepository.findByCategoryName(name) == null){
             throw new RuntimeException("Category does not exist");
         }
-        return categoriesRepository.findByCategoryName(name);
+        return categoriesRepository.findByCategoryName(name).getCategoryId();
     }
     public List<String> getAllCategoriesNames() {
         return categoriesRepository.findAllByCategoryName();

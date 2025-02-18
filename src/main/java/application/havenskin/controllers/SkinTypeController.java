@@ -47,6 +47,10 @@ public class SkinTypeController {
     public List<SkinTypes> addSkinTypeList(@RequestBody List<SkinTypes> skinTypes) {
         return skinTypeService.addListOfSkinTypes(skinTypes);
     }
+    @GetMapping("/name/{skinTypeName}")
+    public String getSkinTypeName(@PathVariable String skinTypeName) {
+        return skinTypeService.getSkinTypeNameByName(skinTypeName);
+    }
 
     @GetMapping("/list-name-skin-types")
     public List<String> listSkinTypeNames() {
