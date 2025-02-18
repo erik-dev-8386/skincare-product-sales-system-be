@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.hibernate.annotations.Nationalized;
 
 import java.util.List;
 
@@ -18,12 +19,15 @@ public class Brands {
     private String brandId;
 
     @Column(name = "brand_name", length = 50)
+    @Nationalized
     private String brandName;
 
     @Column(name = "description", length = 250)
+    @Nationalized
     private String description;
 
     @Column(name = "country", length = 50)
+    @Nationalized
     private String country;
 
     @JsonIgnore
@@ -32,5 +36,5 @@ public class Brands {
 
     @NotNull
     @Column(name = "status", length = 20)
-    private Byte status = BrandEnums.ACTIVE.getValue();
+    private Byte status;
 }

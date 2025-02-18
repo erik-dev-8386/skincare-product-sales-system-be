@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.hibernate.annotations.Nationalized;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -21,16 +22,20 @@ public class Users {
 
     @NotNull
     @Column(name = "first_name", length = 50)
+    @Nationalized
     private String firstName;
 
     @NotNull
     @Column(name = "last_name", length = 50)
+    @Nationalized
     private String lastName;
 
     @Column(name = "gender", length = 10)
+    @Nationalized
     private String gender;
 
     @Column(name = "address", length = 50)
+    @Nationalized
     private String address;
 
     @Column(name = "birth_date")

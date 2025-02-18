@@ -3,6 +3,7 @@ package application.havenskin.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.hibernate.annotations.Nationalized;
 
 @Entity
 @Table(name = "BlogImages")
@@ -17,6 +18,7 @@ public class BlogImages {
     private String imageURL;
 
     @Column(name = "description", length = 500)
+    @Nationalized
     private String description;
 
     @NotNull

@@ -29,7 +29,5 @@ public class OrderDetailDTO {
 
     private Orders orders;
 
-    @NotNull
-    @Column(name = "status")
-    private Byte status;
+    private Byte status = OrderDetailEnums.ACTIVE.getValue();
 }

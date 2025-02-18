@@ -3,6 +3,7 @@ package application.havenskin.controllers;
 import application.havenskin.dataAccess.AuthencationRequest;
 import application.havenskin.dataAccess.AuthencationResponse;
 import application.havenskin.dataAccess.UserDTO;
+import application.havenskin.enums.Role;
 import application.havenskin.models.Users;
 import application.havenskin.services.AuthenticationService;
 import application.havenskin.services.UserService;
@@ -32,6 +33,7 @@ public class UserController {
         newUser.setLastName(user.getLastName());
         newUser.setEmail(user.getEmail());
         newUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        newUser.setRole(Role.CUSTOMER.getValue());
         return userService.createUser(user);
     }
     @PostMapping("/login")

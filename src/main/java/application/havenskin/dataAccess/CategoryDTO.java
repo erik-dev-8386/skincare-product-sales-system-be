@@ -1,5 +1,6 @@
 package application.havenskin.dataAccess;
 
+import application.havenskin.enums.CategoryEnums;
 import application.havenskin.models.Products;
 import lombok.Data;
 
@@ -15,5 +16,5 @@ public class CategoryDTO {
 
     private List<Products> products;
 
-    private Byte status;
+    private Byte status = CategoryEnums.ACTIVE.getStatus();
 }

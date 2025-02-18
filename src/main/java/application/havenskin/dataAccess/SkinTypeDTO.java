@@ -1,5 +1,6 @@
 package application.havenskin.dataAccess;
 
+import application.havenskin.enums.SkinTypeEnums;
 import application.havenskin.models.Products;
 import application.havenskin.models.ResultTests;
 import application.havenskin.models.SkinCaresPlan;
@@ -29,4 +30,5 @@ public class SkinTypeDTO {
     private SkinCaresPlan planSkinCare;
 
     private List<Products> products;
+    private Byte status = SkinTypeEnums.ACTIVE.getSkin_type_status();
 }

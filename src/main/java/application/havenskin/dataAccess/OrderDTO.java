@@ -1,5 +1,6 @@
 package application.havenskin.dataAccess;
 
+import application.havenskin.enums.OrderEnums;
 import application.havenskin.models.OrderDetails;
 import application.havenskin.models.Shipments;
 import application.havenskin.models.Transactions;
@@ -17,7 +18,7 @@ public class OrderDTO {
 
     private int totalAmount;
 
-    private byte status;
+    private byte status = OrderEnums.PENDING.getOrder_status();
 
     private LocalDateTime cancelTime;
 

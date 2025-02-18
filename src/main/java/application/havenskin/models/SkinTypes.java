@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.hibernate.annotations.Nationalized;
 
 import java.util.List;
 
@@ -19,9 +20,11 @@ public class SkinTypes {
 
     @NotNull
     @Column(name = "skin_name", length = 50)
+    @Nationalized
     private String skinName;
 
     @Column(name = "description", length = 500)
+    @Nationalized
     private String description;
 
     @Column(name = "min_mark")
@@ -48,5 +51,5 @@ public class SkinTypes {
 
     @NotNull
     @Column(name = "status", length = 20)
-    private Byte status = SkinTypeEnums.ACTIVE.getSkin_type_status();
+    private Byte status;
 }
