@@ -22,7 +22,7 @@ public class CategoryController {
     }
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @PostMapping
-    public Categories addCategory(@RequestBody Categories categories) {
+    public Categories addCategory(@RequestBody CategoryDTO categories) {
         return categoryService.addCategories(categories);
     }
     @GetMapping("/{id}")

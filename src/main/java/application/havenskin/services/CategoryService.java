@@ -23,8 +23,9 @@ public class CategoryService {
     public Categories getCategoriesById(String id) {
         return categoriesRepository.getById(id);
     }
-    public Categories addCategories(Categories categories) {
-        return categoriesRepository.save(categories);
+    public Categories addCategories(CategoryDTO categories) {
+        Categories x = mapper.toCategories(categories);
+        return categoriesRepository.save(x);
     }
     public Categories updateCategories(String id, CategoryDTO categories) {
         Categories x = categoriesRepository.findById(id).orElseThrow(()->new RuntimeException("Category not found"));

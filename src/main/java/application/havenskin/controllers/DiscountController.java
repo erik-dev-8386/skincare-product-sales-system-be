@@ -21,8 +21,8 @@ public class DiscountController {
     }
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @PostMapping
-    public Discounts addDiscount(@RequestBody Discounts discount){
-        return discountService.createDiscount(discount);
+    public Discounts addDiscount(@RequestBody DiscountDTO discounts){
+        return discountService.createDiscount(discounts);
     }
     @GetMapping("/{id}")
     public Discounts getDiscountById(@PathVariable String id){

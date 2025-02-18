@@ -1,6 +1,7 @@
 package application.havenskin.services;
 
 import application.havenskin.dataAccess.UserDTO;
+import application.havenskin.enums.Role;
 import application.havenskin.mapper.Mapper;
 import application.havenskin.models.Users;
 import application.havenskin.repositories.UserRepository;
@@ -37,6 +38,7 @@ public class UserService {
         x.setLastName(user.getLastName());
         x.setPassword(new BCryptPasswordEncoder(10).encode(user.getPassword()));
         x.setEmail(user.getEmail());
+        x.setRole(Role.CUSTOMER.getValue());
         return userRepository.save(x);
     }
     public Users updateUser(String id,Users user) {

@@ -23,8 +23,9 @@ public class DiscountService {
     public Discounts getDiscountById(String id) {
         return discountsRepository.findByDiscountId(id);
     }
-    public Discounts createDiscount(Discounts discount) {
-        return discountsRepository.save(discount);
+    public Discounts createDiscount(DiscountDTO discount) {
+        Discounts x = mapper.toDiscounts(discount);
+        return discountsRepository.save(x);
     }
     public Discounts updateDiscount(String id, DiscountDTO discount) {
         Discounts x = discountsRepository.findByDiscountId(id);

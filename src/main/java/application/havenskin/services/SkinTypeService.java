@@ -21,8 +21,9 @@ public class SkinTypeService {
     public SkinTypes getSkinTypeById(String id) {
         return skinTypeRepository.findBySkinTypeId(id);
     }
-    public SkinTypes createSkinType(SkinTypes skinType) {
-        return skinTypeRepository.save(skinType);
+    public SkinTypes createSkinType(SkinTypeDTO skinType) {
+        SkinTypes x = mapper.toSkinTypes(skinType);
+        return skinTypeRepository.save(x);
     }
     public SkinTypes updateSkinType(String id, SkinTypeDTO skinType) {
       SkinTypes x = skinTypeRepository.findBySkinTypeId(id);

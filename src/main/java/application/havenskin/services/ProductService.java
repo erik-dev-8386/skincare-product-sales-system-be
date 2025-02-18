@@ -27,8 +27,9 @@ public class ProductService {
         return productsRepository.findById(id).get();
     }
 
-    public Products addProduct(Products product) {
-        return productsRepository.save(product);
+    public Products addProduct(ProductDTO product) {
+        Products x = mapper.toProducts(product);
+        return productsRepository.save(x);
     }
 
     public Products updateProduct(String id, ProductDTO product) {

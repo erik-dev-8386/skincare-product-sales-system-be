@@ -21,7 +21,7 @@ public class SkinTypeController {
     }
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @PostMapping
-    public SkinTypes addSkinType(@RequestBody SkinTypes skinTypes) {
+    public SkinTypes addSkinType(@RequestBody SkinTypeDTO skinTypes) {
         return skinTypeService.createSkinType(skinTypes);
     }
     @GetMapping("/{id}")
