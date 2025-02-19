@@ -113,7 +113,9 @@ public class ShipmentService {
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(requestbody, headers);
         ResponseEntity<ShipmentDTO> response = restTemplate.exchange(url, HttpMethod.POST,request, ShipmentDTO.class);
         if(response.getStatusCode() == HttpStatus.OK && response.getBody() != null){
+            System.out.println("API GHN:" + response.getBody());
             Shipments shipments = mapper.toShipments(response.getBody());
+            System.out.println(shipments);
             shipmentRepository.save(shipments);
             return response.getBody();
         }

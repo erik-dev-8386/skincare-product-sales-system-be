@@ -37,6 +37,7 @@ public class SecurityConfig {
                 request.requestMatchers(HttpMethod.POST, "/haven-skin/users/login")
                         .permitAll()
                         .requestMatchers(HttpMethod.POST,"/haven-skin/users").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/haven-skin/users/login/google").permitAll()
                         .anyRequest().authenticated())
                 .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable())
                 .oauth2ResourceServer(httpSecurityOAuth2ResourceServerConfigurer -> httpSecurityOAuth2ResourceServerConfigurer.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder()).jwtAuthenticationConverter(jwtAuthenticationConverter())))
