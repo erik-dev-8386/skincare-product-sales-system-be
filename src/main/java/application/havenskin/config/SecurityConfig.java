@@ -32,15 +32,45 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173")); // Cho phép FE React gọi API
+        configuration.setAllowedOrigins(List.of("http://localhost:5173")); // Đảm bảo trùng với FE
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
-        configuration.setAllowCredentials(true); // Cho phép gửi cookie nếu cần
+        configuration.setAllowCredentials(true);
+        configuration.addExposedHeader("Authorization");
+        configuration.addExposedHeader("Cross-Origin-Opener-Policy");
+        configuration.addExposedHeader("Cross-Origin-Embedder-Policy");
+
+        // Thêm header này để tránh lỗi COOP
+        configuration.addExposedHeader("Cross-Origin-Resource-Policy");
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
+
+//    @Bean
+//    public CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.setAllowedOrigins(List.of("http://localhost:5173")); // FE React
+//        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+//        configuration.setAllowedHeaders(List.of("*"));
+//        configuration.setAllowCredentials(true); // Cho phép cookie/session
+//        configuration.addExposedHeader("Authorization"); // Expose JWT nếu có
+//
+//        configuration.addExposedHeader("Cross-Origin-Opener-Policy");
+//        configuration.addExposedHeader("Cross-Origin-Embedder-Policy");
+//        configuration.addExposedHeader("Authorization");
+//
+//        configuration.setAllowedHeaders(List.of("*"));
+//        configuration.setExposedHeaders(List.of("Authorization")); // Chỉ expose header cần thiết
+//
+//
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//        return source;
+//    }
+
 
 
     /**
@@ -53,23 +83,3 @@ public class SecurityConfig {
         return handler;
     }
 }
-
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        http
-//                .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/users/login", "/users/logout", "/vnpays/pay").permitAll() // CHO PHÉP KHÔNG CẦN LOGIN
-//                        .anyRequest().authenticated()
-//                )
-//                .oauth2Login(oauth2 -> oauth2 //
-//                        .loginPage("/oauth2/authorization/google") // Tùy chỉnh trang login
-//                )
-//                .logout(logout -> logout
-//                        .logoutSuccessHandler(oidcLogoutSuccessHandler()) // Xử lý logout với OAuth2
-//                        .invalidateHttpSession(true)
-//                        .deleteCookies("JSESSIONID")
-//                )
-//                .csrf(csrf -> csrf.disable());
-//
-//        return http.build();
-//    }

@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static application.havenskin.enums.Role.*;
 
 @RestController
 @RequestMapping("/haven-skin/users")
@@ -29,8 +28,6 @@ public class UsersController {
 
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String googleClientId;
-    // Thêm CLIENT_ID vào application.properties
-    //private String googleClientId;
 
     @Autowired
     public UsersController(UsersService usersService, UserRepository usersRepository) {
@@ -70,52 +67,38 @@ public class UsersController {
     @PostMapping("/login/google")
     public ResponseEntity<?> loginWithGoogle(@RequestBody String credential) {
         try {
-            // Xử lý token và xác thực
-            credential = credential.replaceAll("[\\[\\]\"]", ""); // Xử lý token JSON dạng ["token"]
+            credential = credential.replaceAll("[\\[\\]\"]", "");
             GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(
                     new NetHttpTransport(),
                     JacksonFactory.getDefaultInstance())
                     .setAudience(Collections.singletonList(googleClientId))
                     .build();
+
             GoogleIdToken idToken = verifier.verify(credential);
             if (idToken == null) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Google token");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid Google token"));
             }
 
             GoogleIdToken.Payload payload = idToken.getPayload();
-            String email = payload.getEmail();
+            Users user = processUser(payload);
 
-            // Tìm user theo email (Xử lý Optional)
-            Users user = usersRepository.findByEmail(email).orElse(null);
-            if (user == null) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not found");
+            String redirectUrl = switch (user.getRole()) {
+                case 1, 2 -> "/admin-dashboard";
+                case 3 -> "/";
+                default -> null;
+            };
+
+            if (redirectUrl == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Role not recognized"));
             }
 
-            // Xác định trang home dựa theo role
-            String redirectUrl;
-            switch (user.getRole()) {
-                case 1:
-                    redirectUrl = "/admin/home";
-                    break;
-                case 2:
-                    redirectUrl = "/user/home";
-                    break;
-                case 3:
-                    redirectUrl = "/customer/home";
-                    break;
-                default:
-                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Role not recognized");
-            }
-
-            // Trả về URL phù hợp
-            return ResponseEntity.ok().body(Map.of("redirectUrl", redirectUrl));
+            return ResponseEntity.ok(Map.of("redirectUrl", redirectUrl));
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Authentication failed: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "Authentication failed: " + e.getMessage()));
         }
     }
-
 
     private Users processUser(GoogleIdToken.Payload payload) {
         String email = payload.getEmail();
@@ -128,11 +111,10 @@ public class UsersController {
             newUser.setEmail(email);
             newUser.setFirstName(firstName);
             newUser.setLastName(lastName);
-            newUser.setRole((byte) 2); // CUSTOMER role
+            newUser.setRole((byte) 3);
             return usersRepository.save(newUser);
         });
     }
-
 
     // Đăng xuất
     @GetMapping("/logout")
