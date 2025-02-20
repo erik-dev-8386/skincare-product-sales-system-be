@@ -20,7 +20,7 @@ public class ShipmentController {
 
     @Autowired
     private ShipmentService shipmentService;
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF', 'CUSTOMER')")
     @GetMapping
     public List<Shipments> getAllShipments() {
         return shipmentService.getAllShipments();

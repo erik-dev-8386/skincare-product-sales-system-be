@@ -37,8 +37,8 @@ public class UsersController {
     private final UserRepository usersRepository;
     private final AuthenticationService authenticationService;
 
-//    @Value("${spring.security.oauth2.client.registration.google.client-id}")
-//    private String googleClientId;
+    @Value("${spring.security.oauth2.client.registration.google.client-id}")
+    private String googleClientId;
 
     @Autowired
     public UsersController(UsersService usersService, UserRepository usersRepository, AuthenticationService authenticationService) {

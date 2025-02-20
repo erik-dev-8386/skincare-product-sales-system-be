@@ -14,7 +14,7 @@ import java.util.List;
 public class SkinTypeController {
     @Autowired
     private SkinTypeService skinTypeService;
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF', 'CUSTOMER')")
     @GetMapping
     public List<SkinTypes> getAllSkinTypes() {
         return skinTypeService.getAllSkinTypes();
@@ -35,8 +35,8 @@ public class SkinTypeController {
     }
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @DeleteMapping("/{id}")
-    public void deleteSkinType(@PathVariable String id) {
-        skinTypeService.deleteSkinType(id);
+    public SkinTypes deleteSkinType(@PathVariable String id) {
+        return skinTypeService.deleteSkinType(id);
     }
     @DeleteMapping
     public void deleteAllSkinTypes() {

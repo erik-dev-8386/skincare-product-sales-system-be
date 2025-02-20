@@ -1,6 +1,7 @@
 package application.havenskin.services;
 
 import application.havenskin.dataAccess.SkinTypeDTO;
+import application.havenskin.enums.SkinTypeEnums;
 import application.havenskin.mapper.Mapper;
 import application.havenskin.models.SkinTypes;
 import application.havenskin.repositories.SkinTypesRepository;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SkinTypeService {
@@ -34,8 +36,14 @@ public class SkinTypeService {
         return skinTypeRepository.save(x);
 
     }
-    public void deleteSkinType(String id) {
-        skinTypeRepository.deleteById(id);
+    public SkinTypes deleteSkinType(String id) {
+        Optional<SkinTypes> x = skinTypeRepository.findById(id);
+        if(x.isPresent()){
+            SkinTypes skinType = x.get();
+            skinType.setStatus(SkinTypeEnums.DELETED.getSkin_type_status());
+            return skinTypeRepository.save(skinType);
+        }
+        return null;
     }
     public void deleteAllSkinTypes() {
         skinTypeRepository.deleteAll();

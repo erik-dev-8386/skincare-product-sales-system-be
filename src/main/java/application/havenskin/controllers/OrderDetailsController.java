@@ -14,7 +14,7 @@ import java.util.List;
 public class OrderDetailsController {
     @Autowired
     private OrderDetailsService orderDetailsService;
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF', 'CUSTOMER')")
     @GetMapping
     public List<OrderDetails> getOrderDetails() {
         return orderDetailsService.getAllOrderDetails();
