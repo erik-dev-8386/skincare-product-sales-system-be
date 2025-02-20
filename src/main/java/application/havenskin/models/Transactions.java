@@ -3,6 +3,7 @@ package application.havenskin.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.hibernate.annotations.Nationalized;
 
 import java.time.LocalDateTime;
 
@@ -26,6 +27,7 @@ public class Transactions {
     private String orderId;
 
     @Column(name="transaction_type", length = 50)
+    @Nationalized
     private String transactionType;
 
     @OneToOne

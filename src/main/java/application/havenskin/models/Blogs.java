@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.hibernate.annotations.Nationalized;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,9 +19,11 @@ public class Blogs {
     private String blogId;
 
     @Column(name = "blog_title", length = 50)
+    @Nationalized
     private String blogTitle;
 
     @Column(name = "blog_content", length = 50)
+    @Nationalized
     private String blogContent;
 
     @NotNull

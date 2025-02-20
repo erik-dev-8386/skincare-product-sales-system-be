@@ -1,9 +1,12 @@
 package application.havenskin.dataAccess;
 
+import application.havenskin.enums.SkinTypeEnums;
 import application.havenskin.models.Products;
 import application.havenskin.models.ResultTests;
 import application.havenskin.models.SkinCaresPlan;
 import application.havenskin.models.SkinTypeImages;
+import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.util.List;
@@ -24,4 +27,8 @@ public class SkinTypeDTO {
     private SkinCaresPlan planSkinCare;
 
     private List<Products> products;
+
+    @NotNull
+    @Column(name = "status", length = 20)
+    private Byte status = SkinTypeEnums.ACTIVE.getSkin_type_status();
 }

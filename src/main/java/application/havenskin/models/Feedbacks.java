@@ -3,6 +3,7 @@ package application.havenskin.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.hibernate.annotations.Nationalized;
 
 import java.time.LocalDateTime;
 
@@ -16,6 +17,7 @@ public class Feedbacks {
     private String feedbackId;
 
     @Column(name = "feedback_content", length = 255)
+    @Nationalized
     private String feedbackContent;
 
     @Column(name = "feedback_date", length = 50)

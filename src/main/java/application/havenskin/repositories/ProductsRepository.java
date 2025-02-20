@@ -9,6 +9,7 @@ import java.util.List;
 
 
 public interface ProductsRepository extends JpaRepository<Products, String> {
+    List<Products> findByQuantity(Integer quantiy);
     List<Products> findByCategoryId(String id);
     List<Products> findByBrandId(String id);
 
@@ -32,5 +33,4 @@ public interface ProductsRepository extends JpaRepository<Products, String> {
     List<Products> findProductsByCategories_CategoryName(String categoryName);
 
     List<Products> findByStatus(byte status);
-    List<Products> findByQuantity(Integer quantiy);
 }

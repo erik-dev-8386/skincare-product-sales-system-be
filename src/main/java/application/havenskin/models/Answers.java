@@ -3,6 +3,7 @@ package application.havenskin.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.hibernate.annotations.Nationalized;
 
 @Entity
 @Table(name = "Answers")
@@ -14,6 +15,7 @@ public class Answers {
     private String answerId;
 
     @Column(name = "answer_content", length = 50)
+    @Nationalized
     private String answerContent;
 
     @Column(name = "mark")

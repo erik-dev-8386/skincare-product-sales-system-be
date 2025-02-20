@@ -1,5 +1,6 @@
 package application.havenskin.dataAccess;
 
+import application.havenskin.enums.DiscountEnum;
 import application.havenskin.models.Products;
 import lombok.Data;
 
@@ -24,7 +25,7 @@ public class DiscountDTO {
 
     private double discountPercent;
 
-    private byte status;
+    private byte status = DiscountEnum.ACTIVE.getDiscount_status();
 
     private List<Products> products;
 }

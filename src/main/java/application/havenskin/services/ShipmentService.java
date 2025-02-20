@@ -28,15 +28,18 @@ public class ShipmentService {
     @Value("${ghn.shop.id}")
     private String ghnShopId;
 
+    @Value("${ghn.api.url}")
+    private String ghnApiUrl;
+
     private final RestTemplate restTemplate = new RestTemplate();
     public List<Shipments> getAllShipments() {
         return shipmentRepository.findAll();
     }
 
-    public Shipments getShipmentById(String id) {
-
-        return shipmentRepository.findById(id).get();
-    }
+    //    public Shipments getShipmentById(String id) {
+//
+//        return shipmentRepository.findById(id).get();
+//    }
     public Shipments createShipment(Shipments shipment) {
         return shipmentRepository.save(shipment);
     }
@@ -69,6 +72,7 @@ public class ShipmentService {
         return shipmentRepository.findById(orderID).get().getOrderCode();
     }
     public ShipmentDTO buyGHN(CreateGHNRequest createGhnRequest) {
+        // String url = ghnApiUrl + "v2/shipping-order/create";
         String url = "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -109,10 +113,65 @@ public class ShipmentService {
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(requestbody, headers);
         ResponseEntity<ShipmentDTO> response = restTemplate.exchange(url, HttpMethod.POST,request, ShipmentDTO.class);
         if(response.getStatusCode() == HttpStatus.OK && response.getBody() != null){
+            System.out.println("API GHN:" + response.getBody());
             Shipments shipments = mapper.toShipments(response.getBody());
+            System.out.println(shipments);
             shipmentRepository.save(shipments);
             return response.getBody();
         }
         return null;
+    }
+    public List<Map<String, Object>> getProvince(){
+        //String url = ghnApiUrl + "/master-data/province";
+        String url = "https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/province";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Token", ghnApiKey);
+        HttpEntity<String> request = new HttpEntity<>(headers);
+
+        ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.POST, request, Map.class);
+        System.out.println(response.getBody().get("data"));
+        if(response.getStatusCode() == HttpStatus.OK && response.getBody() != null){
+            Object data = response.getBody().get("data");
+            // ghn tra response:code,message,data
+
+            if(data instanceof List)
+                return (List<Map<String, Object>>) data;
+        }
+        return Collections.emptyList();
+    }
+    public List<Map<String, Object>> getDistrict(int provinceId){
+        //String url = ghnApiUrl + "/master-data/district";
+        String url = "https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/district";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        Map<String, Integer> requestBody = new HashMap<>();
+        requestBody.put("province_id", provinceId);
+        HttpEntity<Map<String, Integer>> request = new HttpEntity<>(requestBody, headers);
+        ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.POST, request, Map.class);
+        if(response.getStatusCode() == HttpStatus.OK && response.getBody() != null){
+            Object data = response.getBody().get("data");
+
+            if(data instanceof List)
+                return (List<Map<String, Object>>) data;
+        }
+        return Collections.emptyList();
+    }
+    public List<Map<String, Object>> getWards(int districtId){
+        //String url = ghnApiUrl + "master-data/ward?district_id=" + districtId;
+        String url = "https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/ward?" + districtId;
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Token", ghnApiKey);
+        Map<String, Object> requestbody = new HashMap<>();
+        requestbody.put("district_id", districtId);
+        HttpEntity<Map<String, Object>> request = new HttpEntity<>(requestbody, headers);
+        ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.POST, request, Map.class);
+        if(response.getStatusCode() == HttpStatus.OK && response.getBody() != null){
+            Object data = response.getBody().get("data");
+            if(data instanceof List)
+                return (List<Map<String, Object>>) data;
+        }
+        return Collections.emptyList();
     }
 }

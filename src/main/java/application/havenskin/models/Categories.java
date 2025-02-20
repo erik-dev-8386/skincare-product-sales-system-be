@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.hibernate.annotations.Nationalized;
 
 import java.util.List;
 
@@ -18,12 +19,15 @@ public class Categories {
     private String categoryId;
 
     @Column(name = "category_name", length = 50)
+    @Nationalized
     private String categoryName;
 
     @Column(name = "description", length = 250)
+    @Nationalized
     private String description;
 
     @Column(name = "usage_instruction", length = 255)
+    @Nationalized
     private String usageInstruction;
 
     @JsonIgnore
@@ -32,5 +36,5 @@ public class Categories {
 
     @NotNull
     @Column(name = "status", length = 20)
-    private Byte status = CategoryEnums.ACTIVE.getStatus();
+    private Byte status;
 }

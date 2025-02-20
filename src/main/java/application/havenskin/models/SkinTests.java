@@ -3,6 +3,7 @@ package application.havenskin.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.hibernate.annotations.Nationalized;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,6 +18,7 @@ public class SkinTests {
     private String skinTestId;
 
     @Column(name = "test_name", length = 50)
+    @Nationalized
     private String testName;
 
     @Column(name = "max_mark")

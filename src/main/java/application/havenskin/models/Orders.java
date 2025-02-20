@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.hibernate.annotations.Nationalized;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,12 +32,13 @@ public class Orders {
 
     @NotNull
     @Column(name = "status")
-    private byte status = OrderEnums.UNORDERED.getOrder_status();
+    private byte status;
 
     @Column(name = "cancel_time")
     private LocalDateTime cancelTime;
 
     @Column(name = "address", length = 50)
+    @Nationalized
     private String address;
 
     @Column(name = "shipment_free")

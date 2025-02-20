@@ -1,11 +1,14 @@
 package application.havenskin.services;
 
+import application.havenskin.dataAccess.UserDTO;
+import application.havenskin.enums.Role;
 import application.havenskin.models.Orders;
 import application.havenskin.models.Users;
 import application.havenskin.dataAccess.UserServiceResponseDto;
 import application.havenskin.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -31,6 +34,20 @@ public class UsersService {
 
     public Users saveUser(Users user) {
         return usersRepository.save(user);
+    }
+
+    public Users createUser(UserDTO user) {
+//        Users x = mapper.toUsers(user);
+//        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+//        x.setPassword(passwordEncoder.encode(user.getPassword()));
+//        return userRepository.save(x);
+        Users x = new Users();
+        x.setFirstName(user.getFirstName());
+        x.setLastName(user.getLastName());
+        x.setPassword(new BCryptPasswordEncoder(10).encode(user.getPassword()));
+        x.setEmail(user.getEmail());
+        x.setRole(Role.CUSTOMER.getValue());
+        return usersRepository.save(x);
     }
 
     public List<Users> addListOfUsers(List<Users> users) {

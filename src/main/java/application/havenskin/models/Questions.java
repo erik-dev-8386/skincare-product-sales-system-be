@@ -2,6 +2,7 @@ package application.havenskin.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.Nationalized;
 
 @Entity
 @Table(name = "Questions")
@@ -13,6 +14,7 @@ public class Questions {
     private String questionId;
 
     @Column(name = "question_content", length = 50)
+    @Nationalized
     private String questionContent;
 
     @Column(name = "max_mark")

@@ -29,14 +29,6 @@ public class BrandService {
         Brands x = mapper.toBrands(brands);
         return brandsRepository.save(x);
     }
-//    public Brands updateBrand(String id,Brands brand) {
-//        //  Brands brands = brandsRepository.findById(id).get();
-//        //    Brands x = mapper.toBrands(brand);
-//        if (!brandsRepository.existsById(id)) {
-//            throw new RuntimeException("Brand not found");
-//        }
-//        return brandsRepository.save(brand);
-//    }
     public Brands updateBrand(String id, BrandDTO brandDTO){
         Brands brand = brandsRepository.findById(id).orElseThrow(()-> new RuntimeException("Brand not found"));
 
@@ -44,7 +36,7 @@ public class BrandService {
 
         return brandsRepository.save(brand);
     }
-//        Brands x = brandsRepository.findById(id).orElseThrow(() -> new RuntimeException("Brand not found"));
+    //        Brands x = brandsRepository.findById(id).orElseThrow(() -> new RuntimeException("Brand not found"));
 //        Brands a = mapper.toBrands(brand);
 //        a.setBrandId(x.getBrandId());
 //        return brandsRepository.save(a);
@@ -76,6 +68,7 @@ public class BrandService {
     public List<Brands> addBrands(List<Brands> x){
         return brandsRepository.saveAll(x);
     }
+
     public Brands getBrandByName(String name){
         if(brandsRepository.findByBrandName(name) == null){
             throw new RuntimeException("Brand not found");
@@ -88,6 +81,10 @@ public class BrandService {
             throw new RuntimeException("Brand not found");
         }
         return brandsRepository.findByCountry(country);
+    }
+
+    public List<String> getAllBrandByName(){
+        return  brandsRepository.findAllByBrandName();
     }
 
 }

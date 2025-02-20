@@ -4,6 +4,7 @@ import application.havenskin.enums.ProductEnums;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.hibernate.annotations.Nationalized;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -12,13 +13,14 @@ import java.util.List;
 @Entity
 @Table(name = "Products")
 @Data
-public class Products {
+public class  Products {
     @Id
     @Column(name = "product_id", length = 50)
     @GeneratedValue(strategy = GenerationType.UUID)
     private String productId;
 
     @Column(name = "product_name", length = 50)
+    @Nationalized
     private String productName;
 
     @Column(name = "unit_price")
@@ -28,9 +30,11 @@ public class Products {
     private Double discountPrice;
 
     @Column(name = "description", length = 255)
+    @Nationalized
     private String description;
 
     @Column(name = "ingredients", length = 255)
+    @Nationalized
     private String ingredients;
 
     @Column(name = "quantity")
@@ -54,7 +58,7 @@ public class Products {
 
     @NotNull
     @Column(name = "status")
-    private Byte status = ProductEnums.AVAILABLE.getValue();
+    private Byte status;
 
     @NotNull
     @Column(name = "discount_id", length = 50)

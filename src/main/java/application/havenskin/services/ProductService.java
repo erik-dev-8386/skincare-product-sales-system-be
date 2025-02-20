@@ -27,18 +27,15 @@ public class ProductService {
         return productsRepository.findById(id).get();
     }
 
-    public Products addProduct(Products product) {
-        return productsRepository.save(product);
+    public Products addProduct(ProductDTO product) {
+        Products x = mapper.toProducts(product);
+        return productsRepository.save(x);
     }
 
     public Products updateProduct(String id, ProductDTO product) {
         Products products = productsRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
         mapper.updateProducts(products, product);
         return productsRepository.save(products);
-    }
-
-    public Products getProductByName(String name) {
-        return productsRepository.findByProductName(name);
     }
 
     public Products deleteProduct(String id) {
@@ -52,18 +49,49 @@ public class ProductService {
         return null;
     }
 
-    public List<Products> getProductsByCategory(String id) {
-       if(productsRepository.findByCategoryId(id) == null) {
-           throw new RuntimeException("Product not found");
-       }
-       return productsRepository.findByCategoryId(id);
-    }
-    public List<Products> getProductsByBrand(String id) {
-        if(productsRepository.findByBrandId(id) == null) {
+    //    public List<Products> getProductsByCategoryName(String categoryName) {
+//       if(productsRepository.findByCategoryId(categoryName) == null) {
+//           throw new RuntimeException("Product not found");
+//       }
+//       return productsRepository.findByCategoryId(categoryName);
+//    }
+    public List<Products> getProductsByCategoryName(String categoryName) {
+        if (productsRepository.findProductsByCategories_CategoryName(categoryName) == null) {
             throw new RuntimeException("Product not found");
         }
-        return productsRepository.findByBrandId(id);
+        return productsRepository.findProductsByCategories_CategoryName(categoryName);
     }
+    //    public List<Products> getProductsByBrand(String id) {
+//        if(productsRepository.findByBrandId(id) == null) {
+//            throw new RuntimeException("Product not found");
+//        }
+//        return productsRepository.findByBrandId(id);
+//    }
+    public List<Products> getProductsByBrandName(String brandName) {
+        if (productsRepository.findByBrands_BrandName(brandName) == null) {
+            throw new RuntimeException("Product not found with " + brandName);
+        }
+        return productsRepository.findByBrands_BrandName(brandName);
+    }
+    public List<Products> getProductsByBrandCountry(String country){
+        if(productsRepository.findByCountry(country) == null){
+            throw new RuntimeException("Product not found with " + country);
+        }
+        return productsRepository.findByCountry(country);
+    }
+    public List<Products> getProductsBySkinName(String skinName) {
+        if (productsRepository.findBySkinName(skinName) == null) {
+            throw new RuntimeException("Product not found with " + skinName);
+        }
+        return productsRepository.findBySkinName(skinName);
+    }
+    public List<Products> getProductsByDiscountName(String discountName) {
+        if (productsRepository.findProductsByDiscounts_DiscountName(discountName) == null) {
+            throw new RuntimeException("Product not found with " + discountName);
+        }
+        return productsRepository.findProductsByDiscounts_DiscountName(discountName);
+    }
+
     public List<Products> addListOfProducts(List<Products> products) {
         return productsRepository.saveAll(products);
     }
@@ -72,39 +100,12 @@ public class ProductService {
         int max = productsRepository.findAll().stream().mapToInt(Products::getQuantity).max().orElse(0);
         return productsRepository.findByQuantity(max);
     }
-    public List<Products> getProductsByCategoryName(String categoryName) {
-        if (productsRepository.findProductsByCategories_CategoryName(categoryName) == null) {
-            throw new RuntimeException("Product not found");
-        }
-        return productsRepository.findProductsByCategories_CategoryName(categoryName);
-    }
 
-    public List<Products> getProductsByBrandName(String brandName) {
-        if (productsRepository.findByBrands_BrandName(brandName) == null) {
-            throw new RuntimeException("Product not found with " + brandName);
-        }
-        return productsRepository.findByBrands_BrandName(brandName);
+    public Products getProductByName(String name) {
+        return productsRepository.findByProductName(name);
     }
-
-    public List<Products> getProductsByBrandCountry(String country){
-        if(productsRepository.findByCountry(country) == null){
-            throw new RuntimeException("Product not found with " + country);
-        }
-        return productsRepository.findByCountry(country);
-    }
-
-    public List<Products> getProductsBySkinName(String skinName) {
-        if (productsRepository.findBySkinName(skinName) == null) {
-            throw new RuntimeException("Product not found with " + skinName);
-        }
-        return productsRepository.findBySkinName(skinName);
-    }
-
-    public List<Products> getProductsByDiscountName(String discountName) {
-        if (productsRepository.findProductsByDiscounts_DiscountName(discountName) == null) {
-            throw new RuntimeException("Product not found with " + discountName);
-        }
-        return productsRepository.findProductsByDiscounts_DiscountName(discountName);
-    }
-
+//    @Transactional
+//    public Products byProduct(String productName) {
+//        Products x = productsRepository.findByProductName()
+//    }
 }

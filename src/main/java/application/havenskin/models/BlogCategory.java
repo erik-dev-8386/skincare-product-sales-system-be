@@ -2,6 +2,7 @@ package application.havenskin.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.Nationalized;
 
 import java.util.List;
 
@@ -15,9 +16,11 @@ public class BlogCategory {
     private String blogCategoryId;
 
     @Column(name = "blog_category_name", length = 50)
+    @Nationalized
     private String blogCategoryName;
 
     @Column(name = "description")
+    @Nationalized
     private String description;
 
 

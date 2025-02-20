@@ -8,6 +8,7 @@ import application.havenskin.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,17 +22,17 @@ public class ProductController {
     private CategoryService categoryService;
     @Autowired
     private BrandService brandService;
-
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public List<Products> getAllProducts() {
         return productService.getAllProducts();
     }
-
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @PostMapping
-    public Products addProduct(@RequestBody Products product) {
+    public Products addProduct(@RequestBody ProductDTO product) {
         return productService.addProduct(product);
     }
-
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @PutMapping("/{id}")
     public Products updateProduct(@PathVariable String id, @RequestBody ProductDTO product) {
         return productService.updateProduct(id, product);
@@ -40,22 +41,21 @@ public class ProductController {
     public Products getProduct(@PathVariable String id) {
         return productService.getProductById(id);
     }
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @DeleteMapping("/{id}")
     public Products deleteProduct(@PathVariable String id) {
         return productService.deleteProduct(id);
     }
 
-
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @PostMapping("/add-list-products")
     public List<Products> addListProducts(@RequestBody List<Products> x) {
         return productService.addListOfProducts(x);
     }
-
     @GetMapping("/max-quantity")
     public List<Products> getMaxQuantity() {
         return productService.getBestSellerProducts();
     }
-
     @GetMapping("/category/{categoryName}")
     public List<Products> getProductByCategoryName(@PathVariable String categoryName) {
         return productService.getProductsByCategoryName(categoryName);
@@ -81,5 +81,4 @@ public class ProductController {
     public List<Products> getProductsByDiscountName(@PathVariable String discountName) {
         return productService.getProductsByDiscountName(discountName);
     }
-
 }

@@ -42,5 +42,5 @@ public class OrderDetails {
 
     @NotNull
     @Column(name = "status")
-    private Byte status = OrderDetailEnums.ACTIVE.getValue();
+    private Byte status;
 }
