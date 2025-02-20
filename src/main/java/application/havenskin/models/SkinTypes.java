@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -36,6 +37,8 @@ public class SkinTypes {
     private List<SkinTypeImages> skinTypeImages;
 
     @OneToMany(mappedBy = "skinType")
+    @ToString.Exclude
+    @JsonIgnore
     private List<ResultTests> resultTests;
 
     @OneToOne(mappedBy = "skinType")

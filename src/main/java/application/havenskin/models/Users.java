@@ -1,9 +1,11 @@
 package application.havenskin.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.ToString;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -38,6 +40,9 @@ public class Users {
     @Column(name = "email", length = 100)
     private String email;
 
+    @Column(name = "password",length = 100)
+    private String password;
+
     @Column(name = "phone_number")
     private int phoneNumber;
 
@@ -55,18 +60,25 @@ public class Users {
     @Column(name = "status")
     private byte status;
 
+
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Orders> orders;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
+    @ToString.Exclude
     private List<ResultTests> resultTests;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Blogs> blogs;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "users")
     private List<Feedbacks> feedbacks;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<SkinCaresPlan> skinCaresPlan;
 
