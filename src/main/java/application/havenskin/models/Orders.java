@@ -13,13 +13,11 @@ import java.util.List;
 @Table(name = "Orders")
 @Data
 public class Orders {
-
     @Id
     @Column(name = "order_id", length = 50)
     @GeneratedValue(strategy = GenerationType.UUID)
     private String orderId;
 
-    @NotNull
     @Column(name = "order_time")
     private LocalDateTime orderTime;
 
@@ -33,7 +31,7 @@ public class Orders {
 
     @NotNull
     @Column(name = "status")
-    private byte status = OrderEnums.PROCESSING.getOrder_status();
+    private byte status = OrderEnums.UNORDERED.getOrder_status();
 
     @Column(name = "cancel_time")
     private LocalDateTime cancelTime;

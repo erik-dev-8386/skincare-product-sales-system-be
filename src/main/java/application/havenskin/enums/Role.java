@@ -2,7 +2,7 @@ package application.havenskin.enums;
 
 public enum Role {
     ADMIN((byte) 1),
-    USER((byte) 2),
+    STAFF((byte) 2),
     CUSTOMER((byte) 3);
 
     private final byte value;

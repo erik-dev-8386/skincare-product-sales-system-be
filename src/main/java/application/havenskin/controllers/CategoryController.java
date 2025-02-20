@@ -25,6 +25,7 @@ public class CategoryController {
     public Categories getCategoryById(@PathVariable String id) {
         return categoryService.getCategoriesById(id);
     }
+
     @PutMapping("/{id}")
     public Categories updateCategory(@PathVariable String id, @RequestBody CategoryDTO categories) {
         return categoryService.updateCategories(id, categories);
