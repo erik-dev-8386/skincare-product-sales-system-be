@@ -70,4 +70,13 @@ public class UsersService {
         return response;
     }
 
+    public List<Users> getAdminAndStaffUsers() {
+        return usersRepository.findByRoleIn(List.of((byte) 1, (byte) 2));
+    }
+
+    public List<Users> getCustomerUsers() {
+        return usersRepository.findByRole((byte) 3);
+    }
+
+
 }

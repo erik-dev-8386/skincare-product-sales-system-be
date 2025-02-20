@@ -64,6 +64,17 @@ public class UsersController {
         return usersService.addListOfUsers(users);
     }
 
+    @GetMapping("/admin-staff")
+    public List<Users> getAdminAndStaffUsers() {
+        return usersService.getAdminAndStaffUsers();
+    }
+
+    @GetMapping("/customers")
+    public List<Users> getCustomerUsers() {
+        return usersService.getCustomerUsers();
+    }
+
+
     @PostMapping("/login/google")
     public ResponseEntity<?> loginWithGoogle(@RequestBody String credential) {
         try {
