@@ -56,4 +56,9 @@ public class AnswersController {
         return answersService.addAnswerByQuestionContent(questionContent, answersDto);
     }
 
+    @GetMapping("/searchByQuestionContent")
+    public List<AnswersDto> getAnswersByQuestionContent(@RequestParam String questionContent) {
+        return answersService.getAnswersByQuestionContent(questionContent);
+    }
+
 }

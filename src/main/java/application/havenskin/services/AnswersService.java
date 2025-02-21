@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AnswersService {
@@ -88,5 +89,29 @@ public class AnswersService {
         responseDto.setMark(answer.getMark());
 
         return responseDto;
+    }
+
+    public List<AnswersDto> getAnswersByQuestionContent(String questionContent) {
+        // 1. Tìm câu hỏi theo questionContent
+        List<Questions> questions = questionsRepository.findByQuestionContent(questionContent);
+
+        if (questions.isEmpty()) {
+            throw new RuntimeException("Không tìm thấy câu hỏi với nội dung: " + questionContent);
+        }
+
+        // Chỉ lấy 1 câu hỏi đầu tiên (tránh lỗi nếu có nhiều câu giống nhau)
+        Questions question = questions.get(0);
+
+        // 2. Lấy danh sách đáp án của câu hỏi này
+        List<Answers> answers = answerRepository.findByQuestion(question);
+
+        // 3. Chuyển đổi danh sách đáp án sang DTO
+        return answers.stream().map(a -> {
+            AnswersDto dto = new AnswersDto();
+            dto.setAnswerId(a.getAnswerId());
+            dto.setAnswerContent(a.getAnswerContent());
+            dto.setMark(a.getMark());
+            return dto;
+        }).collect(Collectors.toList());
     }
 }
