@@ -98,7 +98,7 @@ public class UsersController {
             Users user = processUser(payload);
 
             // ✅ Tạo JWT Token
-            String token = jwtService.generateToken(user.getEmail());
+            String token = jwtService.generateToken(user.getEmail(), String.valueOf(user.getRole())); // ✅ Đúng cú pháp
 
             // ✅ Chuyển đổi sang UserDTO
             UserDTO userDTO = new UserDTO();

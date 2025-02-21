@@ -1,15 +1,14 @@
 package application.havenskin.services;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.JwtParser;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 @Service
@@ -21,11 +20,15 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateToken(String email) {
+    public String generateToken(String email, String role) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role", role);
+
         return Jwts.builder()
-                .subject(email)
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30)) // Token hết hạn sau 30 phút
+                .setClaims(claims)
+                .setSubject(email)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 giờ
                 .signWith(getSigningKey())
                 .compact();
     }
@@ -40,11 +43,10 @@ public class JwtService {
     }
 
     private Claims extractAllClaims(String token) {
-        JwtParser parser = Jwts.parser() // ✅ Sử dụng `parser()` thay vì `parserBuilder()`
-                .build();
+        JwtParser parser = Jwts.parser().build();
 
-        Jws<Claims> claimsJws = parser.parseSignedClaims(token); // ✅ Sử dụng `parseSignedClaims()`
-        return claimsJws.getPayload();
+        Jws<Claims> claimsJws = parser.parseClaimsJws(token);
+        return claimsJws.getBody();
     }
 
     public boolean isTokenValid(String token, String email) {
