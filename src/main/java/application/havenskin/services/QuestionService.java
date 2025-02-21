@@ -89,7 +89,9 @@ public class QuestionService {
                 aDto.setAnswerContent(a.getAnswerContent());
                 aDto.setMark(a.getMark());
                 return aDto;
-            }).toList();
+            }).collect(Collectors.toList());
+
+            dto.setAnswers(answerDTOs);
 
             return dto;
         }).collect(Collectors.toList());

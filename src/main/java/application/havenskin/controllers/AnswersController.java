@@ -1,6 +1,8 @@
 package application.havenskin.controllers;
 
+import application.havenskin.dataAccess.AnswersDto;
 import application.havenskin.models.Answers;
+import application.havenskin.models.Questions;
 import application.havenskin.services.AnswersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -47,6 +49,11 @@ public class AnswersController {
     @GetMapping("/search")
     public List<Answers> searchAnswers(@RequestParam("keyword") String keyword) {
         return answersService.searchAnswersByContent(keyword);
+    }
+
+    @PostMapping("/add-by-question-content")
+    public AnswersDto addAnswerByQuesContent(@RequestParam String questionContent, @RequestBody AnswersDto answersDto) {
+        return answersService.addAnswerByQuestionContent(questionContent, answersDto);
     }
 
 }
