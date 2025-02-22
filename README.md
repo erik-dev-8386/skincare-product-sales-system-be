@@ -3,11 +3,11 @@
 ## 🌟 Welcome!
 
 ### 👋 Project by:
-- Đoàn Trung Thành
-- Hoàng Nguyễn Minh Hiếu
-- Nguyễn Ngọc Minh
-- Nguyễn Bùi Hoàng Phúc
-- Châu Thị Ngọc Tuyền
+- Đoàn Trung Thành - SE185105 (Leader)
+- Hoàng Nguyễn Minh Hiếu - SE182738
+- Nguyễn Ngọc Minh - SE182009
+- Nguyễn Bùi Hoàng Phúc - SE184767
+- Châu Thị Ngọc Tuyền - SE182129
 
 ## 📝 Project Overview:
 Our Skincare Product Sales System is designed to help customers find and purchase skincare products that best suit their skin type.
