@@ -8,6 +8,7 @@ import application.havenskin.models.SkinTypeImages;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 @Data
@@ -20,7 +21,9 @@ public class SkinTypeDTO {
 
     private double maxMark;
 
-    private List<SkinTypeImages> skinTypeImages;
+//    private List<SkinTypeImages> skinTypeImages;
+
+    private List<MultipartFile> images;
 
     private List<ResultTests> resultTests;
 
