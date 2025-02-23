@@ -54,6 +54,6 @@ public class OrderController {
         if (updated) {
             return ResponseEntity.ok("Cập nhật trạng thái thành công");
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Không tìm thấy đơn hàng hoặc lỗi xảy ra");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Không thể cập nhật trạng thái đơn hàng");
     }
 }

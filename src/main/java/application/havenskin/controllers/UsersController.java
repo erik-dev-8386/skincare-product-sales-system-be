@@ -78,7 +78,6 @@ public class UsersController {
         return usersService.getCustomerUsers();
     }
 
-
     @PostMapping("/login/google")
     public ResponseEntity<?> loginWithGoogle(@RequestBody String credential) {
         try {

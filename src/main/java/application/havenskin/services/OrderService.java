@@ -1,9 +1,12 @@
 package application.havenskin.services;
 
 import application.havenskin.dataAccess.OrderDTO;
+import application.havenskin.enums.OrderDetailEnums;
 import application.havenskin.enums.OrderEnums;
 import application.havenskin.mapper.Mapper;
+import application.havenskin.models.OrderDetails;
 import application.havenskin.models.Orders;
+import application.havenskin.repositories.OrderDetailsRepository;
 import application.havenskin.repositories.OrdersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,8 @@ import java.util.Optional;
 public class OrderService {
     @Autowired
     private OrdersRepository ordersRepository;
+    @Autowired
+    private OrderDetailsRepository orderDetailsRepository;
     @Autowired
     private Mapper mapper;
 
@@ -69,12 +74,27 @@ public class OrderService {
                 return false; // Tránh cập nhật trạng thái sai logic
             }
 
+            // Khi chuyển từ UNORDERED sang trạng thái khác, khóa OrderDetails
+            if (currentStatus == OrderEnums.UNORDERED && newStatus != OrderEnums.UNORDERED) {
+                lockOrderDetails(order.getOrderId());
+            }
+
             order.setStatus(newStatus.getOrder_status());
             ordersRepository.save(order);
             return true;
         }
         return false;
     }
+
+    // Hàm khóa OrderDetails
+    private void lockOrderDetails(String orderId) {
+        List<OrderDetails> orderDetailsList = orderDetailsRepository.findByOrderId(orderId);
+        for (OrderDetails detail : orderDetailsList) {
+            detail.setStatus(OrderDetailEnums.INACTIVE.getValue()); // Hoặc có thể tạo thêm trạng thái riêng
+        }
+        orderDetailsRepository.saveAll(orderDetailsList);
+    }
+
 
     private boolean isValidStatusTransition(OrderEnums currentStatus, OrderEnums newStatus) {
         Map<OrderEnums, List<OrderEnums>> validTransitions = new HashMap<>();

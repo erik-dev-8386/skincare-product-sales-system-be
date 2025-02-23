@@ -1,12 +1,15 @@
 package application.havenskin.services;
 
 import application.havenskin.dataAccess.TransactionDTO;
+import application.havenskin.enums.TransactionsEnums;
 import application.havenskin.mapper.Mapper;
 import application.havenskin.models.Transactions;
 import application.havenskin.repositories.TransactionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -40,5 +43,32 @@ public class TransactionService {
     }
     public List<Transactions> addListOfTransactions(List<Transactions> transactions) {
         return transactionsRepository.saveAll(transactions);
+    }
+
+    public void saveTransactionToDB(String transactionCode, String amount, String bankName, String payDate, boolean isSuccess) {
+        try {
+            System.out.println("🔹 Đang lưu giao dịch...");
+            System.out.println("Mã giao dịch: " + transactionCode);
+            System.out.println("Số tiền: " + amount);
+            System.out.println("Ngân hàng: " + bankName);
+            System.out.println("Ngày thanh toán: " + payDate);
+            System.out.println("Trạng thái: " + (isSuccess ? "PAID" : "NOT_PAID"));
+
+
+            Transactions transaction = new Transactions();
+            System.out.println("orderId: " + transaction.getOrderId());
+            transactionsRepository.save(transaction);
+            transaction.setTransactionCode(transactionCode);
+            transaction.setAmount(Double.parseDouble(amount) / 100);
+            transaction.setBankName(bankName);
+            transaction.setTransactionTime(LocalDateTime.parse(payDate, DateTimeFormatter.ofPattern("yyyyMMddHHmmss")));
+            transaction.setTransactionStatus(isSuccess ? TransactionsEnums.PAID.getValue() : TransactionsEnums.NOT_PAID.getValue());
+
+            transactionsRepository.save(transaction);
+            System.out.println("✅ Giao dịch đã lưu thành công!");
+        } catch (Exception e) {
+            System.out.println("❌ Lỗi khi lưu giao dịch:");
+            e.printStackTrace();
+        }
     }
 }

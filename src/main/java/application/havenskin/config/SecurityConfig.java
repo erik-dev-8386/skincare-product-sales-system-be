@@ -49,30 +49,6 @@ public class SecurityConfig {
     }
 
 
-//    @Bean
-//    public CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.setAllowedOrigins(List.of("http://localhost:5173")); // FE React
-//        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-//        configuration.setAllowedHeaders(List.of("*"));
-//        configuration.setAllowCredentials(true); // Cho phép cookie/session
-//        configuration.addExposedHeader("Authorization"); // Expose JWT nếu có
-//
-//        configuration.addExposedHeader("Cross-Origin-Opener-Policy");
-//        configuration.addExposedHeader("Cross-Origin-Embedder-Policy");
-//        configuration.addExposedHeader("Authorization");
-//
-//        configuration.setAllowedHeaders(List.of("*"));
-//        configuration.setExposedHeaders(List.of("Authorization")); // Chỉ expose header cần thiết
-//
-//
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", configuration);
-//        return source;
-//    }
-
-
-
     /**
      * Xử lý logout thành công cho OIDC
      */

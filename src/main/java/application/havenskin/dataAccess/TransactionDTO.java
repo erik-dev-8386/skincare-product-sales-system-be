@@ -9,9 +9,17 @@ public class TransactionDTO {
 
     private byte transactionStatus;
 
+    private String transactionCode;
+
+    private String content;
+
+    private String bankName;
+
     private LocalDateTime transactionTime;
 
     private String orderId;
+
+    private double amount;
 
     private String transactionType;
 
