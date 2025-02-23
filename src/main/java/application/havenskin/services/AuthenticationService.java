@@ -57,7 +57,7 @@ public class AuthenticationService {
                 .subject(email)
                 .issuer("HavenSkin.com")
                 .issueTime(new Date())
-                .expirationTime(new Date(Instant.now().plus(2, ChronoUnit.MINUTES).toEpochMilli()))
+                .expirationTime(new Date(Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()))
                 .jwtID(UUID.randomUUID().toString())
                 // lưu id để khi hết hạn thì => xử lý
                 // nó là duy nhất!

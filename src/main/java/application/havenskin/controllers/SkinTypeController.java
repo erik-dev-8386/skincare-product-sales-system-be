@@ -4,9 +4,13 @@ import application.havenskin.dataAccess.SkinTypeDTO;
 import application.havenskin.models.SkinTypes;
 import application.havenskin.services.SkinTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.*;
+import java.io.IOException;
 import java.util.List;
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -20,9 +24,14 @@ public class SkinTypeController {
         return skinTypeService.getAllSkinTypes();
     }
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
-    @PostMapping
-    public SkinTypes addSkinType(@RequestBody SkinTypeDTO skinTypes) {
-        return skinTypeService.createSkinType(skinTypes);
+//    @PostMapping
+//    public SkinTypes addSkinType(@RequestBody SkinTypeDTO skinTypes) {
+//        return skinTypeService.createSkinType(skinTypes);
+//    }
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE) // nhận dữ liệu dưới dạng multipart/form-data
+    public SkinTypes addSkinType(@RequestPart("skinType") SkinTypeDTO skinTypeDTO, @RequestPart(value = "images", required = false) List<MultipartFile> images) throws IOException {
+//        skinTypeDTO.setImages(images);
+        return skinTypeService.createSkinType(skinTypeDTO,images);
     }
     @GetMapping("/{id}")
     public SkinTypes getSkinTypeById(@PathVariable String id) {

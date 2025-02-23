@@ -1,8 +1,12 @@
 package application.havenskin.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import org.hibernate.annotations.Nationalized;
+import lombok.ToString;
+
+import java.util.Set;
 
 @Entity
 @Table(name = "Questions")
@@ -13,10 +17,22 @@ public class Questions {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String questionId;
 
-    @Column(name = "question_content", length = 50)
-    @Nationalized
+    @Column(name = "question_content", length = 250)
     private String questionContent;
 
     @Column(name = "max_mark")
     private Double maxMark;
+
+    @NotNull
+    @Column(name = "skin_test_id", length = 50)
+    private String skinTestId;
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "skin_test_id", referencedColumnName = "skin_test_id", insertable = false, updatable = false)
+    @ToString.Exclude
+    private SkinTests skinTest;
+
+    @OneToMany(mappedBy = "question")
+    private Set<Answers> answers;
 }

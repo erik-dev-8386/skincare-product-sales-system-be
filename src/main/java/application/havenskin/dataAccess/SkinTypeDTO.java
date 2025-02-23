@@ -4,7 +4,6 @@ import application.havenskin.enums.SkinTypeEnums;
 import application.havenskin.models.Products;
 import application.havenskin.models.ResultTests;
 import application.havenskin.models.SkinCaresPlan;
-import application.havenskin.models.SkinTypeImages;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -20,7 +19,9 @@ public class SkinTypeDTO {
 
     private double maxMark;
 
-    private List<SkinTypeImages> skinTypeImages;
+//    private List<SkinTypeImages> skinTypeImages;
+
+    //private List<MultipartFile> images;
 
     private List<ResultTests> resultTests;
 
