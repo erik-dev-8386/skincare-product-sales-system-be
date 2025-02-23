@@ -35,17 +35,21 @@ public class SkinTypeService {
     }
     public SkinTypes createSkinType(SkinTypeDTO skinType, List<MultipartFile> images) throws IOException {
         SkinTypes x = mapper.toSkinTypes(skinType);
-        SkinTypes saved = skinTypeRepository.save(x);
-        if(skinType.getImages() != null && !skinType.getImages().isEmpty()) {
-            for (MultipartFile file : skinType.getImages() ) {
+//        SkinTypes saved = skinTypeRepository.save(x);
+        if(images != null && !images.isEmpty()) {
+            for (MultipartFile file : images ) {
                 String imageUrl = cloundinaryService.uploadImageFile(file);
                 SkinTypeImages skinTypeImages = new SkinTypeImages();
                 skinTypeImages.setImageURL(imageUrl);
-                skinTypeImages.setSkinTypeId(x.getSkinTypeId());
+                skinTypeImages.setSkinType(x);
+//               skinTypeImages.setSkinType(x.getS);
+//                  skinTypeImages.setSkinTypeId(x.getSkinTypeId());
+//                  skinTypeImages.setSkinType(x.getSKI);
                 skinTypeImagesRepository.save(skinTypeImages);
+                x.getSkinTypeImages().add(skinTypeImages);
             }
         }
-        return saved;
+        return skinTypeRepository.save(x);
     }
     public SkinTypes updateSkinType(String id, SkinTypeDTO skinType) {
         SkinTypes x = skinTypeRepository.findBySkinTypeId(id);

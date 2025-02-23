@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.annotations.Nationalized;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -33,8 +34,10 @@ public class SkinTypes {
     private double maxMark;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "skinType")
+    @OneToMany(mappedBy = "skinType",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SkinTypeImages> skinTypeImages;
+
+//    private List<MultipartFile> images;
 
     @JsonIgnore
     @OneToMany(mappedBy = "skinType")

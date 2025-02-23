@@ -1,9 +1,9 @@
 package application.havenskin.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import org.hibernate.annotations.Nationalized;
 
 @Entity
 @Table(name = "Answers")
@@ -15,7 +15,6 @@ public class Answers {
     private String answerId;
 
     @Column(name = "answer_content", length = 50)
-    @Nationalized
     private String answerContent;
 
     @Column(name = "mark")
@@ -26,15 +25,10 @@ public class Answers {
     private String questionId;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "question_id", referencedColumnName = "question_id", insertable = false, updatable = false)
     private Questions question;
 
-    @NotNull
-    @Column(name = "skin_test_id", length = 50)
-    private String skinTestId;
 
-    @ManyToOne
-    @JoinColumn(name = "skin_test_id", referencedColumnName = "skin_test_id", insertable = false, updatable = false)
-    private SkinTests skinTest;
 
 }
