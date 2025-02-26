@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,59 +25,82 @@ public class SkinTypeService {
     @Autowired
     private SkinTypeImagesRepository skinTypeImagesRepository;
     @Autowired
-    private CloundinaryServiceImpl cloundinaryService;
+    private FirebaseService firebaseService;
     @Autowired
     private SkinTypeImagesRepository imagesRepository;
+
     public List<SkinTypes> getAllSkinTypes() {
         return skinTypeRepository.findAll();
     }
+
     public SkinTypes getSkinTypeById(String id) {
         return skinTypeRepository.findBySkinTypeId(id);
     }
+
     public SkinTypes createSkinType(SkinTypeDTO skinType, List<MultipartFile> images) throws IOException {
         SkinTypes x = mapper.toSkinTypes(skinType);
-//        SkinTypes saved = skinTypeRepository.save(x);
-        if(images != null && !images.isEmpty()) {
-            for (MultipartFile file : images ) {
-                String imageUrl = cloundinaryService.uploadImageFile(file);
+        SkinTypes saved = skinTypeRepository.save(x);
+        if (images != null && !images.isEmpty()) {
+            List<SkinTypeImages> skinTypeImagesList = new ArrayList<>();
+            for (MultipartFile file : images) {
+                String imageUrl = firebaseService.uploadImage(file);
+
                 SkinTypeImages skinTypeImages = new SkinTypeImages();
                 skinTypeImages.setImageURL(imageUrl);
-                skinTypeImages.setSkinType(x);
+                skinTypeImages.setSkinTypeId(saved.getSkinTypeId());
+                skinTypeImages.setSkinType(saved);
+
+                skinTypeImagesList.add(skinTypeImages);
+                //    skinTypeImages.setSkinType(x);
+                //  skinTypeImages.setSkinType(x);
 //               skinTypeImages.setSkinType(x.getS);
 //                  skinTypeImages.setSkinTypeId(x.getSkinTypeId());
 //                  skinTypeImages.setSkinType(x.getSKI);
-                skinTypeImagesRepository.save(skinTypeImages);
-                x.getSkinTypeImages().add(skinTypeImages);
+
+                //    *
+                // skinTypeImagesRepository.save(skinTypeImages);
+                //           x.getSkinTypeImages().add(skinTypeImages);
             }
+            skinTypeImagesRepository.saveAll(skinTypeImagesList);
+            saved.setSkinTypeImages(skinTypeImagesList);
         }
-        return skinTypeRepository.save(x);
+        return saved;
+        //*  x.setSkinTypeImages(skinTypeImagesRepository.findBySkinTypeId(x.getSkinTypeId()));
+        //*  System.out.println(x);
+        //*  return skinTypeRepository.save(x);
     }
+
     public SkinTypes updateSkinType(String id, SkinTypeDTO skinType) {
         SkinTypes x = skinTypeRepository.findBySkinTypeId(id);
-        if(x == null){
+        if (x == null) {
             throw new RuntimeException("SkinType not found");
         }
         mapper.updateSkinType(x, skinType);
         return skinTypeRepository.save(x);
     }
+
     public SkinTypes deleteSkinType(String id) {
         Optional<SkinTypes> x = skinTypeRepository.findById(id);
-        if(x.isPresent()){
+        if (x.isPresent()) {
             SkinTypes skinType = x.get();
             skinType.setStatus(SkinTypeEnums.DELETED.getSkin_type_status());
             return skinTypeRepository.save(skinType);
         }
         return null;
     }
+
     public void deleteAllSkinTypes() {
         skinTypeRepository.deleteAll();
     }
+
     public List<SkinTypes> addListOfSkinTypes(List<SkinTypes> x) {
         return skinTypeRepository.saveAll(x);
     }
+
     public List<String> getAllSkinTypeNames() {
         return skinTypeRepository.findAllBySkinTypeByName();
     }
+
     public String getSkinTypeNameByName(String name) {
         return skinTypeRepository.findBySkinName(name).getSkinTypeId();
     }

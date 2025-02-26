@@ -6,6 +6,7 @@ import lombok.Data;
 import org.hibernate.annotations.Nationalized;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -26,16 +27,16 @@ public class SkinTests {
 
     @NotNull
     @Column(name = "created_time")
-    private LocalDateTime createdTime;
+    private Date createdTime;
 
     @Column(name = "deleted_time")
-    private LocalDateTime deletedTime;
+    private Date deletedTime;
 
     @Column(name = "status")
     private byte status;
 
-    @OneToMany(mappedBy = "skinTest")
-    private List<Answers> answers;
+//    @OneToMany(mappedBy = "skinTest")
+//    private List<Answers> answers;
 
     @OneToMany(mappedBy = "skinTest")
     private List<ResultTests> resultTests;

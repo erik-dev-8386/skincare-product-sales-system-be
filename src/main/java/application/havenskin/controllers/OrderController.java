@@ -1,7 +1,6 @@
 package application.havenskin.controllers;
 
 import application.havenskin.dataAccess.OrderDTO;
-import application.havenskin.enums.OrderEnums;
 import application.havenskin.models.Orders;
 import application.havenskin.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;

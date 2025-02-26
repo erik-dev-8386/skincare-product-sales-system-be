@@ -3,25 +3,28 @@ package application.havenskin.dataAccess;
 import application.havenskin.enums.DiscountEnum;
 import application.havenskin.models.Products;
 import lombok.Data;
+import org.hibernate.annotations.Nationalized;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 @Data
 public class DiscountDTO {
 
+    @Nationalized
     private String discountName;
 
     private String discountCode;
 
+    @Nationalized
     private String description;
 
-    private LocalDateTime createdTime;
+    private Date createdTime = new Date();
 
-    private LocalDateTime deletedTime;
+    private Date deletedTime;
 
-    private LocalDateTime actualStartTime;
+    private Date actualStartTime;
 
-    private LocalDateTime actualEndTime;
+    private Date actualEndTime;
 
     private double discountPercent;
 

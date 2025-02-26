@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,7 +44,7 @@ public class ResultTestService {
         ResultTests resultTest = new ResultTests();
         resultTest.setUserId(request.getUserId());
         resultTest.setSkinTestId(request.getSkinTestId());
-        resultTest.setCreatedTime(LocalDateTime.now());
+        resultTest.setCreatedTime(new Date());
 
         resultTest = resultTestsRepository.save(resultTest);
 
@@ -59,7 +60,6 @@ public class ResultTestService {
             userAnswer.setQuestionId(ans.getQuestionId());
             userAnswer.setAnswerId(ans.getAnswerId());
             userAnswer.setMark(answerObj.getMark());
-
             totalMark += answerObj.getMark();
             userAnswersRepository.save(userAnswer);
         }
@@ -76,7 +76,7 @@ public class ResultTestService {
         else if (totalMark <= 35) return "Da hỗn hợp"; // Da hỗn hợp
         else return "Da dầu"; // Da dầu
     }
-
+    // Lay ket qua cua khach  hang
     public ResultTestDto getResultTestsWithAnswers(String resultTestId) {
         //Lấy resultTest
         ResultTests rt = resultTestsRepository.findById(resultTestId)
@@ -89,7 +89,13 @@ public class ResultTestService {
         dto.setSkinTestId(rt.getSkinTestId());
         dto.setTotalMark(rt.getTotalMark());
         dto.setSkinTypeId(rt.getSkinTypeId());
-        dto.setCreatedTime(rt.getCreatedTime());
+        //dto.setCreatedTime(rt.getCreatedTime());
+
+        // id:
+        // userid -> firstName, lastName
+        // SkintestID??
+        // MARK
+        // LOẠI DA -> TÊN
 
         // 1) Lấy tên user
         if (rt.getUserId() != null) {
@@ -106,6 +112,8 @@ public class ResultTestService {
                 dto.setSkinName(st.getSkinName());
             });
         }
+
+
 
         // 3) Lấy danh sách user_answers
         List<UserAnswers> uaList = userAnswersRepository.findByResultTest_ResultTestId(rt.getResultTestId());
@@ -153,7 +161,7 @@ public class ResultTestService {
             dto.setSkinTestId(rt.getSkinTestId());
             dto.setTotalMark(rt.getTotalMark());
             dto.setSkinTypeId(rt.getSkinTypeId());
-            dto.setCreatedTime(rt.getCreatedTime());
+            //dto.setCreatedTime(rt.getCreatedTime());
 
             // 1) Lấy tên user
             userRepository.findById(rt.getUserId()).ifPresent(user -> {

@@ -8,6 +8,7 @@ import lombok.Data;
 import org.hibernate.annotations.Nationalized;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -20,7 +21,7 @@ public class Orders {
     private String orderId;
 
     @Column(name = "order_time")
-    private LocalDateTime orderTime;
+    private Date orderTime;
 
     @NotNull
     @Column(name = "user_id", length = 50)
@@ -35,7 +36,7 @@ public class Orders {
     private byte status;
 
     @Column(name = "cancel_time")
-    private LocalDateTime cancelTime;
+    private Date cancelTime;
 
     @Column(name = "address", length = 50)
     @Nationalized

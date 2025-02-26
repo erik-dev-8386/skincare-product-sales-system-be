@@ -13,4 +13,6 @@ public interface SkinTypesRepository extends JpaRepository<SkinTypes, String> {
     SkinTypes findBySkinName(String skinName);
     @Query("SELECT skinName FROM SkinTypes ")
     List<String> findAllBySkinTypeByName();
+    @Query("SELECT s FROM SkinTypes s WHERE s.status = 1 ORDER BY s.skinName ASC")
+    List<SkinTypes> findActiveSkinTypesSortedByName();
 }

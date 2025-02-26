@@ -6,11 +6,11 @@ import application.havenskin.services.BrandService;
 import application.havenskin.services.CategoryService;
 import application.havenskin.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 @CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/haven-skin/products")
@@ -29,8 +29,11 @@ public class ProductController {
     }
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @PostMapping
-    public Products addProduct(@RequestBody ProductDTO product) {
-        return productService.addProduct(product);
+//    public Products addProduct(@RequestBody ProductDTO product) {
+//        return productService.addProduct(product);
+//    }
+    public Products createProduct(@RequestPart("products") ProductDTO productDTO, @RequestParam("images") List<MultipartFile> images) throws IOException {
+        return productService.addProduct(productDTO, images);
     }
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @PutMapping("/{id}")

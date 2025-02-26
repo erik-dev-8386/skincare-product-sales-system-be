@@ -14,4 +14,6 @@ public interface CategoriesRepository extends JpaRepository<Categories, String> 
     List<Categories> findByStatus(byte status);
     @Query("SELECT categoryName FROM Categories ")
     List<String> findAllByCategoryName();
+    @Query("SELECT c FROM Categories c WHERE c.status = 2 ORDER BY c.categoryName ASC")
+    List<Categories> findActiveCategorySortedByName();
 }

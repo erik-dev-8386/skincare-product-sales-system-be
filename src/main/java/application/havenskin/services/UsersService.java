@@ -1,10 +1,9 @@
 package application.havenskin.services;
 
 import application.havenskin.dataAccess.UserDTO;
-import application.havenskin.enums.Role;
-import application.havenskin.models.Orders;
-import application.havenskin.models.Users;
 import application.havenskin.dataAccess.UserServiceResponseDto;
+import application.havenskin.enums.Role;
+import application.havenskin.models.Users;
 import application.havenskin.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -5,7 +5,6 @@ import application.havenskin.dataAccess.AuthencationResponse;
 import application.havenskin.dataAccess.RefreshRequest;
 import application.havenskin.dataAccess.UserDTO;
 import application.havenskin.enums.Role;
-import application.havenskin.models.Orders;
 import application.havenskin.models.Users;
 import application.havenskin.repositories.UserRepository;
 import application.havenskin.services.AuthenticationService;

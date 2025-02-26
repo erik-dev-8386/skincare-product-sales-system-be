@@ -7,6 +7,7 @@ import lombok.Data;
 import org.hibernate.annotations.Nationalized;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -32,10 +33,10 @@ public class Blogs {
 
     @NotNull
     @Column(name = "posted_time")
-    private LocalDateTime postedTime;
+    private Date postedTime;
 
     @Column(name = "deleted_time")
-    private LocalDateTime deletedTime;
+    private Date deletedTime;
 
     @JsonIgnore
     @ManyToOne
