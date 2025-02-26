@@ -8,6 +8,7 @@ import lombok.Data;
 import org.hibernate.annotations.Nationalized;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -39,7 +40,7 @@ public class Users {
     private String address;
 
     @Column(name = "birth_date")
-    private LocalDate birthDate;
+    private Date birthDate;
 
     @Column(name = "email", length = 100)
     private String email;

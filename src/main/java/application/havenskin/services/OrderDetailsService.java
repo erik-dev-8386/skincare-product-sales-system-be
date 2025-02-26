@@ -5,6 +5,7 @@ import application.havenskin.enums.OrderDetailEnums;
 import application.havenskin.mapper.Mapper;
 import application.havenskin.models.OrderDetails;
 import application.havenskin.repositories.OrderDetailsRepository;
+import application.havenskin.repositories.OrdersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,8 @@ import java.util.Optional;
 public class OrderDetailsService {
     @Autowired
     private OrderDetailsRepository orderDetailsRepository;
+    @Autowired
+    private OrdersRepository ordersRepository;
     @Autowired
     private Mapper mapper;
     public List<OrderDetails> getAllOrderDetails() {
@@ -50,4 +53,12 @@ public class OrderDetailsService {
     public List<OrderDetails> addListOfOrderDetails(List<OrderDetails> orderDetails) {
         return orderDetailsRepository.saveAll(orderDetails);
     }
+//    public OrderDetails updateProductQuantityInCart(String orderId,String productId, int newquantity) {
+//        Orders x = ordersRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Không tìm thấy đơn hàng"));
+//        if(x.getStatus() != OrderEnums.CANCELLED.getOrder_status()){
+//            throw new RuntimeException("Không thể thay đổi số lượng các sản phẩm");
+//        }
+//        OrderDetails orderDetails = orderDetailsRepository.
+//
+//    }
 }

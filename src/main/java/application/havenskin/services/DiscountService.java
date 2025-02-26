@@ -18,7 +18,8 @@ public class DiscountService {
     @Autowired
     private Mapper mapper;
     public List<Discounts> getAllDiscounts() {
-        return discountsRepository.findAll();
+        //return discountsRepository.findAll();
+        return discountsRepository.findActiveDiscountsSortedByName();
     }
     public Discounts getDiscountById(String id) {
         return discountsRepository.findByDiscountId(id);

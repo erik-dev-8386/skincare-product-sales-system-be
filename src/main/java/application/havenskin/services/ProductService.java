@@ -3,11 +3,16 @@ package application.havenskin.services;
 import application.havenskin.dataAccess.ProductDTO;
 import application.havenskin.enums.ProductEnums;
 import application.havenskin.mapper.Mapper;
+import application.havenskin.models.ProductImages;
 import application.havenskin.models.Products;
+import application.havenskin.repositories.ProductImagesRepository;
 import application.havenskin.repositories.ProductsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +24,10 @@ public class ProductService {
     private CategoryService categoryService;
     @Autowired
     private Mapper mapper;
+    @Autowired
+    private FirebaseService firebaseService;
+    @Autowired
+    private ProductImagesRepository productImagesRepository;
     public List<Products> getAllProducts() {
         return productsRepository.findAll();
     }
@@ -27,10 +36,30 @@ public class ProductService {
         return productsRepository.findById(id).get();
     }
 
-    public Products addProduct(ProductDTO product) {
-        Products x = mapper.toProducts(product);
-        return productsRepository.save(x);
+//    public Products addProduct(ProductDTO product) {
+//        Products x = mapper.toProducts(product);
+//        return productsRepository.save(x);
+//    }
+    public Products addProduct(ProductDTO product, List<MultipartFile> images) throws IOException {
+    Products x = mapper.toProducts(product);
+    Products saved = productsRepository.save(x);
+    if(images != null && !images.isEmpty()) {
+        List<ProductImages> productImagesList = new ArrayList<>();
+        for (MultipartFile file : images) {
+            String imageUrl = firebaseService.uploadImage(file);
+
+            ProductImages productImages = new ProductImages();
+            productImages.setImageURL(imageUrl);
+            productImages.setProductId(saved.getProductId());
+            productImages.setProducts(saved);
+
+            productImagesList.add(productImages);
+        }
+        productImagesRepository.saveAll(productImagesList);
+        saved.setProductImages(productImagesList);
     }
+    return saved;
+}
 
     public Products updateProduct(String id, ProductDTO product) {
         Products products = productsRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));

@@ -16,8 +16,8 @@ public class BlogImages {
     @Column(name = "image_url", length = 255)
     private String imageURL;
 
-    @Column(name = "description", length = 500)
-    private String description;
+   // @Column(name = "description", length = 500)
+   // private String description;
 
     @NotNull
     @Column(name = "blog_id", length = 50)

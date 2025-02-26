@@ -5,12 +5,13 @@ import application.havenskin.models.Shipments;
 import application.havenskin.models.Transactions;
 import application.havenskin.models.Users;
 import lombok.Data;
+import org.hibernate.annotations.Nationalized;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 @Data
 public class OrderDTO {
-    private LocalDateTime orderTime;
+    private Date orderTime;
 
     private String userId;
 
@@ -18,8 +19,9 @@ public class OrderDTO {
 
     private byte status;
 
-    private LocalDateTime cancelTime;
+    private Date cancelTime;
 
+    @Nationalized
     private String address;
 
     private double shipmentFree;

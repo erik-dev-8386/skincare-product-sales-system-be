@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -15,8 +15,8 @@ public class SkinTestsDto {
 //    private String testName;
     private Double maxMark;
     private byte status;
-    private LocalDateTime createdTime;
-    private LocalDateTime deletedTime;
+    private Date createdTime;
+    private Date deletedTime;
     private List<QuestionsResponseDto> questions;
 
 }

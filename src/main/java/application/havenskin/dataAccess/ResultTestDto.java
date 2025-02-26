@@ -2,7 +2,7 @@ package application.havenskin.dataAccess;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -14,7 +14,7 @@ public class ResultTestDto {
     private String lastName;
     private Double totalMark;
     private String skinTypeId;
-    private LocalDateTime createdTime;
+    private Date createdTime;
     private String skinName;
     private byte status;
     private List<UserAnswerDto> userAnswers;

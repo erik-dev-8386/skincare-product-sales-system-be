@@ -8,6 +8,7 @@ import lombok.Data;
 import org.hibernate.annotations.Nationalized;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -32,17 +33,17 @@ public class Discounts {
 
     @NotNull
     @Column(name = "created_time")
-    private LocalDateTime createdTime;
+    private Date createdTime;
 
     @Column(name = "closed_time")
-    private LocalDateTime deletedTime;
+    private Date deletedTime;
 
     @NotNull
     @Column(name = "actual_start_time")
-    private LocalDateTime actualStartTime;
+    private Date actualStartTime;
 
     @Column(name = "actual_end_time")
-    private LocalDateTime actualEndTime;
+    private Date actualEndTime;
 
     @Column(name = "discount_percent")
     private double discountPercent;

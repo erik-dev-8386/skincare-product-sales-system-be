@@ -6,7 +6,7 @@ import application.havenskin.models.Users;
 import lombok.Data;
 import org.hibernate.annotations.Nationalized;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 @Data
 public class BlogDTO {
@@ -18,9 +18,9 @@ public class BlogDTO {
 
     private String userId;
 
-    private LocalDateTime postedTime;
+    private Date postedTime;
 
-    private LocalDateTime deletedTime;
+    private Date deletedTime;
 
     private Users user;
 

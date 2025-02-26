@@ -8,6 +8,7 @@ import org.hibernate.annotations.Nationalized;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -42,16 +43,16 @@ public class  Products {
 
     @NotNull
     @Column(name = "created_time")
-    private LocalDateTime createdTime;
+    private Date createdTime;
 
     @Column(name = "deleted_time")
-    private LocalDateTime deletedTime;
+    private Date deletedTime;
 
     @Column(name = "mfg")
-    private LocalDate mfg;
+    private Date mfg;
 
     @Column(name = "exp")
-    private LocalDate exp;
+    private Date exp;
 
     @Column(name = "net_weight")
     private double netWeight;

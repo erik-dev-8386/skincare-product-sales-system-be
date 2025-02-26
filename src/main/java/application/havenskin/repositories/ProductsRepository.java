@@ -1,5 +1,6 @@
 package application.havenskin.repositories;
 
+import application.havenskin.models.Brands;
 import application.havenskin.models.Products;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -33,4 +34,6 @@ public interface ProductsRepository extends JpaRepository<Products, String> {
     List<Products> findProductsByCategories_CategoryName(String categoryName);
 
     List<Products> findByStatus(byte status);
+    @Query("SELECT p FROM Products p WHERE p.status = 1 ORDER BY p.productName ASC")
+    List<Brands> findActiveBrandsSortedByName();
 }

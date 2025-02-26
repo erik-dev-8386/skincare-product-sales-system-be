@@ -1,11 +1,13 @@
 package application.havenskin.models;
 
+import com.google.firebase.database.DatabaseError;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.annotations.Nationalized;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "Transactions")
@@ -20,7 +22,7 @@ public class Transactions {
     private byte transactionStatus;
 
     @Column(name = "transaction_time")
-    private LocalDateTime transactionTime;
+    private Date transactionTime;
 
     @NotNull
     @Column(name = "order_id", length = 50)

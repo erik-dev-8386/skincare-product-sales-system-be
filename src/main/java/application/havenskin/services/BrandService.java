@@ -18,7 +18,8 @@ public class BrandService {
     @Autowired
     private Mapper mapper;
     public List<Brands> getAllBrands(){
-        return brandsRepository.findAll();
+        //return brandsRepository.findAll();
+        return brandsRepository.findActiveBrandsSortedByName();
     }
 
     public Brands getBrandById(String id){
@@ -29,6 +30,11 @@ public class BrandService {
         Brands x = mapper.toBrands(brands);
         return brandsRepository.save(x);
     }
+//public Brands createBrand(BrandDTO brands){
+//    Brands x = mapper.toBrands(brands);
+//    return brandsRepository.save(x);
+//}
+
     public Brands updateBrand(String id, BrandDTO brandDTO){
         Brands brand = brandsRepository.findById(id).orElseThrow(()-> new RuntimeException("Brand not found"));
 
