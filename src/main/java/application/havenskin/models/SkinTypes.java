@@ -33,7 +33,7 @@ public class SkinTypes {
     @Column(name = "max_mark")
     private double maxMark;
 
-    @JsonIgnore
+    //@JsonIgnore
     @OneToMany(mappedBy = "skinType",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SkinTypeImages> skinTypeImages;
 
