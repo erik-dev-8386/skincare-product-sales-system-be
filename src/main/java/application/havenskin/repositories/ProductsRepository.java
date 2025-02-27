@@ -36,4 +36,9 @@ public interface ProductsRepository extends JpaRepository<Products, String> {
     List<Products> findByStatus(byte status);
     @Query("SELECT p FROM Products p WHERE p.status = 1 ORDER BY p.productName ASC")
     List<Brands> findActiveBrandsSortedByName();
+
+    // Lấy id theo tên của sản phẩm
+    @Query("SELECT p.productId FROM Products p WHERE p.productName = :name")
+    String findProductIDByName(@Param("name") String name);
+
 }
