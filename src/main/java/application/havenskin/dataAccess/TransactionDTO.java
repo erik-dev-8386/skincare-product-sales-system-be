@@ -21,7 +21,7 @@ public class TransactionDTO {
 
     private double amount;
 
-    private String transactionType;
+    private byte transactionType;
 
     private Orders orders;
 }

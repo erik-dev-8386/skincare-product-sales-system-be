@@ -31,15 +31,15 @@ public class UserDTO {
 
     private byte status;
 
-
     private List<Orders> orders;
 
     private List<ResultTests> resultTests;
-
 
     private List<Blogs> blogs;
 
     private List<Feedbacks> feedbacks;
 
     private List<SkinCaresPlan> skinCaresPlan;
+
+    private List<CoinWallets> coinWallets;
 }

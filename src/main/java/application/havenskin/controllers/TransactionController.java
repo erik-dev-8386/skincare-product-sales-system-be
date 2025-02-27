@@ -27,14 +27,11 @@ public class TransactionController {
     private TransactionService transactionService;
     @Autowired
     private TransactionsRepository transactionsRepository;
-    @Autowired
-    private OrderService orderService;
 
     // Inject TransactionsService
-    public TransactionController(TransactionService transactionService, TransactionsRepository transactionsRepository, OrderService orderService) {
+    public TransactionController(TransactionService transactionService, TransactionsRepository transactionsRepository) {
         this.transactionService = transactionService;
         this.transactionsRepository = transactionsRepository;
-        this.orderService = orderService;
     }
 
     @GetMapping
@@ -63,10 +60,11 @@ public class TransactionController {
     }
 
     @GetMapping("/return")
-    public ResponseEntity<String> vnpReturn(@RequestParam Map<String, String> queryParams, @RequestParam String orderId) {
+    public ResponseEntity<String> vnpReturn(@RequestParam Map<String, String> queryParams) {
         try {
             System.out.println("🔹 VNPAY Response: " + queryParams);
 
+            String orderId = queryParams.get("orderId");  // Lấy orderId từ query
             String vnp_ResponseCode = queryParams.get("vnp_ResponseCode");
             String vnp_TxnRef = queryParams.get("vnp_TxnRef");
             String vnp_Amount = queryParams.get("vnp_Amount");
@@ -86,25 +84,8 @@ public class TransactionController {
             }
 
             boolean isSuccess = "00".equals(vnp_ResponseCode);
+            transactionService.saveTransactionToDB(orderId, vnp_TxnRef, vnp_Amount, vnp_BankCode, vnp_PayDate, isSuccess);
 
-            // Lưu giao dịch
-            Transactions transaction = new Transactions();
-            transaction.setOrderId(orderId);
-            transaction.setTransactionCode(vnp_TxnRef);
-            transaction.setAmount(Double.parseDouble(vnp_Amount) / 100);
-            transaction.setBankName(vnp_BankCode);
-            transaction.setTransactionTime(LocalDateTime.parse(vnp_PayDate, DateTimeFormatter.ofPattern("yyyyMMddHHmmss")));
-            transaction.setTransactionStatus(isSuccess ? TransactionsEnums.PAID.getValue() : TransactionsEnums.NOT_PAID.getValue());
-
-            transactionsRepository.save(transaction);
-
-            // Cập nhật trạng thái đơn hàng
-            if (isSuccess) {
-                boolean updated = orderService.updateOrderStatus(orderId, OrderEnums.PROCESSING.getOrder_status());
-                if (!updated) {
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cập nhật trạng thái đơn hàng thất bại");
-                }
-            }
 
             return ResponseEntity.ok(isSuccess ? "✅ Payment successful" : "❌ Payment failed");
         } catch (Exception e) {

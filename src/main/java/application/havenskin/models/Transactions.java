@@ -40,8 +40,8 @@ public class Transactions {
     @Column(name = "order_id", length = 50)
     private String orderId;
 
-    @Column(name="transaction_type", length = 50)
-    private String transactionType;
+    @Column(name="transaction_type")
+    private byte transactionType;
 
     @OneToOne
     @JoinColumn(name = "order_id", referencedColumnName = "order_id", insertable = false, updatable = false)

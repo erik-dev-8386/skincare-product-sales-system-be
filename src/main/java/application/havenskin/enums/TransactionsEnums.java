@@ -23,4 +23,29 @@ public enum TransactionsEnums {
         }
         throw new IllegalArgumentException("No TransactionsEnums with value " + value);
     }
+
+    // For type
+    public enum Type {
+        VNPAY((byte) 1),
+        COD((byte) 2);
+
+        private final byte value;
+
+        Type(byte value) {
+            this.value = value;
+        }
+
+        public byte getValue() {
+            return value;
+        }
+
+        public static Type fromValue(byte value) {
+            for (Type x : Type.values()) {
+                if (x.getValue() == value) {
+                    return x;
+                }
+            }
+            throw new IllegalArgumentException("No TransactionsEnums Type with value " + value);
+        }
+    }
 }

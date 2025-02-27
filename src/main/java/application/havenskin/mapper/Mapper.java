@@ -7,7 +7,6 @@ import org.mapstruct.MappingTarget;
 @org.mapstruct.Mapper(componentModel = "spring")
 public interface Mapper {
     Brands toBrands(BrandDTO brandDTO);
-    //@Mapping(target = "brandId", ignore = true)
     void updateBrands(@MappingTarget Brands brands, BrandDTO brandDTO);
     Categories toCategories(CategoryDTO categoryDTO);
     void updateCategories(@MappingTarget Categories categories, CategoryDTO categoryDTO);
@@ -30,4 +29,6 @@ public interface Mapper {
     Feedbacks toFeedbacks(FeedbackDTO feedbackDTO);
     void updateFeedbacks(@MappingTarget Feedbacks feedbacks, FeedbackDTO feedbackDTO);
     Users toUsers(UserDTO userDTO);
+    CoinWallets toCoinWallets(CoinWalletDTO coinWalletDTO);
+    void updateCoinWallets(@MappingTarget CoinWallets coinWallets, CoinWalletDTO coinWalletDTO);
 }

@@ -18,7 +18,6 @@ import java.util.*;
 @RestController
 @RequestMapping("/vnpays")
 public class VnPayController {
-
     @Autowired
     private OrderService orderService;
 
@@ -31,7 +30,7 @@ public class VnPayController {
             throw new RuntimeException("Order not found");
         }
 
-        long amount = order.getTotalAmount(); // VNPAY yêu cầu số tiền
+        double amount = order.getTotalAmount(); // VNPAY yêu cầu số tiền
 
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";

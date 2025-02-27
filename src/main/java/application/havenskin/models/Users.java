@@ -79,4 +79,8 @@ public class Users {
     @OneToMany(mappedBy = "user")
     private List<SkinCaresPlan> skinCaresPlan;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<CoinWallets> coinWallets;
+
 }

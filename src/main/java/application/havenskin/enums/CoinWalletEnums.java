@@ -1,11 +1,12 @@
 package application.havenskin.enums;
 
-public enum OrderDetailEnums {
+public enum CoinWalletEnums {
     INACTIVE((byte) 0),
     ACTIVE((byte) 1);
+
     private final byte value;
 
-    OrderDetailEnums(byte value) {
+    CoinWalletEnums(byte value) {
         this.value = value;
     }
 
@@ -13,12 +14,12 @@ public enum OrderDetailEnums {
         return value;
     }
 
-   public static OrderDetailEnums fromValue(byte value) {
-        for (OrderDetailEnums orderDetailEnums : OrderDetailEnums.values()) {
-            if (orderDetailEnums.getValue() == value) {
-                return orderDetailEnums;
+    public static CoinWalletEnums fromValue(byte value) {
+        for (CoinWalletEnums coinWalletEnums : CoinWalletEnums.values()) {
+            if (coinWalletEnums.getValue() == value) {
+                return coinWalletEnums;
             }
         }
         throw new IllegalArgumentException("Invalid status value: " + value);
-   }
+    }
 }

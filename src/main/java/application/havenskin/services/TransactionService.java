@@ -1,11 +1,14 @@
 package application.havenskin.services;
 
 import application.havenskin.dataAccess.TransactionDTO;
+import application.havenskin.enums.OrderEnums;
 import application.havenskin.enums.TransactionsEnums;
 import application.havenskin.mapper.Mapper;
 import application.havenskin.models.Transactions;
 import application.havenskin.repositories.TransactionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,6 +19,8 @@ import java.util.List;
 public class TransactionService {
     @Autowired
     private TransactionsRepository transactionsRepository;
+    @Autowired
+    private OrderService orderService;
     @Autowired
     private Mapper mapper;
     public List<Transactions> getAllTransactions() {
@@ -45,7 +50,7 @@ public class TransactionService {
         return transactionsRepository.saveAll(transactions);
     }
 
-    public void saveTransactionToDB(String transactionCode, String amount, String bankName, String payDate, boolean isSuccess) {
+    public void saveTransactionToDB(String orderId, String transactionCode, String amount, String bankName, String payDate, boolean isSuccess) {
         try {
             System.out.println("🔹 Đang lưu giao dịch...");
             System.out.println("Mã giao dịch: " + transactionCode);
@@ -57,14 +62,25 @@ public class TransactionService {
 
             Transactions transaction = new Transactions();
             System.out.println("orderId: " + transaction.getOrderId());
-            transactionsRepository.save(transaction);
+            transaction.setOrderId(orderId);
             transaction.setTransactionCode(transactionCode);
+            transaction.setTransactionType((byte) 1);
             transaction.setAmount(Double.parseDouble(amount) / 100);
             transaction.setBankName(bankName);
             transaction.setTransactionTime(LocalDateTime.parse(payDate, DateTimeFormatter.ofPattern("yyyyMMddHHmmss")));
             transaction.setTransactionStatus(isSuccess ? TransactionsEnums.PAID.getValue() : TransactionsEnums.NOT_PAID.getValue());
 
             transactionsRepository.save(transaction);
+
+            // Cập nhật trạng thái đơn hàng
+            if (isSuccess) {
+                boolean updated = orderService.updateOrderStatus(orderId, OrderEnums.PROCESSING.getOrder_status());
+                if (!updated) {
+                    System.out.println("Cập nhật trạng thái đơn hàng thất bại");
+                    return;
+                }
+            }
+
             System.out.println("✅ Giao dịch đã lưu thành công!");
         } catch (Exception e) {
             System.out.println("❌ Lỗi khi lưu giao dịch:");
