@@ -1,13 +1,11 @@
 package application.havenskin.models;
 
-import application.havenskin.enums.OrderEnums;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.annotations.Nationalized;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -27,7 +25,7 @@ public class Orders {
     @Column(name = "user_id", length = 50)
     private String userId;
 
-    @NotNull
+    //@NotNull
     @Column(name = "total_amount")
     private int totalAmount;
 
@@ -61,4 +59,5 @@ public class Orders {
     @JsonIgnore
     @OneToOne(mappedBy = "orders")
     private Transactions transactions;
+
 }
