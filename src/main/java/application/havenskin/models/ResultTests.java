@@ -33,7 +33,7 @@ public class ResultTests {
     private LocalDateTime deletedTime;
 
     @Column(name = "status")
-    private byte status;
+    private byte status =  1;
 
     @NotNull
     @Column(name = "skin_type_id", length = 50)

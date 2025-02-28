@@ -34,21 +34,22 @@ public class ResultTestService {
     private AnswerRepository answerRepository;
 
     public ResultTests processTestResult(SubmitTestRequestDto request) {
-        // 1) Kiểm tra skinTestId
-        skinTestsRepository.findById(request.getSkinTestId())
-                .orElseThrow(() -> new RuntimeException("SkinTest not found"));
+//        // 1) Kiểm tra skinTestId
+//        skinTestsRepository.findById(request.getSkinTestId())
+//                .orElseThrow(() -> new RuntimeException("SkinTest not found"));
 
-        // 2) Tạo result_test
+        // Tạo result_test
         ResultTests resultTest = new ResultTests();
         resultTest.setUserId(request.getUserId());
-        resultTest.setSkinTestId(request.getSkinTestId());
+
+//        resultTest.setSkinTestId(request.getSkinTestId());
         resultTest.setCreatedTime(LocalDateTime.now());
 
         resultTest = resultTestsRepository.save(resultTest);
 
         double totalMark = 0;
 
-        // 3) Lưu từng userAnswer
+        // Lưu từng userAnswer
         for (SubmitAnswerDto ans : request.getAnswers()) {
             Answers answerObj = answersRepository.findById(ans.getAnswerId())
                     .orElseThrow(() -> new RuntimeException("Answer not found"));
@@ -70,13 +71,20 @@ public class ResultTestService {
     }
 
     private String determineSkinType(double totalMark) {
-        if (totalMark <= 15) return "04618ed1-dd2b-4b4c-be04-66f441b80315";  // Da khô
-        else if (totalMark <= 25) return "a134dad2-aef2-4841-b92f-58609c257543"; // Da thường
-        else if (totalMark <= 35) return "9e08293c-e8a3-4c04-82e2-1a692a9ad434"; // Da hỗn hợp
-        else return "41e9c6bb-5f12-4e93-bffd-cede74a01175"; // Da dầu
+        String skinName;
+        if (totalMark <= 15) skinName = "Dryer";
+        else if (totalMark <= 25) skinName = "Normal";
+        else if (totalMark <= 35) skinName = "Combination";
+        else skinName = "Oily";
+
+        // Tìm skinType trong database bằng skinName
+        SkinTypes skinType = skinTypesRepository.findBySkinName(skinName)
+                .orElseThrow(() -> new RuntimeException("Skin Type not found: " + skinName));
+
+        return skinType.getSkinTypeId(); // Trả về ID hợp lệ thay vì chuỗi
     }
 
-    public ResultTestDto getResultTestsWithAnswers(String resultTestId) {
+    public ResultTestDto getResultTestsWithDetails(String resultTestId) {
         //Lấy resultTest
         ResultTests rt = resultTestsRepository.findById(resultTestId)
                 .orElseThrow(() -> new RuntimeException("ResultTest not found"));
@@ -85,7 +93,8 @@ public class ResultTestService {
         ResultTestDto dto = new ResultTestDto();
         dto.setResultTestId(rt.getResultTestId());
         dto.setUserId(rt.getUserId());
-        dto.setSkinTestId(rt.getSkinTestId());
+//        dto.setSkinTestId(rt.getSkinTestId());
+        dto.setEmail(rt.getUser().getEmail());
         dto.setTotalMark(rt.getTotalMark());
         dto.setSkinTypeId(rt.getSkinTypeId());
         dto.setCreatedTime(rt.getCreatedTime());
@@ -106,92 +115,65 @@ public class ResultTestService {
             });
         }
 
-        // 3) Lấy danh sách user_answers
-        List<UserAnswers> uaList = userAnswersRepository.findByResultTest_ResultTestId(rt.getResultTestId());
-        List<UserAnswerDto> uaDtoList = uaList.stream().map(ua -> {
-            UserAnswerDto uad = new UserAnswerDto();
-            uad.setUserAnswerId(ua.getUserAnswersId());
-            uad.setQuestionId(ua.getQuestionId());
-
-            uad.setAnswerId(ua.getAnswerId());
-            uad.setMark(ua.getMark());
-
-            // Lấy nội dung câu hỏi
-            if (ua.getQuestion() != null) {
-                uad.setQuestionContent(ua.getQuestion().getQuestionContent());
-            } else {
-                questionsRepository.findById(ua.getQuestionId()).ifPresent(q -> uad.setQuestionContent(q.getQuestionContent()));
-            }
-
-            // Lấy nội dung câu trả lời
-            if (ua.getAnswer() != null) {
-                uad.setAnswerContent(ua.getAnswer().getAnswerContent());
-            } else {
-                answersRepository.findById(ua.getAnswerId()).ifPresent(a -> uad.setAnswerContent(a.getAnswerContent()));
-            }
-
-
-
-            return uad;
-        }).collect(Collectors.toList());
-
-        dto.setUserAnswers(uaDtoList);
-
-        return dto;
+//        // 3) Lấy danh sách user_answers
+//        List<UserAnswers> uaList = userAnswersRepository.findByResultTest_ResultTestId(rt.getResultTestId());
+//        List<UserAnswerDto> uaDtoList = uaList.stream().map(ua -> {
+//            UserAnswerDto uad = new UserAnswerDto();
+//            uad.setUserAnswerId(ua.getUserAnswersId());
+//            uad.setQuestionId(ua.getQuestionId());
+//
+//            uad.setAnswerId(ua.getAnswerId());
+//            uad.setMark(ua.getMark());
+//
+//            // Lấy nội dung câu hỏi
+//            if (ua.getQuestion() != null) {
+//                uad.setQuestionContent(ua.getQuestion().getQuestionContent());
+//            } else {
+//                questionsRepository.findById(ua.getQuestionId()).ifPresent(q -> uad.setQuestionContent(q.getQuestionContent()));
+//            }
+//
+//            // Lấy nội dung câu trả lời
+//            if (ua.getAnswer() != null) {
+//                uad.setAnswerContent(ua.getAnswer().getAnswerContent());
+//            } else {
+//                answersRepository.findById(ua.getAnswerId()).ifPresent(a -> uad.setAnswerContent(a.getAnswerContent()));
+//            }
+//
+//
+//
+//            return uad;
+//        }).collect(Collectors.toList());
+//
+//        dto.setUserAnswers(uaDtoList);
+//
+            return dto;
     }
 
     public List<ResultTestDto> getAllResultTests() {
-        // Lấy danh sách tất cả result_tests từ database
         List<ResultTests> resultTestsList = resultTestsRepository.findAll();
-
-        // Chuyển đổi sang DTO
         return resultTestsList.stream().map(rt -> {
             ResultTestDto dto = new ResultTestDto();
             dto.setResultTestId(rt.getResultTestId());
             dto.setUserId(rt.getUserId());
-            dto.setSkinTestId(rt.getSkinTestId());
+//            dto.setSkinTestId(rt.getSkinTestId());
             dto.setTotalMark(rt.getTotalMark());
             dto.setSkinTypeId(rt.getSkinTypeId());
             dto.setCreatedTime(rt.getCreatedTime());
 
-            // 1) Lấy tên user
-            userRepository.findById(rt.getUserId()).ifPresent(user -> {
-                dto.setFirstName(user.getFirstName());
-                dto.setLastName(user.getLastName());
-            });
+            // Lấy tên user
+            if (rt.getUserId() != null) {
+                userRepository.findById(rt.getUserId()).ifPresent(user -> {
+                    dto.setFirstName(user.getFirstName());
+                    dto.setLastName(user.getLastName());
+                });
+            }
 
-            // 2) Lấy tên loại da
-            skinTypesRepository.findById(rt.getSkinTypeId()).ifPresent(st -> {
-                dto.setSkinName(st.getSkinName());
-            });
-
-            // 3) Lấy danh sách user_answers
-            List<UserAnswers> uaList = userAnswersRepository.findByResultTest_ResultTestId(rt.getResultTestId());
-            List<UserAnswerDto> uaDtoList = uaList.stream().map(ua -> {
-                UserAnswerDto uad = new UserAnswerDto();
-                uad.setUserAnswerId(ua.getUserAnswersId());
-                uad.setQuestionId(ua.getQuestionId());
-                uad.setAnswerId(ua.getAnswerId());
-                uad.setMark(ua.getMark());
-
-                // Kiểm tra và lấy nội dung câu hỏi
-                if (ua.getQuestion() != null) {
-                    uad.setQuestionContent(ua.getQuestion().getQuestionContent());
-                } else {
-                    questionsRepository.findById(ua.getQuestionId()).ifPresent(q -> uad.setQuestionContent(q.getQuestionContent()));
-                }
-
-                // Kiểm tra và lấy nội dung câu trả lời
-                if (ua.getAnswer() != null) {
-                    uad.setAnswerContent(ua.getAnswer().getAnswerContent());
-                } else {
-                    answersRepository.findById(ua.getAnswerId()).ifPresent(a -> uad.setAnswerContent(a.getAnswerContent()));
-                }
-
-                return uad;
-            }).collect(Collectors.toList());
-
-            dto.setUserAnswers(uaDtoList);
+            // Lấy tên loại da
+            if (rt.getSkinTypeId() != null) {
+                skinTypesRepository.findById(rt.getSkinTypeId()).ifPresent(st -> {
+                    dto.setSkinName(st.getSkinName());
+                });
+            }
 
             return dto;
         }).collect(Collectors.toList());
@@ -200,8 +182,69 @@ public class ResultTestService {
     public String deleteResultTestById(String resultTestId) {
         ResultTests rt = resultTestsRepository.findById(resultTestId)
                 .orElseThrow(() -> new RuntimeException("ResultTest not found"));
-        resultTestsRepository.delete(rt);
+        rt.setStatus((byte) 0);
+        resultTestsRepository.save(rt);
         return "Deleted ResultTest";
     }
+
+    public ResultTestDto updateStatus(String resultTestId, ResultTestDto rt) {
+
+        ResultTests exitingResultTest = resultTestsRepository.findById(resultTestId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy ResultTest với ID: " + resultTestId));
+
+        if (rt.getStatus() != 0) {
+            exitingResultTest.setStatus(rt.getStatus());
+        }
+
+
+        resultTestsRepository.save(exitingResultTest);
+
+        // Chuyển đổi sang DTO để trả về
+        ResultTestDto dto = new ResultTestDto();
+        dto.setResultTestId(exitingResultTest.getResultTestId());
+        dto.setUserId(exitingResultTest.getUserId());
+//        dto.setSkinTestId(exitingResultTest.getSkinTestId());
+        dto.setTotalMark(exitingResultTest.getTotalMark());
+        dto.setSkinTypeId(exitingResultTest.getSkinTypeId());
+        dto.setCreatedTime(exitingResultTest.getCreatedTime());
+        dto.setStatus(exitingResultTest.getStatus()); // Cập nhật trạng thái mới
+
+        return dto;
+    }
+
+    public List<ResultTestDto> getResultTestByEmail(String email) {
+        // Tìm user theo email
+        Users user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+
+        // Tìm tất cả bài test của user
+        List<ResultTests> resultTests = resultTestsRepository.findByUserId(user.getUserId());
+        if (resultTests.isEmpty()) {
+            throw new RuntimeException("No ResultTest found for user: " + email);
+        }
+
+        //Chuyển danh sách kết quả thành DTO
+        List<ResultTestDto> resultDtos = resultTests.stream().map(rt -> {
+            String skinName = skinTypesRepository.findBySkinName(rt.getSkinType().getSkinName())
+                    .map(SkinTypes::getSkinName)
+                    .orElse("Unknown");
+
+            ResultTestDto dto = new ResultTestDto();
+            dto.setResultTestId(rt.getResultTestId());
+            dto.setEmail(rt.getUser().getEmail());
+            dto.setFirstName(rt.getUser().getFirstName());
+            dto.setLastName(rt.getUser().getLastName());
+            dto.setSkinTypeId(rt.getSkinType().getSkinTypeId());
+            dto.setUserId(rt.getUserId());
+            dto.setTotalMark(rt.getTotalMark());
+            dto.setSkinName(skinName);
+            dto.setCreatedTime(rt.getCreatedTime());
+
+            return dto;
+        }).collect(Collectors.toList());
+
+        return resultDtos;
+    }
+    
 
 }
