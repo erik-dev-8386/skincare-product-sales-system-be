@@ -3,8 +3,10 @@ package application.havenskin.services;
 import application.havenskin.dataAccess.ProductDTO;
 import application.havenskin.enums.ProductEnums;
 import application.havenskin.mapper.Mapper;
+import application.havenskin.models.Discounts;
 import application.havenskin.models.ProductImages;
 import application.havenskin.models.Products;
+import application.havenskin.repositories.DiscountsRepository;
 import application.havenskin.repositories.ProductImagesRepository;
 import application.havenskin.repositories.ProductsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,8 @@ public class ProductService {
     private FirebaseService firebaseService;
     @Autowired
     private ProductImagesRepository productImagesRepository;
+    @Autowired
+    private DiscountsRepository discountsRepository;
     public List<Products> getAllProducts() {
         return productsRepository.findAll();
     }
@@ -42,6 +46,7 @@ public class ProductService {
 //    }
     public Products addProduct(ProductDTO product, List<MultipartFile> images) throws IOException {
     Products x = mapper.toProducts(product);
+    x.setDiscountPrice(x.getUnitPrice() - CalculateDisscountPrice(x.getDiscountId()) * x.getUnitPrice());
     Products saved = productsRepository.save(x);
     if(images != null && !images.isEmpty()) {
         List<ProductImages> productImagesList = new ArrayList<>();
@@ -60,7 +65,14 @@ public class ProductService {
     }
     return saved;
 }
-
+    public double CalculateDisscountPrice(String discountId) {
+        Optional<Discounts> discounts = discountsRepository.findById(discountId);
+        if(discounts.isPresent()) {
+            Discounts discount = discounts.get();
+            return discount.getDiscountPercent();
+        }
+        return 0;
+    }
     public Products updateProduct(String id, ProductDTO product) {
         Products products = productsRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
         mapper.updateProducts(products, product);

@@ -136,7 +136,7 @@ public class OrderDetailsService {
 //        }
 //        String productId = productsRepository.findProductIDByName(productName);
 //        Products products = productsRepository.findById(productId).orElseThrow(()-> new RuntimeException("Product not found"));
-//        Optional<OrderDetails>existing = orderDetailsRepository.findByOrderIdAndCustomerId(orderId, productId);
+//        Optional<OrderDetails>existing = orderDetailsRepository
 //        OrderDetails orderDetail;
 //        if(existing.isPresent()){
 //            orderDetail = existing.get();

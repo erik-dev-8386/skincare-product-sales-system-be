@@ -22,7 +22,7 @@ public class ProductController {
     private CategoryService categoryService;
     @Autowired
     private BrandService brandService;
-    @PreAuthorize("hasAnyRole('ADMIN','STAFF', 'CUSTOMER')")
+   // @PreAuthorize("hasAnyRole('ADMIN','STAFF', 'CUSTOMER')")
     @GetMapping
     public List<Products> getAllProducts() {
         return productService.getAllProducts();

@@ -66,7 +66,8 @@ public class Users {
     private byte status;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
+    // Đảm bảo khi xóa user thì xóa luôn đơn hàng
     private List<Orders> orders;
 
     @JsonIgnore
@@ -84,5 +85,7 @@ public class Users {
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<SkinCaresPlan> skinCaresPlan;
+
+
 
 }

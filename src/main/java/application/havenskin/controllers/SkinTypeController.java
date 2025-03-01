@@ -16,7 +16,7 @@ import java.util.List;
 public class SkinTypeController {
     @Autowired
     private SkinTypeService skinTypeService;
-    @PreAuthorize("hasAnyRole('ADMIN','STAFF', 'CUSTOMER')")
+    //@PreAuthorize("hasAnyRole('ADMIN','STAFF', 'CUSTOMER')")
     @GetMapping
     public List<SkinTypes> getAllSkinTypes() {
         return skinTypeService.getAllSkinTypes();
