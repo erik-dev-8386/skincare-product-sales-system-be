@@ -16,9 +16,9 @@ public class ApplicationInitConfig {
     @Bean
     ApplicationRunner applicationRunner(UserRepository userRepository){// duoc khoi chay khi moi lan app start len
         return args -> {
-            if(userRepository.findByEmail("huba@gmail.com").isEmpty()){
+            if(userRepository.findByEmail("admin@gmail.com").isEmpty()){
                 Users x = new Users();
-                x.setEmail("huba@gmail.com");
+                x.setEmail("admin@gmail.com");
                 x.setPassword(passwordEncoder.encode("123456"));
                 x.setRole(Role.ADMIN.getValue());
                 x.setFirstName("Admin");

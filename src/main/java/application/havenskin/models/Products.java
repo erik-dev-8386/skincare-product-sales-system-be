@@ -1,6 +1,7 @@
 package application.havenskin.models;
 
 import application.havenskin.enums.ProductEnums;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -65,6 +66,7 @@ public class  Products {
     @Column(name = "discount_id", length = 50)
     private String discountId;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "discount_id", referencedColumnName = "discount_id", insertable = false, updatable = false)
     private Discounts discounts;
@@ -73,6 +75,7 @@ public class  Products {
     @Column(name = "category_id", length = 50)
     private String categoryId;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "category_id", insertable = false, updatable = false)
     private Categories categories;
@@ -81,6 +84,7 @@ public class  Products {
     @Column(name = "brand_id", length = 50)
     private String brandId;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "brand_id", referencedColumnName = "brand_id", insertable = false, updatable = false)
     private Brands brands;
@@ -89,6 +93,7 @@ public class  Products {
     @Column(name = "skin_type_id", length = 50)
     private String skinTypeId;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "skin_type_id", referencedColumnName = "skin_type_id", insertable = false, updatable = false)
     private SkinTypes skinTypes;

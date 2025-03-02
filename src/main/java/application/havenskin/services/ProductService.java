@@ -46,7 +46,7 @@ public class ProductService {
 //    }
     public Products addProduct(ProductDTO product, List<MultipartFile> images) throws IOException {
     Products x = mapper.toProducts(product);
-    x.setDiscountPrice(x.getUnitPrice() - CalculateDisscountPrice(x.getDiscountId()) * x.getUnitPrice());
+    x.setDiscountPrice(x.getUnitPrice() - CalculateDisscountPrice(x.getDiscountId())/100 * x.getUnitPrice());
     Products saved = productsRepository.save(x);
     if(images != null && !images.isEmpty()) {
         List<ProductImages> productImagesList = new ArrayList<>();
