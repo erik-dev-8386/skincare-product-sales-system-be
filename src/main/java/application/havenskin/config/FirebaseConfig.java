@@ -16,7 +16,7 @@ public class FirebaseConfig {
     public FirebaseApp firebaseApp() throws IOException {
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(
-                        new ClassPathResource("spring-firebase-haven-skin.json").getInputStream()))
+                        new ClassPathResource("Skin-care.json").getInputStream()))
                 .setStorageBucket("haven-skin-03-2025-d1f5f.firebasestorage.app")
                 .build();
 

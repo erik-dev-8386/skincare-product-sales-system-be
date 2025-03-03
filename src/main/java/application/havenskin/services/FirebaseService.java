@@ -46,7 +46,7 @@ public String uploadImage(MultipartFile file) throws IOException {
     // Khởi tạo Firebase Storage
     Storage storage = StorageOptions.newBuilder()
             .setCredentials(GoogleCredentials.fromStream(
-                    new ClassPathResource("spring-firebase-haven-skin.json").getInputStream()))
+                    new ClassPathResource("Skin-care.json").getInputStream()))
             .build()
             .getService();
 
