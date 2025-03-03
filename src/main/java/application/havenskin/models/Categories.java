@@ -26,9 +26,9 @@ public class Categories {
     @Nationalized
     private String description;
 
-    @Column(name = "usage_instruction", length = 255)
-    @Nationalized
-    private String usageInstruction;
+//    @Column(name = "usage_instruction", length = 255)
+//    @Nationalized
+//    private String usageInstruction;
 
     @JsonIgnore
     @OneToMany(mappedBy = "categories")

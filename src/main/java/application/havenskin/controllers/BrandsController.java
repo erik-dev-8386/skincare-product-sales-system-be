@@ -15,7 +15,7 @@ import java.util.List;
 public class BrandsController {
     @Autowired
     private BrandService brandService;
-    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'CUSTOMER')")
+   // @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'CUSTOMER')")
     @GetMapping
     public List<Brands> getAllBrands() {
         return brandService.getAllBrands();

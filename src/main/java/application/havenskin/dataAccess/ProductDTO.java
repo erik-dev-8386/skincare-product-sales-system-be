@@ -39,21 +39,21 @@ public class ProductDTO {
 
     private String discountId;
 
-    private Discounts discounts;
+   // private Discounts discounts;
 
     private String categoryId;
 
-    private Categories categories;
+ //   private Categories categories;
 
     private String brandId;
 
-    private Brands brands;
+   // private Brands brands;
 
     private String skinTypeId;
 
-    private SkinTypes skinTypes;
+  //  private SkinTypes skinTypes;
 
     private List<ProductImages> productImages;
 
-    private List<Feedbacks> feedbacks;
+  //  private List<Feedbacks> feedbacks;
 }

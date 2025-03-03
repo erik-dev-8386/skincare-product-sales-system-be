@@ -14,7 +14,7 @@ import java.util.List;
 public class DiscountController {
     @Autowired
     private DiscountService discountService;
-    @PreAuthorize("hasAnyRole('ADMIN','STAFF', 'CUSTOMER')")
+   // @PreAuthorize("hasAnyRole('ADMIN','STAFF', 'CUSTOMER')")
     @GetMapping
     public List<Discounts> getAllDiscount(){
         return discountService.getAllDiscounts();

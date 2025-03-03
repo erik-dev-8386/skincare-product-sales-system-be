@@ -15,7 +15,7 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @PreAuthorize("hasAnyRole('ADMIN','STAFF', 'CUSTOMER')")
+   // @PreAuthorize("hasAnyRole('ADMIN','STAFF', 'CUSTOMER')")
     @GetMapping
     public List<Categories> getAllCategories() {
         return categoryService.getAllCategories();

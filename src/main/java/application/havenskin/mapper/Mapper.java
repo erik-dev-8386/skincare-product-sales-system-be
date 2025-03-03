@@ -2,6 +2,7 @@ package application.havenskin.mapper;
 
 import application.havenskin.dataAccess.*;
 import application.havenskin.models.*;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 @org.mapstruct.Mapper(componentModel = "spring")
@@ -17,6 +18,8 @@ public interface Mapper {
     void updateOrders(@MappingTarget Orders orders, OrderDTO orderDTO);
     OrderDetails toOrderDetails(OrderDetails orderDetails);
     void updateOrderDetails(@MappingTarget OrderDetails orderDetails, OrderDetailDTO orderDetailsDTO);
+
+    @Mapping(target = "discountPrice")
     Products toProducts(ProductDTO productDTO);
     void updateProducts(@MappingTarget Products products, ProductDTO productDTO);
     Shipments toShipments(ShipmentDTO shipmentDTO);
