@@ -309,17 +309,17 @@ public class OrderDetailsService {
         return totalPrice;
     }
 
-    public void checkout(String email) {
-        Users user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User Not Found!"));
-        Orders order = ordersRepository.findByUserIdAndStatus(user.getUserId(), OrderEnums.UNORDERED.getOrder_status())
-                .orElseThrow(() -> new RuntimeException("Cart Not Found!"));
-
-        // Cập nhật trạng thái đơn hàng
-        order.setStatus(OrderEnums.PENDING.getOrder_status());
-        ordersRepository.save(order);
-    }
-
+//    public void checkout(String email) {
+//        Users user = userRepository.findByEmail(email)
+//                .orElseThrow(() -> new RuntimeException("User Not Found!"));
+//        Orders order = ordersRepository.findByUserIdAndStatus(user.getUserId(), OrderEnums.UNORDERED.getOrder_status())
+//                .orElseThrow(() -> new RuntimeException("Cart Not Found!"));
+//
+//        // Cập nhật trạng thái đơn hàng
+//        order.setStatus(OrderEnums.PENDING.getOrder_status());
+//        ordersRepository.save(order);
+//    }
+//
 
 
 

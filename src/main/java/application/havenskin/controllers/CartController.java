@@ -2,6 +2,7 @@ package application.havenskin.controllers;
 
 
 import application.havenskin.dataAccess.CartItemsDTO;
+import application.havenskin.dataAccess.CheckoutRequestDTO;
 import application.havenskin.models.OrderDetails;
 import application.havenskin.services.OrderDetailsService;
 import application.havenskin.services.OrderService;
@@ -18,6 +19,8 @@ public class CartController  {
     @Autowired
     private OrderDetailsService orderDetailsService;
 
+    @Autowired
+    private OrderService orderService;
 
     // hàm này được gọi khi ở trang sản phẩm người dùng bấm add-to-cart
     @PreAuthorize("hasAnyRole('ADMIN','STAFF','CUSTOMER')")
@@ -71,6 +74,12 @@ public class CartController  {
 
     // còn hàm checkout  nx nhưng mà để tính cái nha!!!!!
 
+    // ko trả gì về cho FE đâu vì gửi request fe có thông tin hết r!!!
+    // fe gửi nguyên list sp ở giỏ hàng về cho be xử lý lưu xún DB
+    @PostMapping("checkout")
+    public void checkout(@RequestBody CheckoutRequestDTO checkoutRequestDTO){
+        orderService.checkout(checkoutRequestDTO);
+    }
 
 
 

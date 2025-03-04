@@ -29,7 +29,7 @@ public class Orders {
 
     @NotNull
     @Column(name = "total_amount")
-    private int totalAmount;
+    private double totalAmount;
 
     @NotNull
     @Column(name = "status")
