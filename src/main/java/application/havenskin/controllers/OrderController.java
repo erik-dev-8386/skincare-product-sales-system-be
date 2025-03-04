@@ -46,10 +46,10 @@ public class OrderController {
         return orderService.addListOfOrders(orders);
     }
 
-    @GetMapping("/{id}")
-    public int ShowQuantityByOrderId(@PathVariable String id){
-        return orderService.ShowQuantityByOrderId(id);
-    }
+//    @GetMapping("/{id}")
+//    public int ShowQuantityByOrderId(@PathVariable String id){
+//        return orderService.ShowQuantityByOrderId(id);
+//    }
     @PutMapping("/{id}/status")
     public ResponseEntity<?> updateOrderStatus(@PathVariable String id, @RequestParam byte status) {
         boolean updated = orderService.updateOrderStatus(id, status);
