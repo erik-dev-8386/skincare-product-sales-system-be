@@ -1,12 +1,11 @@
 package application.havenskin.controllers;
 
 
-import application.havenskin.dataAccess.CartItemsDTO;
+import application.havenskin.dataAccess.CheckOutResponseDTO;
 import application.havenskin.dataAccess.CheckoutRequestDTO;
 import application.havenskin.models.OrderDetails;
 import application.havenskin.services.OrderDetailsService;
 import application.havenskin.services.OrderService;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -58,11 +57,11 @@ public class CartController  {
     }
 
     // hàm này show ra các sản phẩm trong giỏ hàng
-    @PreAuthorize("hasAnyRole('ADMIN','STAFF','CUSTOMER')")
-    @GetMapping("/items")
-    public List<CartItemsDTO> getCart(@RequestParam String email){
-        return orderDetailsService.getCartItems(email);
-    }
+//    @PreAuthorize("hasAnyRole('ADMIN','STAFF','CUSTOMER')")
+//    @GetMapping("/items")
+//    public List<CartItemsDTO> getCart(@RequestParam String email){
+//        return orderDetailsService.getCartItems(email);
+//    }
 
 
     // hàm này tính tổng tiền của giỏ hàng
@@ -76,10 +75,15 @@ public class CartController  {
 
     // ko trả gì về cho FE đâu vì gửi request fe có thông tin hết r!!!
     // fe gửi nguyên list sp ở giỏ hàng về cho be xử lý lưu xún DB
-    @PostMapping("checkout")
-    public void checkout(@RequestBody CheckoutRequestDTO checkoutRequestDTO){
-        orderService.checkout(checkoutRequestDTO);
+//    @PostMapping("/checkout")
+//    public void checkout(@RequestBody CheckoutRequestDTO checkoutRequestDTO){
+//        orderService.checkout(checkoutRequestDTO);
+//    }
+    @PostMapping("/checkout")
+    public CheckOutResponseDTO checkout(@RequestBody CheckoutRequestDTO checkoutRequestDTO){
+        return orderService.checkout(checkoutRequestDTO);
     }
+
 
 
 

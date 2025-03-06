@@ -1,9 +1,11 @@
 package application.havenskin.services;
 
-import application.havenskin.dataAccess.CartItemRequest;
+import application.havenskin.dataAccess.CartItemDTO;
+import application.havenskin.dataAccess.CheckOutResponseDTO;
 import application.havenskin.dataAccess.CheckoutRequestDTO;
 import application.havenskin.dataAccess.OrderDTO;
 import application.havenskin.enums.OrderEnums;
+import application.havenskin.enums.ProductEnums;
 import application.havenskin.mapper.Mapper;
 import application.havenskin.models.OrderDetails;
 import application.havenskin.models.Orders;
@@ -17,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -31,47 +35,125 @@ public class OrderService {
     @Autowired
     private OrderDetailsRepository orderDetailsRepository;
 
-    public void checkout(CheckoutRequestDTO checkoutRequestDTO) {
-        Users x = userRepository.findByEmail(checkoutRequestDTO.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
+//    public void checkout(CheckoutRequestDTO checkoutRequestDTO) {
+//        Users x = userRepository.findByEmail(checkoutRequestDTO.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
+//
+//        // tao đơn hàng mới
+//        Orders order = new Orders();
+//        order.setUserId(x.getUserId());
+//        order.setStatus(OrderEnums.PENDING.getOrder_status());
+//        order.setOrderTime(new Date());
+////        ordersRepository.save(order);
+//
+//        double totalOrderPrice = 0;
+//        for (CartItemDTO cartItemDTO : checkoutRequestDTO.getCartItemDTOS()) {
+//            Products products = productsRepository.findByProductName(cartItemDTO.getProductName());
+//            if(products == null) {
+//                throw new RuntimeException(cartItemDTO.getProductName() + " not found");
+//            }
+//            if(products.getQuantity() < cartItemDTO.getQuantity()) {
+//                throw  new RuntimeException(cartItemDTO.getProductName()+" not enough");
+//            }
+//
+//            double itemTotalPrice = products.getDiscountPrice() * cartItemDTO.getQuantity();
+//            totalOrderPrice += itemTotalPrice;
+//
+//            OrderDetails orderDetails = new OrderDetails();
+//            orderDetails.setOrderId(order.getOrderId());
+//            orderDetails.setProductId(products.getProductId());
+//            orderDetails.setQuantity(cartItemDTO.getQuantity());
+//            orderDetails.setDiscountPrice(products.getDiscountPrice());
+//            orderDetails.setStatus(OrderEnums.PENDING.getOrder_status());
+//
+//            orderDetailsRepository.save(orderDetails);
+//
+//            // cập nhật so luong ton kho
+//            products.setQuantity(products.getQuantity() - cartItemDTO.getQuantity());
+//            if(products.getQuantity() <= 0){
+//                products.setStatus(ProductEnums.OUT_OF_STOCK.getValue());
+//            }
+//            productsRepository.save(products);
+//
+//            order.setTotalAmount(totalOrderPrice);
+//            ordersRepository.save(order);
+//
+//            order.setStatus(OrderEnums.PENDING.getOrder_status());
+//            ordersRepository.save(order);
+//        }
+//    }
 
-        // tao đơn hàng mới
-        Orders order = new Orders();
-        order.setUserId(x.getUserId());
-        order.setStatus(OrderEnums.PENDING.getOrder_status());
-        order.setOrderTime(new Date());
+public CheckOutResponseDTO checkout(CheckoutRequestDTO checkoutRequestDTO) {
+    Users x = userRepository.findByEmail(checkoutRequestDTO.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
+
+    // tao đơn hàng mới
+    Orders order = new Orders();
+    order.setUserId(x.getUserId());
+    order.setStatus(OrderEnums.PENDING.getOrder_status());
+    order.setOrderTime(new Date());
 //        ordersRepository.save(order);
 
-        double totalOrderPrice = 0;
-        for (CartItemRequest cartItemRequest : checkoutRequestDTO.getCartItemRequests()) {
-            Products products = productsRepository.findByProductName(cartItemRequest.getProductName());
-            if(products == null) {
-                throw new RuntimeException(cartItemRequest.getProductName() + " not found");
+    double totalOrderPrice = 0;
+    for (CartItemDTO cartItemDTO : checkoutRequestDTO.getCartItemDTO()) {
+        Products products = productsRepository.findByProductName(cartItemDTO.getProductName());
+        if (products == null) {
+            throw new RuntimeException(cartItemDTO.getProductName() + " not found");
+        }
+        if (products.getQuantity() < cartItemDTO.getQuantity()) {
+            throw new RuntimeException(cartItemDTO.getProductName() + " not enough");
+        }
+
+        double itemTotalPrice = products.getDiscountPrice() * cartItemDTO.getQuantity();
+        totalOrderPrice += itemTotalPrice;
+
+        OrderDetails orderDetails = new OrderDetails();
+        orderDetails.setOrderId(order.getOrderId());
+        orderDetails.setProductId(products.getProductId());
+        orderDetails.setQuantity(cartItemDTO.getQuantity());
+        orderDetails.setDiscountPrice(products.getDiscountPrice());
+        orderDetails.setStatus(OrderEnums.PENDING.getOrder_status());
+
+        orderDetailsRepository.save(orderDetails);
+
+        // cập nhật so luong ton kho
+        products.setQuantity(products.getQuantity() - cartItemDTO.getQuantity());
+        if (products.getQuantity() <= 0) {
+            products.setStatus(ProductEnums.OUT_OF_STOCK.getValue());
+        }
+        productsRepository.save(products);
+    }
+        order.setTotalAmount(totalOrderPrice);
+        ordersRepository.save(order);
+
+        order.setStatus(OrderEnums.PENDING.getOrder_status());
+        ordersRepository.save(order);
+
+        CheckOutResponseDTO response = new CheckOutResponseDTO();
+        response.setTotal(totalOrderPrice);
+        response.setCartItems(checkoutRequestDTO.getCartItemDTO().stream()
+                .map(detail ->{
+                    CartItemDTO temp = new CartItemDTO();
+                    temp.setProductName(detail.getProductName());
+                    temp.setQuantity(detail.getQuantity());
+                    temp.setPrice(detail.getPrice());
+                    return temp;
+                }).collect(Collectors.toList()));
+        return response;
+    }
+
+
+    public Orders findCartByUserId(String email){
+        String userId = userRepository.findByEmail(email).get().getUserId();
+        if(userId == null) {
+            throw new RuntimeException("User not found");
+        }
+        else{
+            Optional<Orders> orders = ordersRepository.findByUserIdAndStatus(userId, OrderEnums.PENDING.getOrder_status());
+            if(orders.isPresent()) {
+                return orders.get();
             }
-            if(products.getQuantity() < cartItemRequest.getQuantity()) {
-                throw  new RuntimeException(cartItemRequest.getProductName()+" not enough");
+            else{
+                throw new RuntimeException("Order not found");
             }
-
-            double itemTotalPrice = products.getDiscountPrice() * cartItemRequest.getQuantity();
-            totalOrderPrice += itemTotalPrice;
-
-            OrderDetails orderDetails = new OrderDetails();
-            orderDetails.setOrderId(order.getOrderId());
-            orderDetails.setProductId(products.getProductId());
-            orderDetails.setQuantity(cartItemRequest.getQuantity());
-            orderDetails.setDiscountPrice(products.getDiscountPrice());
-            orderDetails.setStatus(OrderEnums.PENDING.getOrder_status());
-
-            orderDetailsRepository.save(orderDetails);
-
-            // cập nhật so luong ton kho
-            products.setQuantity(products.getQuantity() - cartItemRequest.getQuantity());
-            productsRepository.save(products);
-
-            order.setTotalAmount(totalOrderPrice);
-            ordersRepository.save(order);
-
-            order.setStatus(OrderEnums.PENDING.getOrder_status());
-            ordersRepository.save(order);
         }
     }
     public List<Orders> getAllOrders() {

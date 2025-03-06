@@ -3,7 +3,7 @@ package application.havenskin.enums;
 public enum ProductEnums {
     AVAILABLE((byte) 1),
     OUT_OF_STOCK((byte) 2),
-    DISCONTINUED((byte) 3);
+    DELETE((byte) 3);
 
     private final byte value;
 

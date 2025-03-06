@@ -16,4 +16,5 @@ public interface BrandsRepository extends JpaRepository<Brands, String> {
     List<String> findAllByBrandName();
     @Query("SELECT b FROM Brands b WHERE b.status = 1 ORDER BY b.brandName ASC")
     List<Brands> findActiveBrandsSortedByName();
+
 }

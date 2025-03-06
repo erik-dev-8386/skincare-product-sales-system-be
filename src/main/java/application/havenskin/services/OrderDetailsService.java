@@ -98,7 +98,7 @@
 //}
 package application.havenskin.services;
 
-import application.havenskin.dataAccess.CartItemsDTO;
+import application.havenskin.dataAccess.CartItemDTO;
 import application.havenskin.dataAccess.OrderDetailDTO;
 import application.havenskin.enums.OrderDetailEnums;
 import application.havenskin.enums.OrderEnums;
@@ -111,13 +111,10 @@ import application.havenskin.repositories.OrderDetailsRepository;
 import application.havenskin.repositories.OrdersRepository;
 import application.havenskin.repositories.ProductsRepository;
 import application.havenskin.repositories.UserRepository;
-import org.hibernate.query.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -132,6 +129,8 @@ public class OrderDetailsService {
     private ProductsRepository productsRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private OrderService orderService;
     public List<OrderDetails> getAllOrderDetails() {
         return orderDetailsRepository.findAll();
     }
@@ -266,32 +265,32 @@ public class OrderDetailsService {
         return "Successfully removed product from cart";
     }
 
-    public List<CartItemsDTO> getCartItems(String email) {
-
-        Users users = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User Not Found!"));
-
-        // tim  don hang chua thanh toan cua nguoi dung
-        Orders orders = ordersRepository.findByUserIdAndStatus(users.getUserId(), OrderEnums.UNORDERED.getOrder_status()).orElseThrow(() -> new RuntimeException("Order Not Found!"));
-
-        // lay ds cac sp trong gio hang
-        List<OrderDetails> orderDetails = orderDetailsRepository.findByOrderId(orders.getOrderId());
-
-        return orderDetails.stream()
-                .map(this::convertCartItemsDTO)
-                .collect(Collectors.toList());
-    }
-    // chuyen Order Detail -> cart Items
-    private CartItemsDTO convertCartItemsDTO(OrderDetails orderDetails) {
-        Products products = productsRepository.findById(orderDetails.getProductId()).orElseThrow(() -> new RuntimeException("Product Not Found!"));
-
-        // tra ve thong tin sp trong gio
-        return new CartItemsDTO(
-                products.getProductName(),
-                orderDetails.getQuantity(),
-                products.getDiscountPrice(),
-                products.getProductImages()
-        );
-    }
+//    public List<CartItemDTO> getCartItems(String email) {
+//
+//        Users users = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User Not Found!"));
+//
+//        // tim  don hang chua thanh toan cua nguoi dung
+//        Orders orders = ordersRepository.findByUserIdAndStatus(users.getUserId(), OrderEnums.UNORDERED.getOrder_status()).orElseThrow(() -> new RuntimeException("Order Not Found!"));
+//
+//        // lay ds cac sp trong gio hang
+//        List<OrderDetails> orderDetails = orderDetailsRepository.findByOrderId(orders.getOrderId());
+//
+//        return orderDetails.stream()
+//                .map(this::convertCartItemsDTO)
+//                .collect(Collectors.toList());
+//    }
+//    // chuyen Order Detail -> cart Items
+//    private CartItemDTO convertCartItemsDTO(OrderDetails orderDetails) {
+//        Products products = productsRepository.findById(orderDetails.getProductId()).orElseThrow(() -> new RuntimeException("Product Not Found!"));
+//
+//        // tra ve thong tin sp trong gio
+//        return new CartItemDTO(
+//                products.getProductName(),
+//                orderDetails.getQuantity(),
+//                products.getDiscountPrice(),
+//                products.getProductImages()
+//        );
+//    }
 
 
     public double calculateTotalPrice(String email) {
@@ -320,6 +319,25 @@ public class OrderDetailsService {
 //        ordersRepository.save(order);
 //    }
 //
+//
+//  public OrderDetails getProductsCartDetails(String email) {
+//        Orders x = orderService.findCartByUserId(email);
+//        if (x == null) {
+//            throw new RuntimeException("Order Not Found!");
+//        }
+//        else{
+//            String orderId = x.getOrderId();
+//            List<OrderDetails> orderDetails = orderDetailsRepository.findByOrderId(orderId);
+//        }
+//  }
+//public Map<String, Object> getProductsCartDetails(String email) {
+//    Orders x = orderService.findCartByUserId(email);
+//    if (x == null) {
+//        throw new RuntimeException("Order Not Found!");
+//    }
+//    String orderId = x.getOrderId();
+//}
+
 
 
 
@@ -371,6 +389,8 @@ public class OrderDetailsService {
         mapper.updateOrderDetails(existingDetail, orderDetails);
         return orderDetailsRepository.save(existingDetail);
     }
+
+
 
     public OrderDetails deleteOrderDetails(String id) {
         Optional<OrderDetails> orderDetailsOption = orderDetailsRepository.findById(id);

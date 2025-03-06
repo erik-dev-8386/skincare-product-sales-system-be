@@ -63,6 +63,13 @@ public class UsersController {
 //    public Users createUser(@RequestBody Users user) {
 //        return usersService.saveUser(user);
 //    }
+
+
+    @GetMapping("/get-infor")
+    public Users getUserByEmail(@RequestParam String email) {
+        return usersService.getUserByEmail(email);
+    }
+
 @PostMapping
 public Users createUser(@RequestBody UserDTO user) {
     Users newUser = new Users();

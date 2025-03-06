@@ -6,6 +6,6 @@ import java.util.List;
 @Data
 public class CheckoutRequestDTO {
     private String email;
-    private List<CartItemRequest> cartItemRequests;
+    private List<CartItemDTO> cartItemDTO;
     private double totalPrice;
 }
