@@ -53,25 +53,25 @@ public class UsersController {
     }
 
     // Lấy thông tin người dùng theo ID
-    @GetMapping("/{userId}")
+    @PostMapping("/{userId}")
     public Users getUserById(@PathVariable String userId) {
         return usersService.getUserById(userId);
     }
 
-//    // Tạo người dùng mới
-//    @PostMapping
-//    public Users createUser(@RequestBody Users user) {
-//        return usersService.saveUser(user);
-//    }
+    // Tạo người dùng mới
+    @PostMapping
+    public Users addNewUser(@RequestBody Users user) {
+        return usersService.saveUser(user);
+    }
 
 
-    @GetMapping("/get-infor")
-    public Users getUserByEmail(@RequestParam String email) {
+    @GetMapping("/{email}")
+    public Users getUserByEmail(@PathVariable String email) {
         return usersService.getUserByEmail(email);
     }
 
 @PostMapping
-public Users createUser(@RequestBody UserDTO user) {
+public Users addNewUser(@RequestBody UserDTO user) {
     Users newUser = new Users();
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
     newUser.setFirstName(user.getFirstName());

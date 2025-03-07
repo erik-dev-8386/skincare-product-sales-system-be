@@ -30,7 +30,7 @@ public class Transactions {
 
     @Column(name="transaction_type", length = 50)
     @Nationalized
-    private String transactionType;
+    private byte transactionType;
 
     @OneToOne
     @JoinColumn(name = "order_id", referencedColumnName = "order_id", insertable = false, updatable = false)
