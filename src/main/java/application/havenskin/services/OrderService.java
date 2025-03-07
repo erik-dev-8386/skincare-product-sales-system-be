@@ -1,16 +1,10 @@
 package application.havenskin.services;
 
-import application.havenskin.dataAccess.CartItemDTO;
-import application.havenskin.dataAccess.CheckOutResponseDTO;
-import application.havenskin.dataAccess.CheckoutRequestDTO;
-import application.havenskin.dataAccess.OrderDTO;
+import application.havenskin.dataAccess.*;
 import application.havenskin.enums.OrderEnums;
 import application.havenskin.enums.ProductEnums;
 import application.havenskin.mapper.Mapper;
-import application.havenskin.models.OrderDetails;
-import application.havenskin.models.Orders;
-import application.havenskin.models.Products;
-import application.havenskin.models.Users;
+import application.havenskin.models.*;
 import application.havenskin.repositories.OrderDetailsRepository;
 import application.havenskin.repositories.OrdersRepository;
 import application.havenskin.repositories.ProductsRepository;
@@ -34,7 +28,7 @@ public class OrderService {
     private UserRepository userRepository;
     @Autowired
     private OrderDetailsRepository orderDetailsRepository;
-
+//
 //    public void checkout(CheckoutRequestDTO checkoutRequestDTO) {
 //        Users x = userRepository.findByEmail(checkoutRequestDTO.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
 //
@@ -46,7 +40,7 @@ public class OrderService {
 ////        ordersRepository.save(order);
 //
 //        double totalOrderPrice = 0;
-//        for (CartItemDTO cartItemDTO : checkoutRequestDTO.getCartItemDTOS()) {
+//        for (CartItemDTO cartItemDTO : checkoutRequestDTO.getCartItemDTO()) {
 //            Products products = productsRepository.findByProductName(cartItemDTO.getProductName());
 //            if(products == null) {
 //                throw new RuntimeException(cartItemDTO.getProductName() + " not found");
@@ -91,10 +85,11 @@ public CheckOutResponseDTO checkout(CheckoutRequestDTO checkoutRequestDTO) {
     order.setStatus(OrderEnums.PENDING.getOrder_status());
     order.setOrderTime(new Date());
 //        ordersRepository.save(order);
-
+//    Products productCart = null;
     double totalOrderPrice = 0;
     for (CartItemDTO cartItemDTO : checkoutRequestDTO.getCartItemDTO()) {
         Products products = productsRepository.findByProductName(cartItemDTO.getProductName());
+
         if (products == null) {
             throw new RuntimeException(cartItemDTO.getProductName() + " not found");
         }
@@ -129,14 +124,33 @@ public CheckOutResponseDTO checkout(CheckoutRequestDTO checkoutRequestDTO) {
 
         CheckOutResponseDTO response = new CheckOutResponseDTO();
         response.setTotal(totalOrderPrice);
-        response.setCartItems(checkoutRequestDTO.getCartItemDTO().stream()
-                .map(detail ->{
-                    CartItemDTO temp = new CartItemDTO();
-                    temp.setProductName(detail.getProductName());
-                    temp.setQuantity(detail.getQuantity());
-                    temp.setPrice(detail.getPrice());
-                    return temp;
-                }).collect(Collectors.toList()));
+//        response.setCartItems(checkoutRequestDTO.getCartItemDTO().stream()
+//                .map(detail ->{
+//                    CartItemDTO temp = new CartItemDTO();
+//                    temp.setProductName(detail.getProductName());
+//                    temp.setQuantity(detail.getQuantity());
+//                    temp.setPrice(detail.getPrice());
+//                    return temp;
+//                }).collect(Collectors.toList()));
+        response.setCartItems(checkoutRequestDTO.getCartItemDTO().stream().map(detail ->{
+            Products productsCartItem = productsRepository.findByProductName(detail.getProductName());
+            CartItemResponseDTO temp = new CartItemResponseDTO();
+            temp.setProductName(detail.getProductName());
+            temp.setQuantity(detail.getQuantity());
+//            temp.setPrice(detail.getPrice());
+            temp.setPrice(productsCartItem.getDiscountPrice());
+//            temp.setImageUrl(productCart.getProductImages());
+            if(productsCartItem != null && productsCartItem.getProductImages() != null && !productsCartItem.getProductImages().isEmpty()) {
+                // chọn ảnh đầu tiên cho fe
+                String image = productsCartItem.getProductImages().get(0).getImageURL();
+                temp.setImageUrl(image);
+            }
+            else{
+                temp.setImageUrl(null);
+            }
+
+            return temp;
+        }).collect(Collectors.toList()));
         return response;
     }
 

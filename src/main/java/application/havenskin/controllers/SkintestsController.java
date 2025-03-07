@@ -19,28 +19,28 @@ public class SkintestsController {
     @Autowired
     private ResultTestService resultTestService;
 
-    // 1. Lấy tất cả bài test
-    @GetMapping
-    public List<SkinTests> getAllSkinTests() {
-        return skintestsService.getAllSkinTests();
-    }
+//    // 1. Lấy tất cả bài test
+//    @GetMapping
+//    public List<SkinTests> getAllSkinTests() {
+//        return skintestsService.getAllSkinTests();
+//    }
 
 //    @GetMapping("/id/{skintestId}")
 //    public SkinTests getSkinTestById(@PathVariable String skintestId) {
 //        return skintestsService.getSkinTestById(skintestId);
 //    }
 
-    // 3. Tạo bài test mới
-    @PostMapping
-    public SkinTests createSkinTest(@RequestBody SkinTests skinTest) {
-        return skintestsService.createSkinTest(skinTest);
-    }
-
-//    // 4. Cập nhật bài test
-//    @PutMapping("/{id}")
-//    public SkinTests updateSkinTest(@PathVariable String id, @RequestBody SkinTests skinTest) {
-//        return skintestsService.updateSkinTest(id, skinTest);
+//    // 3. Tạo bài test mới
+//    @PostMapping
+//    public SkinTests createSkinTest(@RequestBody SkinTests skinTest) {
+//        return skintestsService.createSkinTest(skinTest);
 //    }
+
+    // 4. Cập nhật bài test
+    @PutMapping("/{id}")
+    public SkinTests updateSkinTest(@PathVariable String id, @RequestBody SkinTests skinTest) {
+        return skintestsService.updateSkinTest(id, skinTest);
+    }
 
     // 5. Xóa mềm bài test (chỉ thay đổi status)
     @DeleteMapping("/{id}")

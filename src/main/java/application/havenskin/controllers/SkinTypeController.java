@@ -62,7 +62,7 @@ public class SkinTypeController {
     }
     @GetMapping("/name/{skinTypeName}")
     public String getSkinTypeName(@PathVariable String skinTypeName) {
-        return skinTypeService.getSkinTypeNameByName(skinTypeName);
+        return skinTypeService.getSkinTypeNameById(skinTypeName);
     }
 
     @GetMapping("/list-name-skin-types")

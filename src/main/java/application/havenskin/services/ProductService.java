@@ -73,11 +73,17 @@ public class ProductService {
         }
         return 0;
     }
-    public Products updateProduct(String id, ProductDTO product) {
-        Products products = productsRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
-        mapper.updateProducts(products, product);
-        return productsRepository.save(products);
-    }
+//    public Products updateProduct(String id, ProductDTO product) {
+//        Products products = productsRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
+//        mapper.updateProducts(products, product);
+//        return productsRepository.save(products);
+//    }
+public Products updateProduct(String id, ProductDTO product) {
+    Products products = productsRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
+    mapper.updateProducts(products, product);
+    return productsRepository.save(products);
+}
+
 
     public Products deleteProduct(String id) {
         //productsRepository.deleteById(id);

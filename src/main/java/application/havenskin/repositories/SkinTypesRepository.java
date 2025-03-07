@@ -6,13 +6,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface SkinTypesRepository extends JpaRepository<SkinTypes, String> {
     SkinTypes findBySkinTypeId(String id);
-    SkinTypes findBySkinName(String skinName);
+    Optional<SkinTypes> findBySkinName(String skinName);
     @Query("SELECT skinName FROM SkinTypes ")
     List<String> findAllBySkinTypeByName();
     @Query("SELECT s FROM SkinTypes s WHERE s.status = 1 ORDER BY s.skinName ASC")
     List<SkinTypes> findActiveSkinTypesSortedByName();
+
 }

@@ -101,8 +101,14 @@ public class SkinTypeService {
         return skinTypeRepository.findAllBySkinTypeByName();
     }
 
-    public String getSkinTypeNameByName(String name) {
-        return skinTypeRepository.findBySkinName(name).getSkinTypeId();
+    public String getSkinTypeNameById(String name) {
+//        return skinTypeRepository.findBySkinName(name).getSkinTypeId();
+        Optional<SkinTypes> x  = skinTypeRepository.findBySkinName(name);
+        if (x.isPresent()) {
+            return x.get().getSkinTypeId();
+        }
+        return null;
     }
+
 
 }
