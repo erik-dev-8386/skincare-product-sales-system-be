@@ -70,25 +70,28 @@ public class UsersController {
         return usersService.getUserByEmail(email);
     }
 
-@PostMapping
-public Users addNewUser(@RequestBody UserDTO user) {
-    Users newUser = new Users();
-    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-    newUser.setFirstName(user.getFirstName());
-    newUser.setLastName(user.getLastName());
-    newUser.setEmail(user.getEmail());
-    newUser.setPassword(passwordEncoder.encode(user.getPassword()));
-    newUser.setRole(Role.CUSTOMER.getValue());
-    return usersService.createUser(user);
-}
+    @PostMapping("/add-new-user")
+    public Users addNewUser(@RequestBody UserDTO user) {
+        Users newUser = new Users();
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        newUser.setFirstName(user.getFirstName());
+        newUser.setLastName(user.getLastName());
+        newUser.setEmail(user.getEmail());
+        newUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        newUser.setRole(Role.CUSTOMER.getValue());
+        return usersService.createUser(user);
+    }
+
     @PostMapping("/login")
     public AuthencationResponse login(@RequestBody AuthencationRequest x) {
         return authenticationService.authenticate(x);
     }
+
     @PostMapping("/refresh-token")
     public AuthencationResponse refreshToken(@RequestBody RefreshRequest x) throws ParseException, JOSEException {
         return authenticationService.refresh(x);
     }
+
     // Xóa người dùng (chỉ cập nhật trạng thái, không xóa thật)
     @DeleteMapping("/{userId}")
     public void deleteUser(@PathVariable String userId) {
@@ -96,7 +99,7 @@ public Users addNewUser(@RequestBody UserDTO user) {
     }
 
     @PostMapping("/add-list-user")
-    public List<Users> addListUser(@RequestBody List<Users> users){
+    public List<Users> addListUser(@RequestBody List<Users> users) {
         return usersService.addListOfUsers(users);
     }
 
