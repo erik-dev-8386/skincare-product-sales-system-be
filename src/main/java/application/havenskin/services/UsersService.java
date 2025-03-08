@@ -49,6 +49,7 @@ public class UsersService {
         x.setLastName(user.getLastName());
         x.setPassword(new BCryptPasswordEncoder(10).encode(user.getPassword()));
         x.setEmail(user.getEmail());
+        x.setPhoneNumber(user.getPhoneNumber());
         x.setRole(Role.CUSTOMER.getValue());
         return usersRepository.save(x);
     }

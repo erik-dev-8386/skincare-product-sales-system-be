@@ -62,7 +62,7 @@ public class  Products {
     @Column(name = "status")
     private Byte status;
 
-    @NotNull
+  //  @NotNull
     @Column(name = "discount_id", length = 50)
     private String discountId;
 
@@ -103,4 +103,7 @@ public class  Products {
 
     @OneToMany(mappedBy = "products")
     private List<Feedbacks> feedbacks;
+
+    @Column(name = "sold_quantity")
+    private int soldQuantity;
 }

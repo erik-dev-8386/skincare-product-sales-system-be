@@ -46,7 +46,14 @@ public class ProductService {
 //    }
     public Products addProduct(ProductDTO product, List<MultipartFile> images) throws IOException {
     Products x = mapper.toProducts(product);
-    x.setDiscountPrice(x.getUnitPrice() - CalculateDisscountPrice(x.getDiscountId())/100 * x.getUnitPrice());
+    if(product.getDiscountId() == null || product.getDiscountId().isEmpty()) {
+        x.setDiscountId(null);
+        x.setDiscountPrice(x.getUnitPrice());
+    }
+    else {
+        x.setDiscountPrice(x.getUnitPrice() - CalculateDisscountPrice(x.getDiscountId()) / 100 * x.getUnitPrice());
+    }
+    x.setSoldQuantity(0);
     Products saved = productsRepository.save(x);
     if(images != null && !images.isEmpty()) {
         List<ProductImages> productImagesList = new ArrayList<>();
@@ -78,12 +85,46 @@ public class ProductService {
 //        mapper.updateProducts(products, product);
 //        return productsRepository.save(products);
 //    }
-public Products updateProduct(String id, ProductDTO product) {
-    Products products = productsRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
-    mapper.updateProducts(products, product);
-    return productsRepository.save(products);
-}
 
+//    *****
+//public Products updateProduct(String id, ProductDTO product) {
+//    Products products = productsRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
+//    mapper.updateProducts(products, product);
+//    return productsRepository.save(products);
+//}
+
+    public Products updateProduct(String id,ProductDTO product, List<MultipartFile> images) throws IOException {
+        Products existingProduct = productsRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
+
+        mapper.updateProducts(existingProduct, product);
+
+        if(product.getDiscountId() == null || product.getDiscountId().isEmpty()) {
+            existingProduct.setDiscountId(null);
+            existingProduct.setDiscountPrice(existingProduct.getUnitPrice());
+        }
+        else {
+            existingProduct.setDiscountPrice(existingProduct.getUnitPrice() - CalculateDisscountPrice(product.getDiscountId()) /  100 * existingProduct.getUnitPrice());
+        }
+
+        // xử lý ảnh nếu người dùng thêm
+        if(images != null && !images.isEmpty()) {
+            // thêm ảnh mới
+            List<ProductImages> productImagesList = new ArrayList<>();
+            for (MultipartFile file : images) {
+                String imageUrl = firebaseService.uploadImage(file);
+
+                ProductImages productImages = new ProductImages();
+                productImages.setImageURL(imageUrl);
+                productImages.setProductId(existingProduct.getProductId());
+                productImages.setProducts(existingProduct);
+
+                productImagesList.add(productImages);
+            }
+            productImagesRepository.saveAll(productImagesList);
+            existingProduct.setProductImages(productImagesList);
+        }
+        return productsRepository.save(existingProduct);
+    }
 
     public Products deleteProduct(String id) {
         //productsRepository.deleteById(id);

@@ -12,6 +12,6 @@ import java.util.List;
 public class CartItemResponseDTO {
     private String productName;
     private int quantity;
-    private double price;
+    private double discountPrice;
     private String imageUrl;
 }

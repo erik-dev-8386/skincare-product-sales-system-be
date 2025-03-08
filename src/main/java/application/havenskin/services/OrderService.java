@@ -111,6 +111,7 @@ public CheckOutResponseDTO checkout(CheckoutRequestDTO checkoutRequestDTO) {
 
         // cập nhật so luong ton kho
         products.setQuantity(products.getQuantity() - cartItemDTO.getQuantity());
+        products.setSoldQuantity(products.getSoldQuantity() + cartItemDTO.getQuantity());
         if (products.getQuantity() <= 0) {
             products.setStatus(ProductEnums.OUT_OF_STOCK.getValue());
         }
@@ -138,7 +139,7 @@ public CheckOutResponseDTO checkout(CheckoutRequestDTO checkoutRequestDTO) {
             temp.setProductName(detail.getProductName());
             temp.setQuantity(detail.getQuantity());
 //            temp.setPrice(detail.getPrice());
-            temp.setPrice(productsCartItem.getDiscountPrice());
+            temp.setDiscountPrice(productsCartItem.getDiscountPrice());
 //            temp.setImageUrl(productCart.getProductImages());
             if(productsCartItem != null && productsCartItem.getProductImages() != null && !productsCartItem.getProductImages().isEmpty()) {
                 // chọn ảnh đầu tiên cho fe
