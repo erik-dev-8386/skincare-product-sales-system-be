@@ -192,6 +192,22 @@ public class ProductService {
     public Products getProductByName(String name) {
         return productsRepository.findByProductName(name);
     }
+
+    public String getProductIDByName(String name) {
+        String id = productsRepository.findProductIDByName(name);
+        if(id == null) {
+            throw new RuntimeException("Product not found");
+        }
+        return id;
+    }
+
+    public Products compareProducts(String productsName){
+        Products products = productsRepository.findByProductName(productsName);
+        if(products == null){
+            throw new RuntimeException("Product not found");
+        }
+        return getProductById(products.getProductId());
+    }
 //    @Transactional
 //    public Products byProduct(String productName) {
 //        Products x = productsRepository.findByProductName()

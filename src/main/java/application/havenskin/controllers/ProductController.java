@@ -50,6 +50,11 @@ public class ProductController {
         return productService.deleteProduct(id);
     }
 
+    @GetMapping("/get-product-name-by-id/{productName}")
+    public String getProductByName(@PathVariable String productName) {
+        return productService.getProductIDByName(productName);
+    }
+
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @PostMapping("/add-list-products")
     public List<Products> addListProducts(@RequestBody List<Products> x) {
@@ -83,5 +88,10 @@ public class ProductController {
     @GetMapping("/discount-name/{discountName}")
     public List<Products> getProductsByDiscountName(@PathVariable String discountName) {
         return productService.getProductsByDiscountName(discountName);
+    }
+
+    @GetMapping("/compare-product/{productsName}")
+    public Products compareProduct(@PathVariable String productsName) {
+        return productService.compareProducts(productsName);
     }
 }

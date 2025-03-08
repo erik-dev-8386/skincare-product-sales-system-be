@@ -18,8 +18,8 @@ public class BrandService {
     @Autowired
     private Mapper mapper;
     public List<Brands> getAllBrands(){
-        //return brandsRepository.findAll();
-        return brandsRepository.findActiveBrandsSortedByName();
+        return brandsRepository.findAll();
+        //return brandsRepository.findActiveBrandsSortedByName();
     }
 
     public Brands getBrandById(String id){
