@@ -58,4 +58,8 @@ public class OrderController {
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Không tìm thấy đơn hàng hoặc lỗi xảy ra");
     }
+    @DeleteMapping("/cancel-order/{email}")
+    public void cancelOrder(@PathVariable String email){
+        orderService.cancelOrder(email);
+    }
 }

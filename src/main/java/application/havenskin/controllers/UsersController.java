@@ -2,7 +2,6 @@ package application.havenskin.controllers;
 
 import application.havenskin.dataAccess.*;
 import application.havenskin.enums.Role;
-import application.havenskin.models.SkinTypes;
 import application.havenskin.models.Users;
 import application.havenskin.repositories.UserRepository;
 import application.havenskin.services.AuthenticationService;
@@ -82,6 +81,7 @@ public class UsersController {
         newUser.setEmail(user.getEmail());
         newUser.setPassword(passwordEncoder.encode(user.getPassword()));
         newUser.setRole(Role.CUSTOMER.getValue());
+        newUser.setPhone(user.getPhone());
         return usersService.createUser(user);
     }
 

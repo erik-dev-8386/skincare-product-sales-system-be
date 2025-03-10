@@ -155,6 +155,30 @@ public CheckOutResponseDTO checkout(CheckoutRequestDTO checkoutRequestDTO) {
         return response;
     }
 
+    public void cancelOrder(String email) {
+        String userId = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found")).getUserId();
+        String orderId = ordersRepository.findById(userId).get().getOrderId();
+
+        Orders order = ordersRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Order not found"));
+
+        List<OrderDetails> orderDetails = orderDetailsRepository.findByOrderId(orderId);
+
+        for (OrderDetails orderDetail : orderDetails) {
+            Products products = productsRepository.findById(orderDetail.getProductId()).orElseThrow(() -> new RuntimeException("Product not found"));
+
+            // cập nhật lại trạng thái
+            products.setQuantity(products.getQuantity() + orderDetail.getQuantity());
+            products.setSoldQuantity(products.getSoldQuantity() - orderDetail.getQuantity());
+
+            // Nếu số lượng sản phẩm về 0. cập nhật  trạng thái
+            if(products.getQuantity() <= 0) {
+                products.setStatus(ProductEnums.OUT_OF_STOCK.getValue());
+            }
+            productsRepository.save(products);
+        }
+        order.setStatus(OrderEnums.CANCELLED.getOrder_status());
+    }
+
 
     public Orders findCartByUserId(String email){
         String userId = userRepository.findByEmail(email).get().getUserId();

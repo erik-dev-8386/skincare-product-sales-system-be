@@ -7,7 +7,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.annotations.Nationalized;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -49,7 +48,7 @@ public class Users {
     private String password;
 
     @Column(name = "phone_number", length = 15)
-    private String phoneNumber;
+    private String phone;
 
     @Max(5)
     @Column(name = "rating")

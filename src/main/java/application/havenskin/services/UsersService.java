@@ -54,7 +54,7 @@ public class UsersService {
         x.setLastName(user.getLastName());
         x.setPassword(new BCryptPasswordEncoder(10).encode(user.getPassword()));
         x.setEmail(user.getEmail());
-        x.setPhoneNumber(user.getPhoneNumber());
+        x.setPhone(user.getPhone());
         x.setRole(Role.CUSTOMER.getValue());
         return usersRepository.save(x);
     }
@@ -115,7 +115,7 @@ public class UsersService {
           existingUser.setFirstName(user.getFirstName());
           existingUser.setLastName(user.getLastName());
           existingUser.setEmail(user.getEmail());
-          existingUser.setPhoneNumber(user.getPhoneNumber());
+          existingUser.setPhone(user.getPhone());
           existingUser.setGender(user.getGender());
           existingUser.setAddress(user.getAddress()
           );

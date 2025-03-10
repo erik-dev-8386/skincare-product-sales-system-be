@@ -35,7 +35,7 @@ public class SkinTypeController {
 //        return skinTypeService.createSkinType(skinTypeDTO,images);
 //    }
     @PostMapping
-    public SkinTypes createSkinType( @RequestPart("skinTypeDTO") SkinTypeDTO skinTypeDTO,@RequestParam("images") List<MultipartFile> images) throws IOException {
+    public SkinTypes createSkinType(@RequestPart("skinTypeDTO") SkinTypeDTO skinTypeDTO,@RequestParam("images") List<MultipartFile> images) throws IOException {
         SkinTypes x = skinTypeService.createSkinType(skinTypeDTO, images);
         return x;
     }
@@ -45,8 +45,8 @@ public class SkinTypeController {
     }
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @PutMapping("/{id}")
-    public SkinTypes updateSkinType(@PathVariable String id, @RequestPart("skintypes") SkinTypeDTO skintypes, @RequestParam(value = "images",required = false) List<MultipartFile> images) throws IOException {
-        return skinTypeService.updateSkinType(id, skintypes, images);
+    public SkinTypes updateSkinType(@PathVariable String id,@RequestPart("skinTypeDTO") SkinTypeDTO skinTypeDTO,@RequestParam("images") List<MultipartFile> images) throws IOException {
+        return skinTypeService.updateSkinType(id, skinTypeDTO, images);
     }
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @DeleteMapping("/{id}")

@@ -34,7 +34,7 @@ public class SkinTypes {
     private double maxMark;
 
     //@JsonIgnore
-    @OneToMany(mappedBy = "skinType",cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "skinType")
     private List<SkinTypeImages> skinTypeImages;
 
 //    private List<MultipartFile> images;
