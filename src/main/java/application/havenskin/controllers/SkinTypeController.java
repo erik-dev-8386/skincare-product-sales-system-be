@@ -45,7 +45,7 @@ public class SkinTypeController {
     }
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @PutMapping("/{id}")
-    public SkinTypes updateSkinType(@PathVariable String id, @RequestBody SkinTypeDTO skintypes, @RequestParam(value = "images", required = false) List<MultipartFile> images) throws IOException {
+    public SkinTypes updateSkinType(@PathVariable String id, @RequestPart("skintypes") SkinTypeDTO skintypes, @RequestParam(value = "images",required = false) List<MultipartFile> images) throws IOException {
         return skinTypeService.updateSkinType(id, skintypes, images);
     }
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")

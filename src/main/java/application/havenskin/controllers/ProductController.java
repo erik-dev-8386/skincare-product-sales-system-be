@@ -37,8 +37,8 @@ public class ProductController {
     }
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @PutMapping("/{id}")
-    public Products updateProduct(@PathVariable String id, @RequestBody ProductDTO product, @RequestParam(value = "images", required = false) List<MultipartFile> images) throws IOException {
-        return productService.updateProduct(id, product, images);
+    public Products updateProduct(@PathVariable String id,@RequestPart("products") ProductDTO productDTO, @RequestParam(value = "images",required = false) List<MultipartFile> images) throws IOException {
+        return productService.updateProduct(id, productDTO, images);
     }
     @GetMapping("/{id}")
     public Products getProduct(@PathVariable String id) {
