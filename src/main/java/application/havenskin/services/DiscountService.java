@@ -60,4 +60,8 @@ public class DiscountService {
     public List<String> getDiscountsByName() {
         return discountsRepository.findAllDiscountByName();
     }
+
+    public List<Discounts> searchDiscountName(String categoryName) {
+        return discountsRepository.findByDiscountsNameContaining(categoryName);
+    }
 }

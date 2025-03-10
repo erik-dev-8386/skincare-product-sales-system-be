@@ -10,7 +10,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SubmitTestRequestDto {
-    private String userId;
+    //    private String userId;
+    private String email;
     private String skinTestId;
     private List<SubmitAnswerDto> answers;
 }

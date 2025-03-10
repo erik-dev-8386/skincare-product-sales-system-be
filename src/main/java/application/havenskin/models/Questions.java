@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.ToString;
+import org.hibernate.annotations.Nationalized;
 
 import java.util.Set;
 
@@ -17,7 +18,8 @@ public class Questions {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String questionId;
 
-    @Column(name = "question_content", length = 250)
+    @Nationalized
+    @Column(name = "question_content", length = 1000)
     private String questionContent;
 
     @Column(name = "max_mark")
@@ -35,4 +37,8 @@ public class Questions {
 
     @OneToMany(mappedBy = "question")
     private Set<Answers> answers;
+
+    @NotNull
+    @Column(name = "status")
+    private Byte status;
 }

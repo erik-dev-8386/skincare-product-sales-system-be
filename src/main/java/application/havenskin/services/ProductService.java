@@ -123,6 +123,9 @@ public class ProductService {
             productImagesRepository.saveAll(productImagesList);
             existingProduct.setProductImages(productImagesList);
         }
+        else {
+            existingProduct.setProductImages(existingProduct.getProductImages());
+        }
         return productsRepository.save(existingProduct);
     }
 
@@ -136,7 +139,13 @@ public class ProductService {
         }
         return null;
     }
+    public List<Products> getProductsBestSeller() {
+        return productsRepository.findTop10ByOrderBySoldQuantityDesc();
+    }
 
+    public List<Products> searchProduct(String productName) {
+        return productsRepository.findByProductNameContaining(productName);
+    }
     //    public List<Products> getProductsByCategoryName(String categoryName) {
 //       if(productsRepository.findByCategoryId(categoryName) == null) {
 //           throw new RuntimeException("Product not found");
@@ -207,6 +216,10 @@ public class ProductService {
             throw new RuntimeException("Product not found");
         }
         return getProductById(products.getProductId());
+    }
+
+    public List<Products> sortDiscountPrice(double startPrice, double endPrice) {
+        return productsRepository.findByDiscountPriceBetween(startPrice, endPrice);
     }
 //    @Transactional
 //    public Products byProduct(String productName) {

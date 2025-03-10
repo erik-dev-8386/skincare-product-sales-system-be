@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/haven-skin/skin-tests")
+    @RequestMapping("/haven-skin/skin-tests")
 public class SkintestsController {
     @Autowired
     private SkintestsService skintestsService;
@@ -31,10 +31,10 @@ public class SkintestsController {
 //    }
 
 //    // 3. Tạo bài test mới
-//    @PostMapping
-//    public SkinTests createSkinTest(@RequestBody SkinTests skinTest) {
-//        return skintestsService.createSkinTest(skinTest);
-//    }
+    @PostMapping
+    public SkinTests createSkinTest(@RequestBody SkinTestsDto skinTest) {
+        return skintestsService.createSkinTest(skinTest);
+    }
 
     // 4. Cập nhật bài test
     @PutMapping("/{id}")

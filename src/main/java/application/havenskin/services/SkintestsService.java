@@ -3,6 +3,7 @@ package application.havenskin.services;
 import application.havenskin.dataAccess.AnswersDto;
 import application.havenskin.dataAccess.QuestionsResponseDto;
 import application.havenskin.dataAccess.SkinTestsDto;
+import application.havenskin.mapper.Mapper;
 import application.havenskin.models.Answers;
 import application.havenskin.models.Questions;
 import application.havenskin.models.SkinTests;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,6 +28,9 @@ public class SkintestsService {
     @Autowired
     private AnswerRepository answerRepository;
 
+    @Autowired
+    private Mapper mapper;
+
     // 1. Lấy tất cả bài test
 //    public List<SkinTests> getAllSkinTests() {
 //        return skinTestRepository.findAll();
@@ -35,6 +40,10 @@ public class SkintestsService {
     public SkinTests getSkinTestById(String id) {
         return skinTestRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Skin Test not found"));
+    }
+    public SkinTests createSkinTest(SkinTestsDto skinTest) {
+        SkinTests x = mapper.toSkinTests(skinTest);
+        return skinTestRepository.save(x);
     }
 
 

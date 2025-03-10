@@ -38,7 +38,7 @@ public class ProductController {
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @PutMapping("/{id}")
     public Products updateProduct(@PathVariable String id, @RequestBody ProductDTO product, @RequestParam(value = "images", required = false) List<MultipartFile> images) throws IOException {
-        return productService.updateProduct(id, product, images     );
+        return productService.updateProduct(id, product, images);
     }
     @GetMapping("/{id}")
     public Products getProduct(@PathVariable String id) {
@@ -93,5 +93,20 @@ public class ProductController {
     @GetMapping("/compare-product/{productsName}")
     public Products compareProduct(@PathVariable String productsName) {
         return productService.compareProducts(productsName);
+    }
+
+    @GetMapping("/best-seller")
+    public List<Products> getBestSellerProducts() {
+        return productService.getBestSellerProducts();
+    }
+
+    @GetMapping("/search/{productName}")
+    public List<Products> getProductByProductName(@PathVariable String productName) {
+        return productService.searchProduct(productName);
+    }
+
+    @GetMapping("/sort/{startPrice}/{endPrice}")
+    public List<Products> sortProductsByPrice(@PathVariable double startPrice, @PathVariable double endPrice) {
+        return productService.sortDiscountPrice(startPrice, endPrice);
     }
 }

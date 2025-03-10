@@ -7,9 +7,12 @@ import application.havenskin.models.Users;
 import application.havenskin.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +22,8 @@ public class UsersService {
     private final UserRepository usersRepository;
     private static final Logger logger = LoggerFactory.getLogger(UsersService.class);
 
+    @Autowired
+    private FirebaseService firebaseService;
     public UsersService(UserRepository usersRepository) {
         this.usersRepository = usersRepository;
     }
@@ -98,6 +103,32 @@ public class UsersService {
     public List<Users> getCustomerUsers() {
         return usersRepository.findByRole((byte) 3);
     }
+
+    public Users updateUser(String email,  UserDTO user, MultipartFile file) throws IOException {
+        String userId = usersRepository.findByEmail(email).get().getUserId();
+        if(userId == null) {
+            throw new RuntimeException("User not found");
+        }
+        else{
+          Users existingUser = usersRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found!"));
+
+          existingUser.setFirstName(user.getFirstName());
+          existingUser.setLastName(user.getLastName());
+          existingUser.setEmail(user.getEmail());
+          existingUser.setPhoneNumber(user.getPhoneNumber());
+          existingUser.setGender(user.getGender());
+          existingUser.setAddress(user.getAddress()
+          );
+          existingUser.setBirthDate(user.getBirthDate());
+
+          if(file != null && !file.isEmpty()) {
+              String avatar = firebaseService.uploadImage(file);
+              existingUser.setImage(avatar);
+          }
+          return usersRepository.save(existingUser);
+        }
+    }
+
 
 
 }

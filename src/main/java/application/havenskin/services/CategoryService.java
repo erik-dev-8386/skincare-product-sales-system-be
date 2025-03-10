@@ -54,4 +54,8 @@ public class CategoryService {
     public List<String> getAllCategoriesNames() {
         return categoriesRepository.findAllByCategoryName();
     }
+
+    public List<Categories> searchByName(String name) {
+        return categoriesRepository.findByCategoryNameContaining(name);
+    }
 }

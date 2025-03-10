@@ -33,17 +33,13 @@ public class ResultTestService {
     private QuestionsRepository questionsRepository;
     @Autowired
     private AnswerRepository answerRepository;
-
     public ResultTests processTestResult(SubmitTestRequestDto request) {
-//        // 1) Kiểm tra skinTestId
-//        skinTestsRepository.findById(request.getSkinTestId())
-//                .orElseThrow(() -> new RuntimeException("SkinTest not found"));
-
-        // Tạo result_test
+        //tạo result_test
+        Users users = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        String userId = users.getUserId();
         ResultTests resultTest = new ResultTests();
-        resultTest.setUserId(request.getUserId());
-
-//        resultTest.setSkinTestId(request.getSkinTestId());
+        resultTest.setUserId(userId);
         resultTest.setCreatedTime(new Date());
 
         resultTest = resultTestsRepository.save(resultTest);
@@ -79,15 +75,11 @@ public class ResultTestService {
         else skinName = "Oily";
 
         // Tìm skinType trong database bằng skinName
-//        SkinTypes skinType = skinTypesRepository.findBySkinName(skinName)
-//                .orElseThrow(() -> new RuntimeException("Skin Type not found: " + skinName));
-        Optional<SkinTypes> skinTypes = skinTypesRepository.findBySkinName(skinName);
-        if (skinTypes == null) throw new RuntimeException("Skin type not found: " + skinName);
+        SkinTypes skinType = skinTypesRepository.findBySkinName(skinName)
+                .orElseThrow(() -> new RuntimeException("Skin Type not found: " + skinName));
 
-        SkinTypes x = skinTypes.get();
-        return x.getSkinTypeId(); // Trả về ID hợp lệ thay vì chuỗi
+        return skinType.getSkinTypeId(); // Trả về ID hợp lệ thay vì chuỗi
     }
-
     public ResultTestDto getResultTestsWithDetails(String resultTestId) {
         //Lấy resultTest
         ResultTests rt = resultTestsRepository.findById(resultTestId)

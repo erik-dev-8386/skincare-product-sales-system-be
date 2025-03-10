@@ -55,5 +55,10 @@ public class CategoryController {
     public List<String> listCategoryName(){
         return categoryService.getAllCategoriesNames();
     }
+
+    @GetMapping("/search/{categoriesName}")
+   public List<Categories> searchCategory(@PathVariable String categoriesName) {
+        return categoryService.searchByName(categoriesName);
+    }
 }
 

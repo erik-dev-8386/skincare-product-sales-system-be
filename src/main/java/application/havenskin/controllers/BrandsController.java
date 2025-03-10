@@ -61,4 +61,9 @@ public class BrandsController {
     public List<String> getBrandsByListName() {
         return brandService.getAllBrandByName();
     }
+
+    @GetMapping("/search/{name}")
+    public List<Brands> getBrandsByName(@PathVariable String name) {
+        return brandService.searchBrand(name);
+    }
 }

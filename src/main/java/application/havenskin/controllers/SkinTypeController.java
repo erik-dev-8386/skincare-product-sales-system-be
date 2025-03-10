@@ -1,6 +1,8 @@
 package application.havenskin.controllers;
 
+import application.havenskin.dataAccess.ProductDTO;
 import application.havenskin.dataAccess.SkinTypeDTO;
+import application.havenskin.models.Products;
 import application.havenskin.models.SkinTypes;
 import application.havenskin.services.SkinTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +45,8 @@ public class SkinTypeController {
     }
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @PutMapping("/{id}")
-    public SkinTypes updateSkinType(@PathVariable String id, @RequestBody SkinTypeDTO skinTypes) {
-        return skinTypeService.updateSkinType(id, skinTypes);
+    public SkinTypes updateSkinType(@PathVariable String id, @RequestBody SkinTypeDTO skintypes, @RequestParam(value = "images", required = false) List<MultipartFile> images) throws IOException {
+        return skinTypeService.updateSkinType(id, skintypes, images);
     }
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @DeleteMapping("/{id}")
@@ -68,5 +70,10 @@ public class SkinTypeController {
     @GetMapping("/list-name-skin-types")
     public List<String> listSkinTypeNames() {
         return skinTypeService.getAllSkinTypeNames();
+    }
+
+    @GetMapping("search/{skin-types}")
+    public List<SkinTypes> searchSkinTypes(@PathVariable String skinTypes) {
+        return skinTypeService.searchSkinTypes(skinTypes);
     }
 }

@@ -7,6 +7,7 @@ import org.mapstruct.MappingTarget;
 
 @org.mapstruct.Mapper(componentModel = "spring")
 public interface Mapper {
+    SkinTests toSkinTests(SkinTestsDto skinTestsDto);
     Brands toBrands(BrandDTO brandDTO);
     //@Mapping(target = "brandId", ignore = true)
     void updateBrands(@MappingTarget Brands brands, BrandDTO brandDTO);

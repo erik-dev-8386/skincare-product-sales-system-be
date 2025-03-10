@@ -4,6 +4,7 @@ import application.havenskin.dataAccess.BrandDTO;
 import application.havenskin.enums.BrandEnums;
 import application.havenskin.mapper.Mapper;
 import application.havenskin.models.Brands;
+import application.havenskin.models.Categories;
 import application.havenskin.repositories.BrandsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -91,6 +92,11 @@ public class BrandService {
 
     public List<String> getAllBrandByName(){
         return  brandsRepository.findAllByBrandName();
+    }
+
+    public List<Brands> searchBrand(String brandName)
+    {
+        return brandsRepository.findByBrandsNameContaining(brandName);
     }
 
 }

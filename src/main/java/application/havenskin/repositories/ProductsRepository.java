@@ -11,7 +11,9 @@ import java.util.List;
 
 public interface ProductsRepository extends JpaRepository<Products, String> {
     List<Products> findByQuantity(Integer quantiy);
+
     List<Products> findByCategoryId(String id);
+
     List<Products> findByBrandId(String id);
 
     Products findByProductName(String productName);
@@ -34,11 +36,23 @@ public interface ProductsRepository extends JpaRepository<Products, String> {
     List<Products> findProductsByCategories_CategoryName(String categoryName);
 
     List<Products> findByStatus(byte status);
+
     @Query("SELECT p FROM Products p WHERE p.status = 1 ORDER BY p.productName ASC")
     List<Brands> findActiveBrandsSortedByName();
 
     // Lấy id theo tên của sản phẩm
     @Query("SELECT p.productId FROM Products p WHERE p.productName = :name")
     String findProductIDByName(@Param("name") String name);
+
+
+    @Query("SELECT p FROM Products p ORDER BY p.soldQuantity DESC")
+    List<Products> findTop10ByOrderBySoldQuantityDesc();
+
+    @Query("SELECT p FROM Products p WHERE p.productName LIKE %:productName%")
+    List<Products> findByProductNameContaining(@Param("productName") String productName);
+
+
+    @Query("SELECT p FROM Products p WHERE p.discountPrice BETWEEN :startPrice AND :endPrice")
+    List<Products> findByDiscountPriceBetween(@Param("startPrice") Double startPrice, @Param("endPrice") Double endPrice);
 
 }

@@ -16,21 +16,22 @@ import java.util.List;
 public class SkinTests {
     @Id
     @Column(name = "skin_test_id", length = 50)
-    @GeneratedValue(strategy = GenerationType.UUID)
+//    @GeneratedValue(strategy = GenerationType.UUID)
     private String skinTestId;
 
-//    @Column(name = "test_name", length = 50)
-//    private String testName;
+    @Nationalized
+    @Column(name = "test_name", length = 50)
+    private String testName;
 
     @Column(name = "max_mark")
     private Double maxMark;
 
     @NotNull
     @Column(name = "created_time")
-    private LocalDateTime createdTime;
+    private Date createdTime;
 
     @Column(name = "deleted_time")
-    private LocalDateTime deletedTime;
+    private Date deletedTime;
 
     @Column(name = "status")
     private byte status;

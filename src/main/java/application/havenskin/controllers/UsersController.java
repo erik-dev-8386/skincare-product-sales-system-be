@@ -1,13 +1,12 @@
 package application.havenskin.controllers;
 
-import application.havenskin.dataAccess.AuthencationRequest;
-import application.havenskin.dataAccess.AuthencationResponse;
-import application.havenskin.dataAccess.RefreshRequest;
-import application.havenskin.dataAccess.UserDTO;
+import application.havenskin.dataAccess.*;
 import application.havenskin.enums.Role;
+import application.havenskin.models.SkinTypes;
 import application.havenskin.models.Users;
 import application.havenskin.repositories.UserRepository;
 import application.havenskin.services.AuthenticationService;
+import application.havenskin.services.ProductService;
 import application.havenskin.services.UsersService;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
@@ -21,7 +20,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.Collections;
 import java.util.List;
@@ -35,15 +36,17 @@ public class UsersController {
     private final UsersService usersService;
     private final UserRepository usersRepository;
     private final AuthenticationService authenticationService;
+    private final ProductService productService;
 
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String googleClientId;
 
     @Autowired
-    public UsersController(UsersService usersService, UserRepository usersRepository, AuthenticationService authenticationService) {
+    public UsersController(UsersService usersService, UserRepository usersRepository, AuthenticationService authenticationService, ProductService productService) {
         this.usersService = usersService;
         this.usersRepository = usersRepository;
         this.authenticationService = authenticationService;
+        this.productService = productService;
     }
 
     // Lấy danh sách tất cả người dùng
@@ -171,4 +174,10 @@ public class UsersController {
     public String logout() {
         return "You have been logged out successfully!";
     }
+
+    @PutMapping("/update/{email}")
+    public Users updateSkinType(@PathVariable String email, @RequestBody UserDTO userDTO, @RequestParam(value = "images", required = false) MultipartFile images) throws IOException {
+        return usersService.updateUser(email, userDTO, images);
+    }
+
 }
