@@ -25,6 +25,10 @@ public class  Products {
     @Nationalized
     private String productName;
 
+    @Column(name = "usage_instruction", length = 255)
+    @Nationalized
+    private String usageInstruction;
+
     @Column(name = "unit_price")
     private double unitPrice;
 
