@@ -38,10 +38,11 @@ public class ResultTestService {
 //        skinTestsRepository.findById(request.getSkinTestId())
 //                .orElseThrow(() -> new RuntimeException("SkinTest not found"));
 
-        // Tạo result_test
+        //tạo result_test
+        Users users = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        String userId = users.getUserId();
         ResultTests resultTest = new ResultTests();
-        resultTest.setUserId(request.getUserId());
-
 //        resultTest.setSkinTestId(request.getSkinTestId());
         resultTest.setCreatedTime(LocalDateTime.now());
 

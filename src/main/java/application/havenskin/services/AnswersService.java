@@ -63,21 +63,22 @@ public class AnswersService {
     }
 
     public AnswersDto addAnswerByQuestionContent(String questionContent, AnswersDto answerDto) {
-        // 1. Tìm câu hỏi theo questionContent
-        List<Questions> questions = questionsRepository.findByQuestionContent(questionContent);
+        // 1. Tìm câu hỏi theo questionContent (Chỉnh lại tên phương thức)
+        Optional<Questions> questionOpt = questionsRepository.findByQuestionContent(questionContent);
 
-        if (questions.isEmpty()) {
+        if (questionOpt.isEmpty()) {
             throw new RuntimeException("Không tìm thấy câu hỏi với nội dung: " + questionContent);
         }
 
         // Chỉ lấy 1 câu hỏi đầu tiên trong danh sách (tránh lỗi danh sách nhiều câu hỏi)
-        Questions question = questions.get(0);
+        Questions question = questionOpt.get();
 
         // 2. Tạo đáp án mới và liên kết với câu hỏi
         Answers answer = new Answers();
         answer.setAnswerContent(answerDto.getAnswerContent());
         answer.setMark(answerDto.getMark());
-        answer.setQuestion(question);  // Gán câu hỏi vào đáp án
+        answer.setQuestionId(question.getQuestionId());
+        answer.setQuestion(question);// Gán câu hỏi vào đáp án
 
         // 3. Lưu đáp án vào database
         answer = answerRepository.save(answer);
@@ -87,20 +88,22 @@ public class AnswersService {
         responseDto.setAnswerId(answer.getAnswerId());
         responseDto.setAnswerContent(answer.getAnswerContent());
         responseDto.setMark(answer.getMark());
+        responseDto.setQuestionId(question.getQuestionId());
+        responseDto.setQuestionContent(questionContent);
 
         return responseDto;
     }
 
     public List<AnswersDto> getAnswersByQuestionContent(String questionContent) {
         // 1. Tìm câu hỏi theo questionContent
-        List<Questions> questions = questionsRepository.findByQuestionContent(questionContent);
+        Optional<Questions> questions = questionsRepository.findByQuestionContent(questionContent);
 
         if (questions.isEmpty()) {
             throw new RuntimeException("Không tìm thấy câu hỏi với nội dung: " + questionContent);
         }
 
         // Chỉ lấy 1 câu hỏi đầu tiên (tránh lỗi nếu có nhiều câu giống nhau)
-        Questions question = questions.get(0);
+        Questions question = questions.get();
 
         // 2. Lấy danh sách đáp án của câu hỏi này
         List<Answers> answers = answerRepository.findByQuestion(question);

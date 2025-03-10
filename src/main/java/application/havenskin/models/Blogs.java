@@ -1,11 +1,14 @@
 package application.havenskin.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.hibernate.annotations.Nationalized;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "Blogs")
@@ -16,10 +19,10 @@ public class Blogs {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String blogId;
 
-    @Column(name = "blog_title", length = 50)
+    @Column(name = "blog_title", length = 250)
     private String blogTitle;
 
-    @Column(name = "blog_content", length = 50)
+    @Column(name = "blog_content", length = 250)
     private String blogContent;
 
     @NotNull
@@ -28,11 +31,12 @@ public class Blogs {
 
     @NotNull
     @Column(name = "posted_time")
-    private LocalDateTime postedTime;
+    private Date postedTime;
 
     @Column(name = "deleted_time")
-    private LocalDateTime deletedTime;
+    private Date deletedTime;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     private Users user;
@@ -40,7 +44,29 @@ public class Blogs {
     @OneToMany(mappedBy = "blog")
     private List<BlogImages> blogImages;
 
+    @NotNull
+    @Column(name = "blog_category_id", length = 50)
+    private String blogCategoryId;
+
     @ManyToOne
-    @JoinColumn(name = "blog_category_id", referencedColumnName = "blog_category_id", nullable = false)
+    @JsonIgnore
+    @JoinColumn(name = "blog_category_id",referencedColumnName = "blog_category_id", insertable = false, updatable = false)
     private BlogCategory blogCategory;
+
+
+    //không cần tạo riêng 1 enity chỉ để ánh xạ ManyToMany, vì JPA có thể xử lý trực tiếp
+    //bằng  @JoinTable trong Blog Entity
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
+    @JoinTable(
+            name = "blog_hashtag_mapping",
+            joinColumns = @JoinColumn(name = "blog_id"),
+            inverseJoinColumns = @JoinColumn(name = "blog_hashtag_id")
+    )
+    private List<BlogHashtag> hashtags;
+
+
+    @NotNull
+    @Column(name = "status")
+    private byte status;
 }

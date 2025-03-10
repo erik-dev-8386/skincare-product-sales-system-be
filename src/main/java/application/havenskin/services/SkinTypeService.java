@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SkinTypeService {
@@ -20,7 +21,7 @@ public class SkinTypeService {
         return skinTypeRepository.findBySkinTypeId(id);
     }
 
-    public SkinTypes getSkinTypeByName(String skinName) {
+    public Optional<SkinTypes> getSkinTypeByName(String skinName) {
         return skinTypeRepository.findBySkinName(skinName);
     }
 

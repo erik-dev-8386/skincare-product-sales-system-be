@@ -11,4 +11,6 @@ public class AnswersDto {
     private String answerId;
     private String answerContent;
     private Double mark;
+    private String questionId;
+    private String questionContent;
 }

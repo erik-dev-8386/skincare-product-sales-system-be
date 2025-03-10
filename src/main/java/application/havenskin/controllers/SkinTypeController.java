@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/haven-skin/skin-types")
@@ -28,7 +29,7 @@ public class SkinTypeController {
     }
 
     @GetMapping("/name/{skinName}")
-    public SkinTypes getSkinTypeByName(@PathVariable String skinName) {
+    public Optional<SkinTypes> getSkinTypeByName(@PathVariable String skinName) {
         return skinTypeService.getSkinTypeByName(skinName);
     }
 
