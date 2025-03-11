@@ -1,8 +1,6 @@
 package application.havenskin.services;
 import application.havenskin.models.Blogs;
-import application.havenskin.repositories.BlogCategoryRepository;
-import application.havenskin.repositories.BlogHashtagRepository;
-import application.havenskin.repositories.BlogRepostiory;
+import application.havenskin.repositories.BlogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +9,7 @@ import java.util.List;
 @Service
 public class BlogService {
     @Autowired
-    private BlogRepostiory blogRepository;
+    private BlogRepository blogRepository;
 
     public List<Blogs> getAllBlogs() {
         return blogRepository.findAll();
@@ -21,8 +19,8 @@ public class BlogService {
         return blogRepository.findById(id).get();
     }
 
-    public Blogs getBlogByTitle(String title) {
-        return blogRepository.findByBlogTitle(title);
+    public List<Blogs> getBlogByTitle(String title) {
+        return blogRepository.findByTitle(title);
     }
 
     public Blogs createBlog(Blogs blog) {
@@ -73,7 +71,7 @@ public class BlogService {
     }
 
     // Lấy blog theo hashtag
-    public List<Blogs> getBlogsByHashtag(String hashtagName) {
+    public List<Blogs> getBlogsByHashtagName(String hashtagName) {
         return blogRepository.findByHashtagName(hashtagName);
     }
 

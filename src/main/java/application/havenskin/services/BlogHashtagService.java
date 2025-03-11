@@ -21,7 +21,7 @@ public class BlogHashtagService {
     }
 
     public BlogHashtag getByHashtagName(String hashtagName) {
-        return blogHashtagRepository.findByBlogHashtagName(hashtagName);
+        return blogHashtagRepository.findHashtagByName(hashtagName);
     }
 
     public BlogHashtag addBlogHashtag(BlogHashtag blogHashtag) {

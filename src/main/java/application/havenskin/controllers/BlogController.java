@@ -28,7 +28,7 @@ public class BlogController {
 
     // Tìm blog theo tiêu đề
     @GetMapping(value = "/title/{title}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Blogs getBlogByTitle(@PathVariable String title) {
+    public List<Blogs> getBlogByTitle(@PathVariable String title) {
         return blogService.getBlogByTitle(title);
     }
 
@@ -41,7 +41,7 @@ public class BlogController {
     // Tìm blog theo hashtag
     @GetMapping("/hashtag/{hashtagName}")
     public List<Blogs> getBlogsByHashtag(@PathVariable String hashtagName) {
-        return blogService.getBlogsByHashtag(hashtagName);
+        return blogService.getBlogsByHashtagName(hashtagName);
     }
 
     // Tạo mới blog

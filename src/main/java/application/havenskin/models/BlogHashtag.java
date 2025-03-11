@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -23,7 +24,7 @@ public class BlogHashtag {
 
     @ManyToMany(mappedBy = "hashtags")
     @JsonIgnore
-    private Set<Blogs> blogs;
+    private List<Blogs> blogs;
 
     @Column(name = "status")
     private byte status;

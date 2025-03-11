@@ -8,7 +8,6 @@ import org.hibernate.annotations.Nationalized;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "Blogs")
@@ -57,7 +56,6 @@ public class Blogs {
     //không cần tạo riêng 1 enity chỉ để ánh xạ ManyToMany, vì JPA có thể xử lý trực tiếp
     //bằng  @JoinTable trong Blog Entity
     @ManyToMany(fetch = FetchType.EAGER)
-    @JsonIgnore
     @JoinTable(
             name = "blog_hashtag_mapping",
             joinColumns = @JoinColumn(name = "blog_id"),
