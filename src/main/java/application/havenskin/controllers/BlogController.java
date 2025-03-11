@@ -41,7 +41,7 @@ public class BlogController {
     // Tìm blog theo hashtag
     @GetMapping("/hashtag/{hashtagName}")
     public List<Blogs> getBlogsByHashtag(@PathVariable String hashtagName) {
-        return blogService.getBlogsByHashtag(hashtagName);
+        return blogService.getBlogsByHashtagName(hashtagName);
     }
 
     // Tạo mới blog

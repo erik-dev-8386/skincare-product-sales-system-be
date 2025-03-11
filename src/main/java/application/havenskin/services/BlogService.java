@@ -94,7 +94,7 @@ public class BlogService {
     }
 
     // Lấy blog theo hashtag
-    public List<Blogs> getBlogsByHashtag(String hashtagName) {
+    public List<Blogs> getBlogsByHashtagName(String hashtagName) {
         return blogRepository.findByHashtagName(hashtagName);
     }
 }
