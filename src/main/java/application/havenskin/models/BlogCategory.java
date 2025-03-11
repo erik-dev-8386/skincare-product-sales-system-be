@@ -26,4 +26,7 @@ public class BlogCategory {
 
     @OneToMany(mappedBy = "blogCategory")
     private List<Blogs> blogs;
+
+    @Column(name = "status")
+    private byte status;
 }

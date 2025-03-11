@@ -47,6 +47,23 @@ public class Blogs {
     private List<BlogImages> blogImages;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "blog_category_id", referencedColumnName = "blog_category_id", nullable = false)
     private BlogCategory blogCategory;
+
+    //không cần tạo riêng 1 enity chỉ để ánh xạ ManyToMany, vì JPA có thể xử lý trực tiếp
+    //bằng  @JoinTable trong Blog Entity
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
+    @JoinTable(
+            name = "blog_hashtag_mapping",
+            joinColumns = @JoinColumn(name = "blog_id"),
+            inverseJoinColumns = @JoinColumn(name = "blog_hashtag_id")
+    )
+    private List<BlogHashtag> hashtags;
+
+
+    @NotNull
+    @Column(name = "status")
+    private byte status;
 }
