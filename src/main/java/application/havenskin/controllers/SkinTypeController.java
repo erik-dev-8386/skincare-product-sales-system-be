@@ -1,6 +1,8 @@
 package application.havenskin.controllers;
 
+import application.havenskin.dataAccess.ProductDTO;
 import application.havenskin.dataAccess.SkinTypeDTO;
+import application.havenskin.models.Products;
 import application.havenskin.models.SkinTypes;
 import application.havenskin.services.SkinTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,7 @@ import java.util.List;
 public class SkinTypeController {
     @Autowired
     private SkinTypeService skinTypeService;
-    @PreAuthorize("hasAnyRole('ADMIN','STAFF', 'CUSTOMER')")
+    //@PreAuthorize("hasAnyRole('ADMIN','STAFF', 'CUSTOMER')")
     @GetMapping
     public List<SkinTypes> getAllSkinTypes() {
         return skinTypeService.getAllSkinTypes();
@@ -33,7 +35,7 @@ public class SkinTypeController {
 //        return skinTypeService.createSkinType(skinTypeDTO,images);
 //    }
     @PostMapping
-    public SkinTypes createSkinType( @RequestPart("skinTypeDTO") SkinTypeDTO skinTypeDTO,@RequestParam("images") List<MultipartFile> images) throws IOException {
+    public SkinTypes createSkinType(@RequestPart("skinTypeDTO") SkinTypeDTO skinTypeDTO,@RequestParam("images") List<MultipartFile> images) throws IOException {
         SkinTypes x = skinTypeService.createSkinType(skinTypeDTO, images);
         return x;
     }
@@ -43,8 +45,8 @@ public class SkinTypeController {
     }
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @PutMapping("/{id}")
-    public SkinTypes updateSkinType(@PathVariable String id, @RequestBody SkinTypeDTO skinTypes) {
-        return skinTypeService.updateSkinType(id, skinTypes);
+    public SkinTypes updateSkinType(@PathVariable String id,@RequestPart("skinTypeDTO") SkinTypeDTO skinTypeDTO,@RequestParam("images") List<MultipartFile> images) throws IOException {
+        return skinTypeService.updateSkinType(id, skinTypeDTO, images);
     }
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @DeleteMapping("/{id}")
@@ -62,11 +64,16 @@ public class SkinTypeController {
     }
     @GetMapping("/name/{skinTypeName}")
     public String getSkinTypeName(@PathVariable String skinTypeName) {
-        return skinTypeService.getSkinTypeNameByName(skinTypeName);
+        return skinTypeService.getSkinTypeNameById(skinTypeName);
     }
 
     @GetMapping("/list-name-skin-types")
     public List<String> listSkinTypeNames() {
         return skinTypeService.getAllSkinTypeNames();
+    }
+
+    @GetMapping("search/{skin-types}")
+    public List<SkinTypes> searchSkinTypes(@PathVariable String skinTypes) {
+        return skinTypeService.searchSkinTypes(skinTypes);
     }
 }

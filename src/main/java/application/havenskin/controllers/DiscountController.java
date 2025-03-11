@@ -14,7 +14,7 @@ import java.util.List;
 public class DiscountController {
     @Autowired
     private DiscountService discountService;
-    @PreAuthorize("hasAnyRole('ADMIN','STAFF', 'CUSTOMER')")
+   // @PreAuthorize("hasAnyRole('ADMIN','STAFF', 'CUSTOMER')")
     @GetMapping
     public List<Discounts> getAllDiscount(){
         return discountService.getAllDiscounts();
@@ -51,5 +51,10 @@ public class DiscountController {
     @GetMapping("/list-name-discounts")
     public List<String> getListDiscountByName(){
         return discountService.getDiscountsByName();
+    }
+
+    @GetMapping("/search/{discountName}")
+    public List<Discounts> searchDiscountByName(@PathVariable String discountName){
+        return discountService.searchDiscountName(discountName);
     }
 }

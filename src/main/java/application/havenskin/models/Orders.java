@@ -29,7 +29,7 @@ public class Orders {
 
     @NotNull
     @Column(name = "total_amount")
-    private int totalAmount;
+    private double totalAmount;
 
     @NotNull
     @Column(name = "status")
@@ -46,19 +46,19 @@ public class Orders {
     private double shipmentFree;
 
     @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
-    private Users user;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "orders")
-    private List<OrderDetails> orderDetails;
-
-    @JsonIgnore
     @OneToMany(mappedBy = "orders")
     private List<Shipments> shipments;
 
     @JsonIgnore
     @OneToOne(mappedBy = "orders")
     private Transactions transactions;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
+    private Users users;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
+    private List<OrderDetails> orderDetails;
 }

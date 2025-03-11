@@ -15,7 +15,7 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @PreAuthorize("hasAnyRole('ADMIN','STAFF', 'CUSTOMER')")
+   // @PreAuthorize("hasAnyRole('ADMIN','STAFF', 'CUSTOMER')")
     @GetMapping
     public List<Categories> getAllCategories() {
         return categoryService.getAllCategories();
@@ -54,6 +54,11 @@ public class CategoryController {
     @GetMapping("/list-name-categories")
     public List<String> listCategoryName(){
         return categoryService.getAllCategoriesNames();
+    }
+
+    @GetMapping("/search/{categoriesName}")
+   public List<Categories> searchCategory(@PathVariable String categoriesName) {
+        return categoryService.searchByName(categoriesName);
     }
 }
 

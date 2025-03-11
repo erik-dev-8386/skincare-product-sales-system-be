@@ -70,13 +70,31 @@ public class SkinTypeService {
         //*  return skinTypeRepository.save(x);
     }
 
-    public SkinTypes updateSkinType(String id, SkinTypeDTO skinType) {
-        SkinTypes x = skinTypeRepository.findBySkinTypeId(id);
-        if (x == null) {
+    public SkinTypes updateSkinType(String id, SkinTypeDTO skinType, List<MultipartFile> images) throws IOException {
+        SkinTypes existingSkinType = skinTypeRepository.findBySkinTypeId(id);
+        if (existingSkinType == null) {
             throw new RuntimeException("SkinType not found");
         }
-        mapper.updateSkinType(x, skinType);
-        return skinTypeRepository.save(x);
+        mapper.updateSkinType(existingSkinType, skinType);
+
+        if(images != null && !images.isEmpty()) {
+            List<SkinTypeImages> skinTypeImagesList = new ArrayList<>();
+            for (MultipartFile file : images) {
+                String imageUrl = firebaseService.uploadImage(file);
+                SkinTypeImages skinTypeImages = new SkinTypeImages();
+                skinTypeImages.setImageURL(imageUrl);
+                skinTypeImages.setSkinTypeId(existingSkinType.getSkinTypeId());
+                skinTypeImages.setSkinType(existingSkinType);
+
+                skinTypeImagesList.add(skinTypeImages);
+            }
+            skinTypeImagesRepository.saveAll(skinTypeImagesList);
+            existingSkinType.setSkinTypeImages(skinTypeImagesList);
+        }
+        else{
+            existingSkinType.setSkinTypeImages(existingSkinType.getSkinTypeImages());
+        }
+        return skinTypeRepository.save(existingSkinType);
     }
 
     public SkinTypes deleteSkinType(String id) {
@@ -101,8 +119,19 @@ public class SkinTypeService {
         return skinTypeRepository.findAllBySkinTypeByName();
     }
 
-    public String getSkinTypeNameByName(String name) {
-        return skinTypeRepository.findBySkinName(name).getSkinTypeId();
+    public String getSkinTypeNameById(String name) {
+//        return skinTypeRepository.findBySkinName(name).getSkinTypeId();
+        Optional<SkinTypes> x  = skinTypeRepository.findBySkinName(name);
+        if (x.isPresent()) {
+            return x.get().getSkinTypeId();
+        }
+        return null;
     }
+
+
+    public List<SkinTypes> searchSkinTypes(String name) {
+        return skinTypeRepository.findBySkinNameContaining(name);
+    }
+
 
 }

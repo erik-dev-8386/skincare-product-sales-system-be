@@ -16,4 +16,8 @@ public interface QuestionsRepository extends JpaRepository<Questions, String> {
     List<Questions> findBySkinTestId(String skinTestId);
 
     List<Questions> findByQuestionContent(String questionContent);
+
+    @Query("SELECT q.questionContent FROM Questions q")
+    List<String> findAllQuestionContents();
+
 }

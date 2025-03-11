@@ -18,8 +18,8 @@ public class CategoryService {
     @Autowired
     private Mapper mapper;
     public List<Categories> getAllCategories() {
-//        return categoriesRepository.findAll();
-        return categoriesRepository.findActiveCategorySortedByName();
+        return categoriesRepository.findAll();
+    //    return categoriesRepository.findActiveCategorySortedByName();
     }
     public Categories getCategoriesById(String id) {
         return categoriesRepository.getById(id);
@@ -53,5 +53,9 @@ public class CategoryService {
     }
     public List<String> getAllCategoriesNames() {
         return categoriesRepository.findAllByCategoryName();
+    }
+
+    public List<Categories> searchByName(String name) {
+        return categoriesRepository.findByCategoryNameContaining(name);
     }
 }

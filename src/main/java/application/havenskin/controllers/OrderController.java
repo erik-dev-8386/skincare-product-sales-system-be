@@ -16,7 +16,7 @@ import java.util.List;
 public class OrderController {
     @Autowired
     private OrderService orderService;
-    @PreAuthorize("hasAnyRole('ADMIN','STAFF', 'CUSTOMER')")
+//    @PreAuthorize("hasAnyRole('ADMIN','STAFF', 'CUSTOMER')")
     @GetMapping
     public List<Orders> getAllOrder(){
         return orderService.getAllOrders();
@@ -46,10 +46,10 @@ public class OrderController {
         return orderService.addListOfOrders(orders);
     }
 
-    @GetMapping("/{id}")
-    public int ShowQuantityByOrderId(@PathVariable String id){
-        return orderService.ShowQuantityByOrderId(id);
-    }
+//    @GetMapping("/{id}")
+//    public int ShowQuantityByOrderId(@PathVariable String id){
+//        return orderService.ShowQuantityByOrderId(id);
+//    }
     @PutMapping("/{id}/status")
     public ResponseEntity<?> updateOrderStatus(@PathVariable String id, @RequestParam byte status) {
         boolean updated = orderService.updateOrderStatus(id, status);
@@ -57,5 +57,9 @@ public class OrderController {
             return ResponseEntity.ok("Cập nhật trạng thái thành công");
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Không tìm thấy đơn hàng hoặc lỗi xảy ra");
+    }
+    @DeleteMapping("/cancel-order/{email}")
+    public void cancelOrder(@PathVariable String email){
+        orderService.cancelOrder(email);
     }
 }

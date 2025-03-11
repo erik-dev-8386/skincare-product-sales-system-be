@@ -1,13 +1,11 @@
 package application.havenskin.controllers;
 
-import application.havenskin.dataAccess.AuthencationRequest;
-import application.havenskin.dataAccess.AuthencationResponse;
-import application.havenskin.dataAccess.RefreshRequest;
-import application.havenskin.dataAccess.UserDTO;
+import application.havenskin.dataAccess.*;
 import application.havenskin.enums.Role;
 import application.havenskin.models.Users;
 import application.havenskin.repositories.UserRepository;
 import application.havenskin.services.AuthenticationService;
+import application.havenskin.services.ProductService;
 import application.havenskin.services.UsersService;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
@@ -21,7 +19,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.Collections;
 import java.util.List;
@@ -35,15 +35,17 @@ public class UsersController {
     private final UsersService usersService;
     private final UserRepository usersRepository;
     private final AuthenticationService authenticationService;
+    private final ProductService productService;
 
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String googleClientId;
 
     @Autowired
-    public UsersController(UsersService usersService, UserRepository usersRepository, AuthenticationService authenticationService) {
+    public UsersController(UsersService usersService, UserRepository usersRepository, AuthenticationService authenticationService, ProductService productService) {
         this.usersService = usersService;
         this.usersRepository = usersRepository;
         this.authenticationService = authenticationService;
+        this.productService = productService;
     }
 
     // Lấy danh sách tất cả người dùng
@@ -53,35 +55,46 @@ public class UsersController {
     }
 
     // Lấy thông tin người dùng theo ID
-    @GetMapping("/{userId}")
+    @PostMapping("/{userId}")
     public Users getUserById(@PathVariable String userId) {
         return usersService.getUserById(userId);
     }
 
-//    // Tạo người dùng mới
-//    @PostMapping
-//    public Users createUser(@RequestBody Users user) {
-//        return usersService.saveUser(user);
-//    }
-@PostMapping
-public Users createUser(@RequestBody UserDTO user) {
-    Users newUser = new Users();
-    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-    newUser.setFirstName(user.getFirstName());
-    newUser.setLastName(user.getLastName());
-    newUser.setEmail(user.getEmail());
-    newUser.setPassword(passwordEncoder.encode(user.getPassword()));
-    newUser.setRole(Role.CUSTOMER.getValue());
-    return usersService.createUser(user);
-}
+    // Tạo người dùng mới
+    @PostMapping
+    public Users addNewUser(@RequestBody Users user) {
+        return usersService.saveUser(user);
+    }
+
+
+    @GetMapping("/{email}")
+    public Users getUserByEmail(@PathVariable String email) {
+        return usersService.getUserByEmail(email);
+    }
+
+    @PostMapping("/add-new-user")
+    public Users addNewUser(@RequestBody UserDTO user) {
+        Users newUser = new Users();
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        newUser.setFirstName(user.getFirstName());
+        newUser.setLastName(user.getLastName());
+        newUser.setEmail(user.getEmail());
+        newUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        newUser.setRole(Role.CUSTOMER.getValue());
+        newUser.setPhone(user.getPhone());
+        return usersService.createUser(user);
+    }
+
     @PostMapping("/login")
     public AuthencationResponse login(@RequestBody AuthencationRequest x) {
         return authenticationService.authenticate(x);
     }
+
     @PostMapping("/refresh-token")
     public AuthencationResponse refreshToken(@RequestBody RefreshRequest x) throws ParseException, JOSEException {
         return authenticationService.refresh(x);
     }
+
     // Xóa người dùng (chỉ cập nhật trạng thái, không xóa thật)
     @DeleteMapping("/{userId}")
     public void deleteUser(@PathVariable String userId) {
@@ -89,7 +102,7 @@ public Users createUser(@RequestBody UserDTO user) {
     }
 
     @PostMapping("/add-list-user")
-    public List<Users> addListUser(@RequestBody List<Users> users){
+    public List<Users> addListUser(@RequestBody List<Users> users) {
         return usersService.addListOfUsers(users);
     }
 
@@ -161,4 +174,10 @@ public Users createUser(@RequestBody UserDTO user) {
     public String logout() {
         return "You have been logged out successfully!";
     }
+
+    @PutMapping("/update/{email}")
+    public Users updateUser(@PathVariable String email, @RequestPart("users") UserDTO userDTO, @RequestParam(value = "images",required = false) MultipartFile images)throws IOException {
+        return usersService.updateUser(email, userDTO, images);
+    }
+
 }

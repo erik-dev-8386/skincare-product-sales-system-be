@@ -15,7 +15,7 @@ import java.util.List;
 public class BrandsController {
     @Autowired
     private BrandService brandService;
-    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'CUSTOMER')")
+    //@PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'CUSTOMER')")
     @GetMapping
     public List<Brands> getAllBrands() {
         return brandService.getAllBrands();
@@ -60,5 +60,10 @@ public class BrandsController {
     @GetMapping("/list-name-brands")
     public List<String> getBrandsByListName() {
         return brandService.getAllBrandByName();
+    }
+
+    @GetMapping("/search/{name}")
+    public List<Brands> getBrandsByName(@PathVariable String name) {
+        return brandService.searchBrand(name);
     }
 }

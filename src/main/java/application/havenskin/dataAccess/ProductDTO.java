@@ -41,6 +41,8 @@ public class ProductDTO {
 
     private Discounts discounts;
 
+    private String usageInstruction;
+
     private String categoryId;
 
     private Categories categories;

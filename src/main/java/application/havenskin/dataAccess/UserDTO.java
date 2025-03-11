@@ -25,7 +25,7 @@ public class UserDTO {
 
     private String password;
 
-    private String phoneNumber;
+    private String phone;
 
     private byte rating;
 

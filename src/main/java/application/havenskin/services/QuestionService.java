@@ -2,6 +2,7 @@ package application.havenskin.services;
 
 import application.havenskin.dataAccess.AnswersDto;
 import application.havenskin.dataAccess.QuestionsResponseDto;
+import application.havenskin.enums.QuestionEnum;
 import application.havenskin.models.Answers;
 import application.havenskin.models.Questions;
 import application.havenskin.repositories.AnswerRepository;
@@ -103,7 +104,12 @@ public class QuestionService {
         return "Question has been deleted";
     }
 
+    public List<String> getAllQuestionContent() {
+        return questionsRepository.findAllQuestionContents();
+    }
     public Questions addQuestion(Questions questions) {
+        questions.setSkinTestId("1");
+        questions.setStatus(QuestionEnum.ACTIVE.getStatus());
         return questionsRepository.save(questions);
     }
 

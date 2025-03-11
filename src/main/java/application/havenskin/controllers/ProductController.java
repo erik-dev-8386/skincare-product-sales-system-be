@@ -22,7 +22,7 @@ public class ProductController {
     private CategoryService categoryService;
     @Autowired
     private BrandService brandService;
-    @PreAuthorize("hasAnyRole('ADMIN','STAFF', 'CUSTOMER')")
+   // @PreAuthorize("hasAnyRole('ADMIN','STAFF', 'CUSTOMER')")
     @GetMapping
     public List<Products> getAllProducts() {
         return productService.getAllProducts();
@@ -37,8 +37,8 @@ public class ProductController {
     }
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @PutMapping("/{id}")
-    public Products updateProduct(@PathVariable String id, @RequestBody ProductDTO product) {
-        return productService.updateProduct(id, product);
+    public Products updateProduct(@PathVariable String id,@RequestPart("products") ProductDTO productDTO, @RequestParam(value = "images",required = false) List<MultipartFile> images) throws IOException {
+        return productService.updateProduct(id, productDTO, images);
     }
     @GetMapping("/{id}")
     public Products getProduct(@PathVariable String id) {
@@ -48,6 +48,11 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public Products deleteProduct(@PathVariable String id) {
         return productService.deleteProduct(id);
+    }
+
+    @GetMapping("/get-product-name-by-id/{productName}")
+    public String getProductByName(@PathVariable String productName) {
+        return productService.getProductIDByName(productName);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
@@ -83,5 +88,25 @@ public class ProductController {
     @GetMapping("/discount-name/{discountName}")
     public List<Products> getProductsByDiscountName(@PathVariable String discountName) {
         return productService.getProductsByDiscountName(discountName);
+    }
+
+    @GetMapping("/compare-product/{productsName}")
+    public Products compareProduct(@PathVariable String productsName) {
+        return productService.compareProducts(productsName);
+    }
+
+    @GetMapping("/best-seller")
+    public List<Products> getBestSellerProducts() {
+        return productService.getBestSellerProducts();
+    }
+
+    @GetMapping("/search/{productName}")
+    public List<Products> getProductByProductName(@PathVariable String productName) {
+        return productService.searchProduct(productName);
+    }
+
+    @GetMapping("/sort/{startPrice}/{endPrice}")
+    public List<Products> sortProductsByPrice(@PathVariable double startPrice, @PathVariable double endPrice) {
+        return productService.sortDiscountPrice(startPrice, endPrice);
     }
 }

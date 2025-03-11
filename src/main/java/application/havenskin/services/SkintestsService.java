@@ -3,6 +3,7 @@ package application.havenskin.services;
 import application.havenskin.dataAccess.AnswersDto;
 import application.havenskin.dataAccess.QuestionsResponseDto;
 import application.havenskin.dataAccess.SkinTestsDto;
+import application.havenskin.mapper.Mapper;
 import application.havenskin.models.Answers;
 import application.havenskin.models.Questions;
 import application.havenskin.models.SkinTests;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,30 +28,45 @@ public class SkintestsService {
     @Autowired
     private AnswerRepository answerRepository;
 
+    @Autowired
+    private Mapper mapper;
+
     // 1. Lấy tất cả bài test
-    public List<SkinTests> getAllSkinTests() {
-        return skinTestRepository.findAll();
-    }
+//    public List<SkinTests> getAllSkinTests() {
+//        return skinTestRepository.findAll();
+//    }
 
     // 2. Lấy bài test theo ID
     public SkinTests getSkinTestById(String id) {
         return skinTestRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Skin Test not found"));
     }
-
-    // 3. Tạo bài test mới
-    public SkinTests createSkinTest(SkinTests skinTest) {
-        return skinTestRepository.save(skinTest);
+    public SkinTests createSkinTest(SkinTestsDto skinTest) {
+        SkinTests x = mapper.toSkinTests(skinTest);
+        return skinTestRepository.save(x);
     }
 
-//    // 4. Cập nhật bài test
-//    public SkinTests updateSkinTest(String id, SkinTests newSkinTest) {
-//        SkinTests existingTest = getSkinTestById(id);
-//        existingTest.setCreatedTime(newSkinTest.getCreatedTime());
-//        existingTest.setMaxMark(newSkinTest.getMaxMark());
-//        existingTest.setStatus(newSkinTest.getStatus());
-//        return skinTestRepository.save(existingTest);
-//    }
+
+
+    // 4. Cập nhật bài test
+    public SkinTests updateSkinTest(String id, SkinTests newSkinTest) {
+        // Lấy bản ghi hiện có, nếu không tìm thấy thì ném ngoại lệ
+        SkinTests existingTest = getSkinTestById(id);
+
+        // Chỉ cập nhật nếu giá trị mới không phải null
+        if (newSkinTest.getCreatedTime() != null) {
+            existingTest.setCreatedTime(newSkinTest.getCreatedTime());
+        }
+        if (newSkinTest.getMaxMark() != null) {
+            existingTest.setMaxMark(newSkinTest.getMaxMark());
+        }
+        if (newSkinTest.getStatus() != 0) {
+            existingTest.setStatus(newSkinTest.getStatus());
+        }
+
+        // Lưu bản ghi đã cập nhật
+        return skinTestRepository.save(existingTest);
+    }
 
     // 5. Xóa mềm bài test (Chuyển status thành 0)
     public String deleteSkinTest(String id) {

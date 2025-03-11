@@ -1,6 +1,7 @@
 package application.havenskin.services;
 
 import application.havenskin.dataAccess.AnswersDto;
+import application.havenskin.enums.AnswerEnum;
 import application.havenskin.models.Answers;
 import application.havenskin.models.Questions;
 import application.havenskin.repositories.AnswerRepository;
@@ -19,8 +20,28 @@ public class AnswersService {
     @Autowired
     private QuestionsRepository questionsRepository;
 
-    public List<Answers> getAllAnswers() {
-        return answerRepository.findAll();
+//    public List<Answers> getAllAnswers() {
+//        return answerRepository.findAll();
+//    }
+
+    public List<AnswersDto> getAllAnswers() {
+        List<Answers> answers = answerRepository.findAll();
+        return answers.stream().map(answer -> {
+            AnswersDto dto = new AnswersDto();
+            dto.setAnswerId(answer.getAnswerId());
+            dto.setAnswerContent(answer.getAnswerContent());
+            dto.setMark(answer.getMark());
+            dto.setStatus(answer.getStatus());
+
+            // Lấy nội dung câu hỏi từ đối tượng Questions liên kết
+            if (answer.getQuestion() != null) {
+                dto.setQuestionContent(answer.getQuestion().getQuestionContent());
+            } else {
+                dto.setQuestionContent(null); // Hoặc giá trị mặc định nếu không có câu hỏi liên kết
+            }
+
+            return dto;
+        }).collect(Collectors.toList());
     }
 
     public Answers getAnswerById(String id) {
@@ -78,6 +99,7 @@ public class AnswersService {
         answer.setAnswerContent(answerDto.getAnswerContent());
         answer.setMark(answerDto.getMark());
         answer.setQuestion(question);  // Gán câu hỏi vào đáp án
+        answer.setQuestionId(question.getQuestionId());
 
         // 3. Lưu đáp án vào database
         answer = answerRepository.save(answer);
@@ -87,7 +109,7 @@ public class AnswersService {
         responseDto.setAnswerId(answer.getAnswerId());
         responseDto.setAnswerContent(answer.getAnswerContent());
         responseDto.setMark(answer.getMark());
-
+        responseDto.setQuestionContent(question.getQuestionContent());
         return responseDto;
     }
 

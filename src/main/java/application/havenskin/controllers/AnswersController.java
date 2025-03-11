@@ -15,7 +15,7 @@ public class AnswersController {
     private AnswersService answersService;
 
     @GetMapping
-    public List<Answers> getAllAnswers() {
+    public List<AnswersDto> getAllAnswers() {
         return answersService.getAllAnswers();
     }
 

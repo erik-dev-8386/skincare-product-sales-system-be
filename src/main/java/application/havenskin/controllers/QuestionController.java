@@ -40,6 +40,10 @@ public class QuestionController {
         return questionService.updateQuestion(questionId, dto);
     }
 
+    @GetMapping("/find-by-content-question")
+    public List<String> findByContent(){
+        return questionService.getAllQuestionContent();
+    }
     @DeleteMapping("/{id}")
     public String deleteQuestion(@PathVariable String id) {
         questionService.deleteQuestion(id);

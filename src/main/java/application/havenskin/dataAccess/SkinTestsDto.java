@@ -3,6 +3,7 @@ package application.havenskin.dataAccess;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Nationalized;
 
 import java.util.Date;
 import java.util.List;
@@ -12,11 +13,11 @@ import java.util.List;
 @NoArgsConstructor
 public class SkinTestsDto {
     private String skinTestId;
-//    private String testName;
+    @Nationalized
+    private String testName;
     private Double maxMark;
     private byte status;
-    private Date createdTime;
+    private Date createdTime = new Date();
     private Date deletedTime;
     private List<QuestionsResponseDto> questions;
-
 }

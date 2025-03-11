@@ -5,13 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SubmitTestRequestDto {
-    //    private String userId;
-    private String email;
-    private String skinTestId;
-    private List<SubmitAnswerDto> answers;
+public class CheckOutResponseDTO {
+    List<CartItemResponseDTO> cartItems;
+    private double total;
 }
