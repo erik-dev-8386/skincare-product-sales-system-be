@@ -9,6 +9,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CheckOutResponseDTO {
-    List<CartItemResponseDTO> cartItems;
+    private String orderId;
+    private List<CartItemResponseDTO> cartItems;
     private double total;
 }
