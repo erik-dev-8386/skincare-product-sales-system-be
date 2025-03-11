@@ -125,6 +125,9 @@ public class UsersService {
               String avatar = firebaseService.uploadImage(file);
               existingUser.setImage(avatar);
           }
+          else {
+              existingUser.setImage(null);
+          }
           return usersRepository.save(existingUser);
         }
     }
