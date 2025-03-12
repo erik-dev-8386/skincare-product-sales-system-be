@@ -54,7 +54,7 @@ public class Users {
     @Column(name = "rating")
     private byte rating;
 
-    @Column(name = "image", length = 100)
+    @Column(name = "image", length = 1000)
     private String image;
 
     @NotNull

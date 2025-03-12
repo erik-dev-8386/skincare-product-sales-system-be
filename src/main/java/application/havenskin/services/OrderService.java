@@ -84,7 +84,7 @@ public class OrderService {
         order.setUserId(x.getUserId());
         order.setStatus(OrderEnums.PENDING.getOrder_status());
         order.setOrderTime(new Date());
-//        ordersRepository.save(order);
+        ordersRepository.save(order);
 //    Products productCart = null;
         double totalOrderPrice = 0;
         for (CartItemDTO cartItemDTO : checkoutRequestDTO.getCartItemDTO()) {
@@ -101,6 +101,7 @@ public class OrderService {
             totalOrderPrice += itemTotalPrice;
 
             OrderDetails orderDetails = new OrderDetails();
+ //           orderDetails.setOrderId(order.getOrderId());
             orderDetails.setOrderId(order.getOrderId());
             orderDetails.setProductId(products.getProductId());
             orderDetails.setQuantity(cartItemDTO.getQuantity());
@@ -156,11 +157,13 @@ public class OrderService {
     }
 
     public void cancelOrder(String email, String orderId) {
-        String userId = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"))
-                .getUserId();
+//        String userId = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"))
+//                .getUserId();
 
+        String userId = userRepository.findByEmail(email).get().getUserId();
         Orders orders = ordersRepository.findByOrderIdAndUserId(orderId, userId).orElseThrow(() -> new RuntimeException("Order not found"));
-
+//        Orders orders = ordersRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Order not found"));
+        System.out.println("Order:" + orders.toString());
         if(orders.getStatus() != OrderEnums.PENDING.getOrder_status()) {
             throw new RuntimeException("Chỉ có thể hủy đơn hàng ở trạng thái PENDING");
         }
@@ -265,6 +268,32 @@ public class OrderService {
         validTransitions.put(OrderEnums.RETURNED, List.of());
 
         return validTransitions.getOrDefault(currentStatus, List.of()).contains(newStatus);
+    }
+
+    public List<HistoryOrderDTO> getHistoryOrder(String email) {
+        Optional<Users> userOpt = userRepository.findByEmail(email);
+        if (!userOpt.isPresent()) {
+            throw new RuntimeException("User not found");
+        }
+        Users user = userOpt.get();
+        String userId = user.getUserId();
+        List<Orders> orders = ordersRepository.findByUserId(userId);
+
+        List<HistoryOrderDTO> historyOrders = orders.stream().map(x->{
+            HistoryOrderDTO historyOrder = new HistoryOrderDTO();
+            historyOrder.setOrderId(x.getOrderId());
+            historyOrder.setOrderTime(x.getOrderTime());
+            historyOrder.setTotalAmount(x.getTotalAmount());
+
+            List<OrderDetails> orderDetails = orderDetailsRepository.findByOrderId(x.getOrderId());
+            historyOrder.setQuantity(orderDetails.size());
+            List<String> productName = orderDetails.stream().map(details->details.getProducts().getProductName()).collect(Collectors.toList());
+            historyOrder.setProductName(productName);
+//            historyOrder.setTotalAmount(x.getTotalAmount());
+//            historyOrder.setQuantity(orderDetails.getQuantity());
+            return historyOrder;
+        }).collect(Collectors.toList());
+        return historyOrders;
     }
 
 

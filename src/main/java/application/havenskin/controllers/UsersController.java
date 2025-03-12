@@ -176,7 +176,7 @@ public class UsersController {
     }
 
     @PutMapping("/update/{email}")
-    public Users updateUser(@PathVariable String email, @RequestPart("users") UserDTO userDTO, @RequestParam(value = "images",required = false) MultipartFile images)throws IOException {
+    public Users updateUser(@PathVariable String email, @RequestPart("users") UserDTO userDTO, @RequestParam(value = "image",required = false) MultipartFile images)throws IOException {
         return usersService.updateUser(email, userDTO, images);
     }
 

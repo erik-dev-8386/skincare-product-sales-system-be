@@ -3,6 +3,7 @@ package application.havenskin.controllers;
 
 import application.havenskin.dataAccess.CheckOutResponseDTO;
 import application.havenskin.dataAccess.CheckoutRequestDTO;
+import application.havenskin.dataAccess.HistoryOrderDTO;
 import application.havenskin.models.OrderDetails;
 import application.havenskin.services.OrderDetailsService;
 import application.havenskin.services.OrderService;
@@ -84,6 +85,10 @@ public class CartController  {
         return orderService.checkout(checkoutRequestDTO);
     }
 
+    @GetMapping("/{email}")
+    public List<HistoryOrderDTO> getHistoryOrders(@PathVariable String email){
+        return orderService.getHistoryOrder(email);
+    }
 
 
 

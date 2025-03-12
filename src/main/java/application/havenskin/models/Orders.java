@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.Nationalized;
 
 import java.time.LocalDateTime;
@@ -53,11 +54,13 @@ public class Orders {
     @OneToOne(mappedBy = "orders")
     private Transactions transactions;
 
+    @ToString.Exclude
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     private Users users;
 
+    @ToString.Exclude
     @JsonIgnore
     @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
     private List<OrderDetails> orderDetails;
