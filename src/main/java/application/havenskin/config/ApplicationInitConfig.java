@@ -25,6 +25,15 @@ public class ApplicationInitConfig {
                 x.setLastName("Admin");
                 userRepository.save(x);
             }
+            if(userRepository.findByEmail("staff@gmail.com").isEmpty()){
+                Users x = new Users();
+                x.setEmail("staff@gmail.com");
+                x.setPassword(passwordEncoder.encode("123456"));
+                x.setRole(Role.STAFF.getValue());
+                x.setFirstName("Staff");
+                x.setLastName("Staff");
+                userRepository.save(x);
+            }
         };
     }
 }

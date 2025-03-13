@@ -15,6 +15,7 @@ public class BlogController {
     private BlogService blogService;
 
     // Lấy tất cả blogs
+    // *
     @GetMapping
     public List<Blogs> getAllBlogs() {
         return blogService.getAllBlogs();
@@ -26,24 +27,27 @@ public class BlogController {
         return blogService.getBlogById(id);
     }
 
+    // *
     // Tìm blog theo tiêu đề
     @GetMapping(value = "/title/{title}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Blogs getBlogByTitle(@PathVariable String title) {
         return blogService.getBlogByTitle(title);
     }
 
+    // *
     // Tìm blog theo danh mục
     @GetMapping("/category/{categoryName}")
     public List<Blogs> getBlogByCategory(@PathVariable String categoryName) {
         return  blogService.getBlogByCategory(categoryName);
     }
-
+    // *
     // Tìm blog theo hashtag
     @GetMapping("/hashtag/{hashtagName}")
     public List<Blogs> getBlogsByHashtag(@PathVariable String hashtagName) {
         return blogService.getBlogsByHashtagName(hashtagName);
     }
 
+    // *
     // Tạo mới blog
     @PostMapping
     public Blogs createBlog(@RequestBody Blogs blog) {

@@ -10,6 +10,7 @@ public class HistoryOrderDTO {
     private String orderId;
     private Date orderTime;
     private double totalAmount;
-    private List<String> productName;
+    private List<ProductDetailsDTO> productName;
     private int quantity;
+    private Byte status;
 }

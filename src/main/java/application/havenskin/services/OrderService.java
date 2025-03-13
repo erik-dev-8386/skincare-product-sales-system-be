@@ -77,6 +77,9 @@ public class OrderService {
 //        }
 //    }
     public CheckOutResponseDTO checkout(CheckoutRequestDTO checkoutRequestDTO) {
+        if (checkoutRequestDTO.getCartItemDTO() == null || checkoutRequestDTO.getCartItemDTO().isEmpty()) {
+            throw new RuntimeException("Cart is empty. Cannot create order.");
+        }
         Users x = userRepository.findByEmail(checkoutRequestDTO.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
 
         // tao đơn hàng mới
@@ -284,13 +287,30 @@ public class OrderService {
             historyOrder.setOrderId(x.getOrderId());
             historyOrder.setOrderTime(x.getOrderTime());
             historyOrder.setTotalAmount(x.getTotalAmount());
-
+            historyOrder.setStatus(x.getStatus());
             List<OrderDetails> orderDetails = orderDetailsRepository.findByOrderId(x.getOrderId());
             historyOrder.setQuantity(orderDetails.size());
-            List<String> productName = orderDetails.stream().map(details->details.getProducts().getProductName()).collect(Collectors.toList());
-            historyOrder.setProductName(productName);
+            List<ProductDetailsDTO> productDetails = orderDetails.stream().map(detail ->{
+                ProductDetailsDTO productDetail = new ProductDetailsDTO();
+                Products products = productsRepository.findById(detail.getProductId()).get();
+                if(products == null) {
+                    throw new RuntimeException("Product not found");
+                }
+                productDetail.setProductName(products.getProductName());
+                productDetail.setQuantity(detail.getQuantity());
+                if(products.getProductImages() != null && !products.getProductImages().isEmpty()) {
+                    productDetail.setImageUrl(products.getProductImages().get(0).getImageURL());
+                }else{
+                    productDetail.setImageUrl(null);
+                }
+
+                return productDetail;
+            }).collect(Collectors.toList());
+//            List<String> productName = orderDetails.stream().map(details->details.getProducts().getProductName()).collect(Collectors.toList());
+//            historyOrder.setProductName(productName);
 //            historyOrder.setTotalAmount(x.getTotalAmount());
 //            historyOrder.setQuantity(orderDetails.getQuantity());
+            historyOrder.setProductName(productDetails);
             return historyOrder;
         }).collect(Collectors.toList());
         return historyOrders;
