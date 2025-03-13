@@ -1,0 +1,43 @@
+package application.havenskin.controllers;
+
+import application.havenskin.dataAccess.CoinWalletDTO;
+import application.havenskin.models.CoinWallets;
+import application.havenskin.services.CoinWalletService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@CrossOrigin(origins = "http://localhost:5173")
+@RestController
+@RequestMapping("/haven-skin/coinWallets")
+public class CoinWalletController {
+    @Autowired
+    private CoinWalletService coinWalletService;
+
+    @GetMapping
+    public List<CoinWallets> getAllCoinWallets(){
+        return coinWalletService.getAllCoinWallets();
+    }
+
+    @PostMapping
+    public CoinWallets createCoinWallet(@RequestBody CoinWallets coinWallets){
+        return coinWalletService.createCoinWallet(coinWallets);
+    }
+
+    @GetMapping("/{id}")
+    public CoinWallets getCoinWalletById(@PathVariable String id){
+        return coinWalletService.getCoinWalletById(id);
+    }
+
+    @PutMapping("/{id}")
+    public CoinWallets updateCoinWallet(@PathVariable String id, @RequestBody CoinWalletDTO coinWallet){
+        return coinWalletService.updateCoinWallet(id, coinWallet);
+    }
+
+    @DeleteMapping("/{id}")
+    public CoinWallets deleteCoinWallet(@PathVariable String id){
+        return coinWalletService.deleteCoinWallet(id);
+    }
+
+}

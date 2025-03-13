@@ -1,14 +1,12 @@
 package application.havenskin.services;
 
 import application.havenskin.dataAccess.*;
+import application.havenskin.enums.OrderDetailEnums;
 import application.havenskin.enums.OrderEnums;
 import application.havenskin.enums.ProductEnums;
 import application.havenskin.mapper.Mapper;
 import application.havenskin.models.*;
-import application.havenskin.repositories.OrderDetailsRepository;
-import application.havenskin.repositories.OrdersRepository;
-import application.havenskin.repositories.ProductsRepository;
-import application.havenskin.repositories.UserRepository;
+import application.havenskin.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +26,8 @@ public class OrderService {
     private UserRepository userRepository;
     @Autowired
     private OrderDetailsRepository orderDetailsRepository;
+    @Autowired
+    private CoinWalletsRepository coinWalletsRepository;
 //
 //    public void checkout(CheckoutRequestDTO checkoutRequestDTO) {
 //        Users x = userRepository.findByEmail(checkoutRequestDTO.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
@@ -240,6 +240,25 @@ public class OrderService {
 //        return ordersRepository.findById(id).get().getTotalAmount();
 //    }
 
+//    public boolean updateOrderStatus(String orderId, byte newStatusByte) {
+//        Optional<Orders> orderOpt = ordersRepository.findById(orderId);
+//        if (orderOpt.isPresent()) {
+//            Orders order = orderOpt.get();
+//            OrderEnums currentStatus = OrderEnums.fromOrderStatus(order.getStatus());
+//            OrderEnums newStatus = OrderEnums.fromOrderStatus(newStatusByte);
+//
+//            // Kiểm tra trạng thái hợp lệ
+//            if (!isValidStatusTransition(currentStatus, newStatus)) {
+//                return false; // Tránh cập nhật trạng thái sai logic
+//            }
+//
+//            order.setStatus(newStatus.getOrder_status());
+//            ordersRepository.save(order);
+//            return true;
+//        }
+//        return false;
+//    }
+
     public boolean updateOrderStatus(String orderId, byte newStatusByte) {
         Optional<Orders> orderOpt = ordersRepository.findById(orderId);
         if (orderOpt.isPresent()) {
@@ -247,9 +266,22 @@ public class OrderService {
             OrderEnums currentStatus = OrderEnums.fromOrderStatus(order.getStatus());
             OrderEnums newStatus = OrderEnums.fromOrderStatus(newStatusByte);
 
-            // Kiểm tra trạng thái hợp lệ
             if (!isValidStatusTransition(currentStatus, newStatus)) {
                 return false; // Tránh cập nhật trạng thái sai logic
+            }
+
+            if (currentStatus == OrderEnums.UNORDERED && newStatus != OrderEnums.UNORDERED) {
+                lockOrderDetails(order.getOrderId());
+            }
+
+            if (newStatus == OrderEnums.DELIVERED) {
+                Optional<CoinWallets> coinWalletOpt = coinWalletsRepository.findByUserId(order.getUserId());
+                if (coinWalletOpt.isPresent()) {
+                    CoinWallets coinWallet = coinWalletOpt.get();
+                    double rewardAmount = order.getTotalAmount() * 0.01; // 1% thưởng
+                    coinWallet.setBalance(coinWallet.getBalance() + rewardAmount);
+                    coinWalletsRepository.save(coinWallet); // Lưu số dư mới
+                }
             }
 
             order.setStatus(newStatus.getOrder_status());
@@ -259,6 +291,14 @@ public class OrderService {
         return false;
     }
 
+    // Hàm khóa OrderDetails
+    private void lockOrderDetails(String orderId) {
+        List<OrderDetails> orderDetailsList = orderDetailsRepository.findByOrderId(orderId);
+        for (OrderDetails detail : orderDetailsList) {
+            detail.setStatus(OrderDetailEnums.INACTIVE.getValue());
+        }
+        orderDetailsRepository.saveAll(orderDetailsList);
+    }
     private boolean isValidStatusTransition(OrderEnums currentStatus, OrderEnums newStatus) {
         Map<OrderEnums, List<OrderEnums>> validTransitions = new HashMap<>();
 
@@ -317,5 +357,47 @@ public class OrderService {
         return historyOrders;
     }
 
+    public HistoryOrderDTO getOrderById(String email, String orderId){
+        Optional<Users> userOpt = userRepository.findByEmail(email);
+        if(!userOpt.isPresent()) {
+            throw new RuntimeException("User not found");
+        }
+        Users user = userOpt.get();
+        String userId = user.getUserId();
+
+        Optional<Orders> orderOpt = ordersRepository.findByOrderIdAndUserId(orderId, userId);
+        if(!orderOpt.isPresent()) {
+            throw new RuntimeException("Order not found");
+        }
+        Orders order = orderOpt.get();
+
+        HistoryOrderDTO historyOrder = new HistoryOrderDTO();
+        historyOrder.setOrderId(order.getOrderId());
+        historyOrder.setOrderTime(order.getOrderTime());
+        historyOrder.setTotalAmount(order.getTotalAmount());
+        historyOrder.setStatus(order.getStatus());
+
+        List<OrderDetails> orderDetails = orderDetailsRepository.findByOrderId(order.getOrderId());
+        historyOrder.setQuantity(orderDetails.size());
+
+        List<ProductDetailsDTO> productDetails = orderDetails.stream().map(detail->{
+            ProductDetailsDTO productDetail = new ProductDetailsDTO();
+            Products products = productsRepository.findById(detail.getProductId()).orElseThrow(() -> new RuntimeException("Product not found"));
+
+            productDetail.setProductName(products.getProductName());
+            productDetail.setQuantity(detail.getQuantity());
+            productDetail.setDiscountPrice(detail.getDiscountPrice());
+
+            if(products.getProductImages() != null && !products.getProductImages().isEmpty()) {
+                productDetail.setImageUrl(products.getProductImages().get(0).getImageURL());
+            }
+            else{
+                productDetail.setImageUrl(null);
+            }
+            return productDetail;
+        }).collect(Collectors.toList());
+        historyOrder.setProductName(productDetails);
+        return historyOrder;
+    }
 
 }

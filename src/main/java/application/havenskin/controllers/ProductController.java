@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+
 @CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/haven-skin/products")
 @RestController
@@ -22,11 +23,13 @@ public class ProductController {
     private CategoryService categoryService;
     @Autowired
     private BrandService brandService;
-   // @PreAuthorize("hasAnyRole('ADMIN','STAFF', 'CUSTOMER')")
+
+    // @PreAuthorize("hasAnyRole('ADMIN','STAFF', 'CUSTOMER')")
     @GetMapping
     public List<Products> getAllProducts() {
         return productService.getAllProducts();
     }
+
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @PostMapping
 //    public Products addProduct(@RequestBody ProductDTO product) {
@@ -35,16 +38,20 @@ public class ProductController {
     public Products createProduct(@RequestPart("products") ProductDTO productDTO, @RequestParam("images") List<MultipartFile> images) throws IOException {
         return productService.addProduct(productDTO, images);
     }
+
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @PutMapping("/{id}")
-    public Products updateProduct(@PathVariable String id,@RequestPart("products") ProductDTO productDTO, @RequestParam(value = "images",required = false) List<MultipartFile> images) throws IOException {
+    public Products updateProduct(@PathVariable String id, @RequestPart("products") ProductDTO productDTO, @RequestParam(value = "images", required = false) List<MultipartFile> images) throws IOException {
         return productService.updateProduct(id, productDTO, images);
     }
+
     @GetMapping("/{id}")
     public Products getProduct(@PathVariable String id) {
         return productService.getProductById(id);
     }
-    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
+
+    //    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public Products deleteProduct(@PathVariable String id) {
         return productService.deleteProduct(id);
@@ -60,10 +67,12 @@ public class ProductController {
     public List<Products> addListProducts(@RequestBody List<Products> x) {
         return productService.addListOfProducts(x);
     }
+
     @GetMapping("/max-quantity")
     public List<Products> getMaxQuantity() {
         return productService.getBestSellerProducts();
     }
+
     @GetMapping("/category/{categoryName}")
     public List<Products> getProductByCategoryName(@PathVariable String categoryName) {
         return productService.getProductsByCategoryName(categoryName);
