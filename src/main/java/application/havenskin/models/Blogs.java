@@ -24,9 +24,9 @@ public class Blogs {
     @Column(name = "blog_content", length = 250)
     private String blogContent;
 
-    @NotNull
-    @Column(name = "user_id", length = 50)
-    private String userId;
+//    @NotNull
+//    @Column(name = "user_id", length = 50)
+//    private String userId;
 
     @NotNull
     @Column(name = "posted_time")
@@ -35,21 +35,19 @@ public class Blogs {
     @Column(name = "deleted_time")
     private Date deletedTime;
 
-    @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private Users user;
 
     @OneToMany(mappedBy = "blog")
     private List<BlogImages> blogImages;
 
-    @NotNull
-    @Column(name = "blog_category_id", length = 50)
-    private String blogCategoryId;
+//    @NotNull
+//    @Column(name = "blog_category_id", length = 50)
+//    private String blogCategoryId;
 
     @ManyToOne
-    @JsonIgnore
-    @JoinColumn(name = "blog_category_id",referencedColumnName = "blog_category_id", insertable = false, updatable = false)
+    @JoinColumn(name = "blog_category_id",nullable = false)
     private BlogCategory blogCategory;
 
 

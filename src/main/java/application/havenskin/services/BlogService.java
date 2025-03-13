@@ -1,38 +1,129 @@
 package application.havenskin.services;
+import application.havenskin.models.BlogCategory;
+import application.havenskin.models.BlogHashtag;
 import application.havenskin.models.Blogs;
+import application.havenskin.models.Users;
+import application.havenskin.repositories.BlogCategoryRepository;
+import application.havenskin.repositories.BlogHashtagRepository;
 import application.havenskin.repositories.BlogRepository;
+import application.havenskin.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BlogService {
     @Autowired
     private BlogRepository blogRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private BlogHashtagRepository blogHashtagRepository;
+
+    @Autowired
+    private BlogCategoryRepository blogCategoryRepository;
+
+
     public List<Blogs> getAllBlogs() {
         return blogRepository.findAll();
     }
 
-    public Blogs getBlogById(String id) {
-        return blogRepository.findById(id).get();
-    }
+//    public Blogs getBlogById(String id) {
+//        return blogRepository.findById(id).get();
+//    }
 
-    public List<Blogs> getBlogByTitle(String title) {
+    public Blogs getBlogByTitle(String title) {
         return blogRepository.findByTitle(title);
     }
 
     public Blogs createBlog(Blogs blog) {
+        // Tìm User theo email
+        Users user = userRepository.findByEmail(blog.getUser().getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + blog.getUser().getEmail()));
+
+        // Tìm BlogCategory theo tên
+        BlogCategory category = blogCategoryRepository
+                .findByBlogCategoryName(blog.getBlogCategory().getBlogCategoryName())
+                .orElseThrow(() -> new RuntimeException("BlogCategory not found with name: " + blog.getBlogCategory().getBlogCategoryName()));
+
+
+        // Tìm Hashtags theo tên
+        List<BlogHashtag> hashtags = new ArrayList<>();
+        if (blog.getHashtags() != null && !blog.getHashtags().isEmpty()) {
+            for (BlogHashtag ht : blog.getHashtags()) {
+                BlogHashtag existingHashtag = blogHashtagRepository.findHashtagByName(ht.getBlogHashtagName())
+                        .orElseThrow(() -> new RuntimeException("Hashtag not found: " + ht.getBlogHashtagName()));
+                hashtags.add(existingHashtag);
+            }
+        }
+
+        // Gán dữ liệu vào blog mới
+        blog.setUser(user);
+        blog.setBlogCategory(category);
+        blog.setHashtags(hashtags);
+
         return blogRepository.save(blog);
     }
 
-    public Blogs updateBlogById(String id, Blogs blog) {
-        Blogs existingBlog = blogRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Blog not found"));
+//    public Blogs updateBlogById(String id, Blogs blog) {
+//        Blogs existingBlog = blogRepository.findById(id)
+//                .orElseThrow(() -> new RuntimeException("Blog not found"));
+//
+//        if (blog.getBlogCategory() != null) {
+//            existingBlog.setBlogCategory(blog.getBlogCategory());
+//        }
+//        if (blog.getBlogContent() != null) {
+//            existingBlog.setBlogContent(blog.getBlogContent());
+//        }
+//        if (blog.getBlogImages() != null) {
+//            existingBlog.setBlogImages(blog.getBlogImages());
+//        }
+//        if (blog.getHashtags() != null) {
+//            existingBlog.setHashtags(blog.getHashtags());
+//        }
+//        if (blog.getUserId() != null) {
+//            existingBlog.setUserId(blog.getUserId());
+//        }
+//        if (blog.getPostedTime() != null) {
+//            existingBlog.setPostedTime(blog.getPostedTime());
+//        }
+//        if (blog.getDeletedTime() != null) {
+//            existingBlog.setDeletedTime(blog.getDeletedTime());
+//        }
+//        if (blog.getStatus() != 0) {
+//            existingBlog.setStatus(blog.getStatus());
+//        }
+//
+//        return blogRepository.save(existingBlog);
+//    }
+
+    public Blogs updateBlogByTitle(String blogTitle, Blogs blog) {
+        Blogs existingBlog =  blogRepository.findByTitle(blogTitle);
+        if (existingBlog == null) {
+            throw new RuntimeException("Blog not found with title: " + blogTitle);
+        }
+
+//        if (blog.getBlogCategory() != null) {
+//            existingBlog.setBlogCategory(blog.getBlogCategory());
+//        }
 
         if (blog.getBlogCategory() != null) {
-            existingBlog.setBlogCategory(blog.getBlogCategory());
+            BlogCategory incomingCategory = blog.getBlogCategory();
+
+            // Kiểm tra xem BlogCategory đã tồn tại chưa
+            BlogCategory existingCategory = blogCategoryRepository
+                    .findByBlogCategoryName(incomingCategory.getBlogCategoryName())
+                    .orElseGet(() -> blogCategoryRepository.save(incomingCategory));
+
+            existingBlog.setBlogCategory(existingCategory);
+        }
+        if (blog.getBlogTitle() != null) {
+            existingBlog.setBlogTitle(blog.getBlogTitle());
         }
         if (blog.getBlogContent() != null) {
             existingBlog.setBlogContent(blog.getBlogContent());
@@ -40,12 +131,26 @@ public class BlogService {
         if (blog.getBlogImages() != null) {
             existingBlog.setBlogImages(blog.getBlogImages());
         }
-        if (blog.getHashtags() != null) {
-            existingBlog.setHashtags(blog.getHashtags());
+//        if (blog.getHashtags() != null) {
+//            existingBlog.setHashtags(blog.getHashtags());
+//        }
+        if (blog.getHashtags() != null && !blog.getHashtags().isEmpty()) {
+            List<BlogHashtag> savedHashtags = new ArrayList<>();
+
+            for (BlogHashtag hashtag : blog.getHashtags()) {
+                // Kiểm tra xem hashtag đã tồn tại chưa
+                BlogHashtag existingHashtag = blogHashtagRepository
+                        .findHashtagByName(hashtag.getBlogHashtagName()) // Đảm bảo tên phương thức trùng khớp
+                        .orElseGet(() -> blogHashtagRepository.save(hashtag));
+
+                savedHashtags.add(existingHashtag);
+            }
+
+            existingBlog.setHashtags(savedHashtags);
         }
-        if (blog.getUserId() != null) {
-            existingBlog.setUserId(blog.getUserId());
-        }
+//        if (blog.getUserId() != null) {
+//            existingBlog.setUserId(blog.getUserId());
+//        }
         if (blog.getPostedTime() != null) {
             existingBlog.setPostedTime(blog.getPostedTime());
         }
@@ -59,10 +164,20 @@ public class BlogService {
         return blogRepository.save(existingBlog);
     }
 
-    public String deleteBlogById(String id) {
-        Blogs blog = blogRepository.findById(id).orElseThrow(() -> new RuntimeException("Blog not found"));
-        blog.setStatus((byte) 0); // Xóa mềm
-        blogRepository.save(blog);
+//    public String deleteBlogById(String id) {
+//        Blogs blog = blogRepository.findById(id).orElseThrow(() -> new RuntimeException("Blog not found"));
+//        blog.setStatus((byte) 0); // Xóa mềm
+//        blogRepository.save(blog);
+//        return "Blog deleted successfully";
+//    }
+
+    public String deleteBlogByTitle(String blogTitle) {
+        Blogs existingBlog = blogRepository.findByTitle(blogTitle);
+        if (existingBlog == null) {
+            throw new RuntimeException("Blog not found with title: " + blogTitle);
+        }
+        existingBlog.setStatus((byte) 0); // Xóa mềm
+        blogRepository.save(existingBlog);
         return "Blog deleted successfully";
     }
 

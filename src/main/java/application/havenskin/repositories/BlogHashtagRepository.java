@@ -7,10 +7,11 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BlogHashtagRepository extends JpaRepository<BlogHashtag, String> {
-//    BlogHashtag findByBlogHashtagName(String blogHashtagName);
-@Query("SELECT h FROM BlogHashtag h WHERE h.blogHashtagName = :hashtagName")
-BlogHashtag findHashtagByName(@Param("hashtagName") String hashtagName);
+    //    BlogHashtag findByBlogHashtagName(String blogHashtagName);
+    @Query("SELECT h FROM BlogHashtag h WHERE h.blogHashtagName = :hashtagName")
+    Optional<BlogHashtag> findHashtagByName(@Param("hashtagName") String hashtagName);
 }
