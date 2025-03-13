@@ -77,9 +77,9 @@ public class OrderService {
 //        }
 //    }
     public CheckOutResponseDTO checkout(CheckoutRequestDTO checkoutRequestDTO) {
-        if (checkoutRequestDTO.getCartItemDTO() == null || checkoutRequestDTO.getCartItemDTO().isEmpty()) {
-            throw new RuntimeException("Cart is empty. Cannot create order.");
-        }
+//        if (checkoutRequestDTO.getCartItemDTO() == null || checkoutRequestDTO.getCartItemDTO().isEmpty()) {
+//            throw new RuntimeException("Cart is empty. Cannot create order.");
+//        }
         Users x = userRepository.findByEmail(checkoutRequestDTO.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
 
         // tao đơn hàng mới

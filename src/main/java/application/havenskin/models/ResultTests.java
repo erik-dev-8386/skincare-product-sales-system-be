@@ -20,7 +20,7 @@ public class ResultTests {
     private String resultTestId;
 
     @Column(name = "total_mark")
-    private Double totalMark;
+    private double totalMark;
 
     @NotNull
     @Column(name = "user_id", length = 50)
