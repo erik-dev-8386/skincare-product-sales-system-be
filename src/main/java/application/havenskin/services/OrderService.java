@@ -298,6 +298,7 @@ public class OrderService {
                 }
                 productDetail.setProductName(products.getProductName());
                 productDetail.setQuantity(detail.getQuantity());
+                productDetail.setDiscountPrice(detail.getDiscountPrice());
                 if(products.getProductImages() != null && !products.getProductImages().isEmpty()) {
                     productDetail.setImageUrl(products.getProductImages().get(0).getImageURL());
                 }else{
