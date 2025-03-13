@@ -12,10 +12,11 @@ import java.util.List;
 public interface BlogRepository extends JpaRepository<Blogs, String> {
     @Query("SELECT b FROM Blogs b JOIN b.hashtags h WHERE LOWER(TRIM(h.blogHashtagName)) = LOWER(TRIM(:hashtagName))")
     List<Blogs> findByHashtagName(@Param("hashtagName") String hashtagName);
-    @Query("SELECT b FROM Blogs b WHERE LOWER(b.blogTitle) LIKE LOWER(CONCAT('%', :title, '%'))")
-    List<Blogs>  findByTitle(@Param("title") String title);
 
-    Blogs findByBlogTitle(String blogTitle);
+
+    @Query("SELECT b FROM Blogs b WHERE LOWER(b.blogTitle) = LOWER(:title)")
+    Blogs  findByTitle(@Param("title") String title);
+
 
 
     List<Blogs> findByBlogContent(String blogContent);

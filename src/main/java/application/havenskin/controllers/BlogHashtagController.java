@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/haven-skin/blog-hashtag")
@@ -21,14 +22,14 @@ public class BlogHashtagController {
     }
 
     // Lấy hashtag theo ID
-    @GetMapping("/{id}")
-    public BlogHashtag getBlogHashtagById(@PathVariable String id) {
-        return blogHashtagService.getById(id);
-    }
+//    @GetMapping("/{id}")
+//    public BlogHashtag getBlogHashtagById(@PathVariable String id) {
+//        return blogHashtagService.getById(id);
+//    }
 
     // Lấy hashtag theo tên
-    @GetMapping("/name")
-    public BlogHashtag getBlogHashtagByName(@RequestParam String name) {
+    @GetMapping("/name/{name}")
+    public Optional<BlogHashtag> getBlogHashtagByName(@RequestParam String name) {
         return blogHashtagService.getByHashtagName(name);
     }
 
@@ -38,15 +39,15 @@ public class BlogHashtagController {
         return blogHashtagService.addBlogHashtag(blogHashtag);
     }
 
-    // Cập nhật hashtag theo ID
-    @PutMapping("/{id}")
-    public BlogHashtag updateBlogHashtag(@PathVariable String id, @RequestBody BlogHashtag blogHashtag) {
-        return blogHashtagService.updateBlogHashtag(id, blogHashtag);
+    // Cập nhật hashtag theo tên
+    @PutMapping("/{blogHashtagName}")
+    public BlogHashtag updateBlogHashtag(@PathVariable String blogHashtagName, @RequestBody BlogHashtag blogHashtag) {
+        return blogHashtagService.updateBlogHashtagByHashtagName(blogHashtagName, blogHashtag);
     }
 
-    // Xóa mềm hashtag theo ID
-    @DeleteMapping("/{id}")
-    public String deleteBlogHashtag(@PathVariable String id) {
-        return blogHashtagService.deleteBlogHashtag(id);
+    // Xóa mềm hashtag theo tên
+    @DeleteMapping("/{blogHashtagName}")
+    public String deleteBlogHashtag(@PathVariable String blogHashtagName) {
+        return blogHashtagService.deleteBlogHashtagByHashtagName(blogHashtagName);
     }
 }

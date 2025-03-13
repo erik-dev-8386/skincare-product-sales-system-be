@@ -22,10 +22,10 @@ public class BlogController {
     }
 
     // Lấy blog theo ID
-    @GetMapping("/id/{id}")
-    public Blogs getBlogById(@PathVariable String id) {
-        return blogService.getBlogById(id);
-    }
+//    @GetMapping("/id/{id}")
+//    public Blogs getBlogById(@PathVariable String id) {
+//        return blogService.getBlogById(id);
+//    }
 
     // *
     // Tìm blog theo tiêu đề
@@ -54,15 +54,15 @@ public class BlogController {
         return blogService.createBlog(blog);
     }
 
-    // Cập nhật blog theo ID
-    @PutMapping("/{id}")
-    public Blogs updateBlogById(@PathVariable String id, @RequestBody Blogs blog) {
-        return blogService.updateBlogById(id, blog);
+    // Cập nhật blog theo title
+    @PutMapping("/{blogTitle}")
+    public Blogs updateBlogById(@PathVariable String blogTitle, @RequestBody Blogs blog) {
+        return blogService.updateBlogByTitle(blogTitle, blog);
     }
 
-    // Xóa mềm blog theo ID
-    @DeleteMapping("/{id}")
-    public String deleteBlogById(@PathVariable String id) {
-        return blogService.deleteBlogById(id);
+    // Xóa mềm blog theo title
+    @DeleteMapping("/{blogTitle}")
+    public String deleteBlogById(@PathVariable String blogTitle) {
+        return blogService.deleteBlogByTitle(blogTitle);
     }
 }

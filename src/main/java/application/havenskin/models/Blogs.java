@@ -19,17 +19,17 @@ public class Blogs {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String blogId;
 
-    @Column(name = "blog_title", length = 50)
+    @Column(name = "blog_title", length = 250)
     @Nationalized
     private String blogTitle;
 
-    @Column(name = "blog_content", length = 50)
+    @Column(name = "blog_content", length = 250)
     @Nationalized
     private String blogContent;
 
-    @NotNull
-    @Column(name = "user_id", length = 50)
-    private String userId;
+//    @NotNull
+//    @Column(name = "user_id", length = 50)
+//    private String userId;
 
     @NotNull
     @Column(name = "posted_time")
@@ -38,18 +38,26 @@ public class Blogs {
     @Column(name = "deleted_time")
     private Date deletedTime;
 
-    @JsonIgnore
+//    @JsonIgnore
+//    @ManyToOne
+//    @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
+//    private Users user;
+
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private Users user;
 
     @OneToMany(mappedBy = "blog")
     private List<BlogImages> blogImages;
 
+//    @ManyToOne
+//    @JsonIgnore
+//    @JoinColumn(name = "blog_category_id", referencedColumnName = "blog_category_id", nullable = false)
+//    private BlogCategory blogCategory;
     @ManyToOne
-    @JsonIgnore
-    @JoinColumn(name = "blog_category_id", referencedColumnName = "blog_category_id", nullable = false)
+    @JoinColumn(name = "blog_category_id",nullable = false)
     private BlogCategory blogCategory;
+
 
     //không cần tạo riêng 1 enity chỉ để ánh xạ ManyToMany, vì JPA có thể xử lý trực tiếp
     //bằng  @JoinTable trong Blog Entity

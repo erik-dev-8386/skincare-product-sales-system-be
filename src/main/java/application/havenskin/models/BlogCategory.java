@@ -1,5 +1,6 @@
 package application.havenskin.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.Nationalized;
@@ -25,6 +26,7 @@ public class BlogCategory {
 
 
     @OneToMany(mappedBy = "blogCategory")
+    @JsonIgnore
     private List<Blogs> blogs;
 
     @Column(name = "status")
