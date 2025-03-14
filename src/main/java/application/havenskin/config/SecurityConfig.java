@@ -32,7 +32,7 @@ public class SecurityConfig {
     public SecurityConfig(ClientRegistrationRepository clientRegistrationRepository) {
         this.clientRegistrationRepository = clientRegistrationRepository;
     }
-    private final String[] PUBLIC_ENDPOINTS = {"/haven-skin/brands","/haven-skin/categories", "/haven-skin/discounts", "/haven-skin/products", "/haven-skin/skin-types", "/haven-skin/products/{id}", "/haven-skin/categories/name/","/haven-skin/products/category/{categoryname}"};
+    private final String[] PUBLIC_ENDPOINTS = {"/haven-skin/brands","/haven-skin/categories", "/haven-skin/discounts", "/haven-skin/products", "/haven-skin/skin-types", "/haven-skin/products/{id}", "/haven-skin/categories/name/","/haven-skin/products/category/{categoryname}", "/haven-skin/momo/create/**"};
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.
@@ -41,6 +41,7 @@ public class SecurityConfig {
                                 .permitAll()
                                 .requestMatchers(HttpMethod.POST,"/haven-skin/users/add-new-user").permitAll()
                                 .requestMatchers(HttpMethod.POST,"/haven-skin/users/login/google").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/haven-skin/momo/create/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS).permitAll()
                                 .anyRequest().authenticated())
                 .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable())
@@ -99,31 +100,6 @@ public class SecurityConfig {
         });
         return converter;
     }
-
-
-//    @Bean
-//    public CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.setAllowedOrigins(List.of("http://localhost:5173")); // FE React
-//        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-//        configuration.setAllowedHeaders(List.of("*"));
-//        configuration.setAllowCredentials(true); // Cho phép cookie/session
-//        configuration.addExposedHeader("Authorization"); // Expose JWT nếu có
-//
-//        configuration.addExposedHeader("Cross-Origin-Opener-Policy");
-//        configuration.addExposedHeader("Cross-Origin-Embedder-Policy");
-//        configuration.addExposedHeader("Authorization");
-//
-//        configuration.setAllowedHeaders(List.of("*"));
-//        configuration.setExposedHeaders(List.of("Authorization")); // Chỉ expose header cần thiết
-//
-//
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", configuration);
-//        return source;
-//    }
-
-
 
     /**
      * Xử lý logout thành công cho OIDC

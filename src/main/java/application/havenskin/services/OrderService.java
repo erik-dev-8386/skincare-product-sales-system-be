@@ -28,54 +28,7 @@ public class OrderService {
     private UserRepository userRepository;
     @Autowired
     private OrderDetailsRepository orderDetailsRepository;
-//
-//    public void checkout(CheckoutRequestDTO checkoutRequestDTO) {
-//        Users x = userRepository.findByEmail(checkoutRequestDTO.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
-//
-//        // tao đơn hàng mới
-//        Orders order = new Orders();
-//        order.setUserId(x.getUserId());
-//        order.setStatus(OrderEnums.PENDING.getOrder_status());
-//        order.setOrderTime(new Date());
 
-    /// /        ordersRepository.save(order);
-//
-//        double totalOrderPrice = 0;
-//        for (CartItemDTO cartItemDTO : checkoutRequestDTO.getCartItemDTO()) {
-//            Products products = productsRepository.findByProductName(cartItemDTO.getProductName());
-//            if(products == null) {
-//                throw new RuntimeException(cartItemDTO.getProductName() + " not found");
-//            }
-//            if(products.getQuantity() < cartItemDTO.getQuantity()) {
-//                throw  new RuntimeException(cartItemDTO.getProductName()+" not enough");
-//            }
-//
-//            double itemTotalPrice = products.getDiscountPrice() * cartItemDTO.getQuantity();
-//            totalOrderPrice += itemTotalPrice;
-//
-//            OrderDetails orderDetails = new OrderDetails();
-//            orderDetails.setOrderId(order.getOrderId());
-//            orderDetails.setProductId(products.getProductId());
-//            orderDetails.setQuantity(cartItemDTO.getQuantity());
-//            orderDetails.setDiscountPrice(products.getDiscountPrice());
-//            orderDetails.setStatus(OrderEnums.PENDING.getOrder_status());
-//
-//            orderDetailsRepository.save(orderDetails);
-//
-//            // cập nhật so luong ton kho
-//            products.setQuantity(products.getQuantity() - cartItemDTO.getQuantity());
-//            if(products.getQuantity() <= 0){
-//                products.setStatus(ProductEnums.OUT_OF_STOCK.getValue());
-//            }
-//            productsRepository.save(products);
-//
-//            order.setTotalAmount(totalOrderPrice);
-//            ordersRepository.save(order);
-//
-//            order.setStatus(OrderEnums.PENDING.getOrder_status());
-//            ordersRepository.save(order);
-//        }
-//    }
     public CheckOutResponseDTO checkout(CheckoutRequestDTO checkoutRequestDTO) {
         if (checkoutRequestDTO.getCartItemDTO() == null || checkoutRequestDTO.getCartItemDTO().isEmpty()) {
             throw new RuntimeException("Cart is empty. Cannot create order.");
@@ -130,14 +83,6 @@ public class OrderService {
         CheckOutResponseDTO response = new CheckOutResponseDTO();
         response.setTotal(totalOrderPrice);
         response.setOrderId(order.getOrderId());
-//        response.setCartItems(checkoutRequestDTO.getCartItemDTO().stream()
-//                .map(detail ->{
-//                    CartItemDTO temp = new CartItemDTO();
-//                    temp.setProductName(detail.getProductName());
-//                    temp.setQuantity(detail.getQuantity());
-//                    temp.setPrice(detail.getPrice());
-//                    return temp;
-//                }).collect(Collectors.toList()));
         response.setCartItems(checkoutRequestDTO.getCartItemDTO().stream().map(detail -> {
             Products productsCartItem = productsRepository.findByProductName(detail.getProductName());
             CartItemResponseDTO temp = new CartItemResponseDTO();
@@ -235,10 +180,6 @@ public class OrderService {
     public List<Orders> addListOfOrders(List<Orders> orders) {
         return ordersRepository.saveAll(orders);
     }
-
-//    public int ShowQuantityByOrderId(String id) {
-//        return ordersRepository.findById(id).get().getTotalAmount();
-//    }
 
     public boolean updateOrderStatus(String orderId, byte newStatusByte) {
         Optional<Orders> orderOpt = ordersRepository.findById(orderId);

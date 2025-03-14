@@ -41,4 +41,5 @@ public class TransactionService {
     public List<Transactions> addListOfTransactions(List<Transactions> transactions) {
         return transactionsRepository.saveAll(transactions);
     }
+
 }
