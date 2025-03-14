@@ -15,7 +15,7 @@ public class OrderDTO {
 
     private String userId;
 
-    private int totalAmount;
+    private double totalAmount;
 
     private byte status;
 

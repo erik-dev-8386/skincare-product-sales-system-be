@@ -9,7 +9,6 @@ import org.mapstruct.MappingTarget;
 public interface Mapper {
     SkinTests toSkinTests(SkinTestsDto skinTestsDto);
     Brands toBrands(BrandDTO brandDTO);
-    //@Mapping(target = "brandId", ignore = true)
     void updateBrands(@MappingTarget Brands brands, BrandDTO brandDTO);
     Categories toCategories(CategoryDTO categoryDTO);
     void updateCategories(@MappingTarget Categories categories, CategoryDTO categoryDTO);

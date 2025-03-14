@@ -3,18 +3,27 @@ package application.havenskin.dataAccess;
 import application.havenskin.models.Orders;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+
 
 @Data
 public class TransactionDTO {
 
     private byte transactionStatus;
 
-    private Date transactionTime;
+    private String transactionCode;
+
+    private String content;
+
+    private String bankName;
+
+    private LocalDateTime transactionTime;
 
     private String orderId;
 
-    private String transactionType;
+    private double amount;
+
+    private byte transactionType;
 
     private Orders orders;
 }

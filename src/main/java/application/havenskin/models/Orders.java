@@ -28,7 +28,6 @@ public class Orders {
     @Column(name = "user_id", length = 50)
     private String userId;
 
-    @NotNull
     @Column(name = "total_amount")
     private double totalAmount;
 

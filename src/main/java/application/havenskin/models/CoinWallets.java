@@ -1,6 +1,7 @@
 package application.havenskin.models;
 
 import application.havenskin.enums.CoinWalletEnums;
+import application.havenskin.enums.OrderEnums;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

@@ -2,8 +2,7 @@ package application.havenskin.enums;
 
 public enum OrderDetailEnums {
     INACTIVE((byte) 0),
-    ACTIVE((byte) 1)
-    ;
+    ACTIVE((byte) 1);
     private final byte value;
 
     OrderDetailEnums(byte value) {

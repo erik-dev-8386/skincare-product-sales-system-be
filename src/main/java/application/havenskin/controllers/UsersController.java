@@ -1,9 +1,12 @@
 package application.havenskin.controllers;
 
+import application.havenskin.dataAccess.UserDTO;
+import application.havenskin.models.Orders;
 import application.havenskin.dataAccess.*;
 import application.havenskin.enums.Role;
 import application.havenskin.models.Users;
 import application.havenskin.repositories.UserRepository;
+import application.havenskin.services.JwtService;
 import application.havenskin.services.AuthenticationService;
 import application.havenskin.services.ProductService;
 import application.havenskin.services.UsersService;
@@ -39,13 +42,15 @@ public class UsersController {
 
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String googleClientId;
+    private final JwtService jwtService;
 
     @Autowired
-    public UsersController(UsersService usersService, UserRepository usersRepository, AuthenticationService authenticationService, ProductService productService) {
-        this.usersService = usersService;
+    public UsersController(UsersService usersService, UserRepository usersRepository, AuthenticationService authenticationService, ProductService productService, JwtService jwtService) {
+    this.usersService = usersService;
         this.usersRepository = usersRepository;
         this.authenticationService = authenticationService;
         this.productService = productService;
+        this.jwtService = jwtService;
     }
 
     // Lấy danh sách tất cả người dùng
@@ -135,6 +140,17 @@ public class UsersController {
             GoogleIdToken.Payload payload = idToken.getPayload();
             Users user = processUser(payload);
 
+            // ✅ Tạo JWT Token
+            String token = jwtService.generateToken(user.getEmail(), String.valueOf(user.getRole())); // ✅ Đúng cú pháp
+
+            // ✅ Chuyển đổi sang UserDTO
+            UserDTO userDTO = new UserDTO();
+            userDTO.setFirstName(user.getFirstName());
+            userDTO.setLastName(user.getLastName());
+            userDTO.setEmail(user.getEmail());
+            userDTO.setRole(user.getRole());
+
+            // ✅ Chuyển hướng FE theo vai trò
             String redirectUrl = switch (user.getRole()) {
                 case 1, 2 -> "/admin-dashboard";
                 case 3 -> "/";
@@ -145,7 +161,11 @@ public class UsersController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Role not recognized"));
             }
 
-            return ResponseEntity.ok(Map.of("redirectUrl", redirectUrl));
+            return ResponseEntity.ok(Map.of(
+                    "token", token,
+                    "user", userDTO,
+                    "redirectUrl", redirectUrl
+            ));
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,113 +1,16 @@
-//package application.havenskin.services;
-//
-//import application.havenskin.dataAccess.OrderDetailDTO;
-//import application.havenskin.enums.OrderDetailEnums;
-//import application.havenskin.enums.OrderEnums;
-//import application.havenskin.mapper.Mapper;
-//import application.havenskin.models.OrderDetails;
-//import application.havenskin.models.Orders;
-//import application.havenskin.repositories.OrderDetailsRepository;
-//import application.havenskin.repositories.OrdersRepository;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.stereotype.Service;
-//
-//import java.util.List;
-//import java.util.Optional;
-//
-//@Service
-//public class OrderDetailsService {
-//    @Autowired
-//    private OrderDetailsRepository orderDetailsRepository;
-//    @Autowired
-//    private OrdersRepository ordersRepository;
-//    @Autowired
-//    private Mapper mapper;
-//    public List<OrderDetails> getAllOrderDetails() {
-//        return orderDetailsRepository.findAll();
-//    }
-//    public OrderDetails getOrderDetailsByID(String orderId) {
-//        if (!orderDetailsRepository.existsById(orderId)) {
-//            throw new RuntimeException("Order not found");
-//        }
-//        return orderDetailsRepository.findById(orderId).get();
-//    }
-//    public OrderDetails addOrderDetails(OrderDetails orderDetails) {
-//        return orderDetailsRepository.save(orderDetails);
-//    }
-////    public OrderDetails updateOrderDetails(String id, OrderDetailDTO orderDetails) {
-////        OrderDetails x = orderDetailsRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
-////        mapper.updateOrderDetails(x, orderDetails);
-////    return orderDetailsRepository.save(x);
-////    }
-//public OrderDetails updateOrderDetails(String id, OrderDetailDTO orderDetails) {
-//    OrderDetails existingDetail = orderDetailsRepository.findById(id)
-//            .orElseThrow(() -> new RuntimeException("OrderDetail not found"));
-//
-//    // Kiểm tra trạng thái của order
-//    Orders order = ordersRepository.findById(existingDetail.getOrderId())
-//            .orElseThrow(() -> new RuntimeException("Order not found"));
-//    if (order.getStatus() != OrderEnums.UNORDERED.getOrder_status()) {
-//        throw new RuntimeException("Cannot modify OrderDetails after order is placed");
-//    }
-//
-//    // Cập nhật order details
-//    mapper.updateOrderDetails(existingDetail, orderDetails);
-//    return orderDetailsRepository.save(existingDetail);
-//}
-////    public OrderDetails deleteOrderDetails(String id) {
-//////        if (!orderDetailsRepository.existsById(id)) {
-//////            throw new RuntimeException("Order not found");
-//////        }
-//////        orderDetailsRepository.deleteById(id);
-////        Optional<OrderDetails> orderDetailsOption = orderDetailsRepository.findById(id);
-////        if(orderDetailsOption.isPresent()) {
-////            OrderDetails x = orderDetailsOption.get();
-////            x.setStatus(OrderDetailEnums.INACTIVE.getValue());
-////            return orderDetailsRepository.save(x);
-////        }
-////        return null;
-////    }
-//public OrderDetails deleteOrderDetails(String id) {
-//    Optional<OrderDetails> orderDetailsOption = orderDetailsRepository.findById(id);
-//    if (orderDetailsOption.isPresent()) {
-//        OrderDetails detail = orderDetailsOption.get();
-//
-//        // Kiểm tra trạng thái của order
-//        Orders order = ordersRepository.findById(detail.getOrderId())
-//                .orElseThrow(() -> new RuntimeException("Order not found"));
-//        if (order.getStatus() != OrderEnums.UNORDERED.getOrder_status()) {
-//            throw new RuntimeException("Cannot delete OrderDetails after order is placed");
-//        }
-//
-//        detail.setStatus(OrderDetailEnums.INACTIVE.getValue());
-//        return orderDetailsRepository.save(detail);
-//    }
-//    return null;
-//}
-//    public List<OrderDetails> addListOfOrderDetails(List<OrderDetails> orderDetails) {
-//        return orderDetailsRepository.saveAll(orderDetails);
-//    }
-////    public OrderDetails updateProductQuantityInCart(String orderId,String productId, int newquantity) {
-////        Orders x = ordersRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Không tìm thấy đơn hàng"));
-////        if(x.getStatus() != OrderEnums.CANCELLED.getOrder_status()){
-////            throw new RuntimeException("Không thể thay đổi số lượng các sản phẩm");
-////        }
-////        OrderDetails orderDetails = orderDetailsRepository.
-////
-////    }
-//}
 package application.havenskin.services;
 
-import application.havenskin.dataAccess.CartItemDTO;
 import application.havenskin.dataAccess.OrderDetailDTO;
 import application.havenskin.enums.OrderDetailEnums;
 import application.havenskin.enums.OrderEnums;
 import application.havenskin.mapper.Mapper;
 import application.havenskin.models.OrderDetails;
 import application.havenskin.models.Orders;
+import application.havenskin.models.Orders;
 import application.havenskin.models.Products;
 import application.havenskin.models.Users;
 import application.havenskin.repositories.OrderDetailsRepository;
+import application.havenskin.repositories.OrdersRepository;
 import application.havenskin.repositories.OrdersRepository;
 import application.havenskin.repositories.ProductsRepository;
 import application.havenskin.repositories.UserRepository;
@@ -125,6 +28,7 @@ public class OrderDetailsService {
     private OrdersRepository ordersRepository;
     @Autowired
     private Mapper mapper;
+
     @Autowired
     private ProductsRepository productsRepository;
     @Autowired
@@ -393,6 +297,10 @@ public class OrderDetailsService {
 
 
     public OrderDetails deleteOrderDetails(String id) {
+//        if (!orderDetailsRepository.existsById(id)) {
+//            throw new RuntimeException("Order not found");
+//        }
+//        orderDetailsRepository.deleteById(id);
         Optional<OrderDetails> orderDetailsOption = orderDetailsRepository.findById(id);
         if (orderDetailsOption.isPresent()) {
             OrderDetails detail = orderDetailsOption.get();

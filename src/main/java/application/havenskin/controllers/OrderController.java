@@ -1,6 +1,7 @@
 package application.havenskin.controllers;
 
 import application.havenskin.dataAccess.OrderDTO;
+import application.havenskin.enums.OrderEnums;
 import application.havenskin.models.Orders;
 import application.havenskin.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +22,11 @@ public class OrderController {
     public List<Orders> getAllOrder(){
         return orderService.getAllOrders();
     }
+
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @PostMapping
-    public Orders createOrder(@RequestBody Orders order){
-        return orderService.createOrder(order);
+    public Orders createOrder(@RequestBody Orders order, @RequestParam(defaultValue = "false") boolean useCoinWallet) {
+        return orderService.createOrder(order, useCoinWallet);
     }
     @GetMapping("/id")
     public Orders getOrderById(@PathVariable String id){
@@ -46,10 +48,6 @@ public class OrderController {
         return orderService.addListOfOrders(orders);
     }
 
-//    @GetMapping("/{id}")
-//    public int ShowQuantityByOrderId(@PathVariable String id){
-//        return orderService.ShowQuantityByOrderId(id);
-//    }
     @PutMapping("/{id}/status")
     public ResponseEntity<?> updateOrderStatus(@PathVariable String id, @RequestParam byte status) {
         boolean updated = orderService.updateOrderStatus(id, status);

@@ -6,17 +6,8 @@ public enum OrderEnums {
     PROCESSING((byte) 2),  // Shop đã xác nhận, đơn hàng đang được chuẩn bị
     SHIPPING((byte) 3),    // Đơn hàng đang được vận chuyển
     DELIVERED((byte) 4),   // Đơn hàng đã giao thành công
-    CANCELLED((byte) 5),   // Đơn hàng bị hủy bởi khách hàng hoặc shop
+    CANCELLED((byte) 5),   // Đơn hàng bị hủy trước giao và sau giao
     RETURNED((byte) 6);    // Khách hàng trả lại đơn hàng
-//    PENDING((byte) 0),
-//    CONFIRMED((byte) 1),
-//    PROCESSING((byte) 2),
-//    SHIPPED((byte) 3),
-//    DELIVERED((byte) 4),
-//    CANCELLED((byte) 5),
-//    RETURNED((byte) 6),
-//    REFUNDED((byte) 7),
-//    PAYMENT_FAILED((byte) 8);
     private final byte order_status;
 
     OrderEnums(byte order_status) {
