@@ -5,8 +5,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.hibernate.annotations.Nationalized;
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -21,20 +22,23 @@ public class Users {
 
     @NotNull
     @Column(name = "first_name", length = 50)
+    @Nationalized
     private String firstName;
 
     @NotNull
     @Column(name = "last_name", length = 50)
+    @Nationalized
     private String lastName;
 
     @Column(name = "gender", length = 10)
+    @Nationalized
     private String gender;
 
     @Column(name = "address", length = 50)
     private String address;
 
     @Column(name = "birth_date")
-    private LocalDate birthDate;
+    private Date birthDate;
 
     @Column(name = "email", length = 100)
     private String email;
@@ -43,13 +47,13 @@ public class Users {
     private String password;
 
     @Column(name = "phone_number", length = 15)
-    private String phoneNumber;
+    private String phone;
 
     @Max(5)
     @Column(name = "rating")
     private byte rating;
 
-    @Column(name = "image", length = 100)
+    @Column(name = "image", length = 1000)
     private String image;
 
     @NotNull
@@ -60,7 +64,8 @@ public class Users {
     private byte status;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
+    // Đảm bảo khi xóa user thì xóa luôn đơn hàng
     private List<Orders> orders;
 
     @JsonIgnore

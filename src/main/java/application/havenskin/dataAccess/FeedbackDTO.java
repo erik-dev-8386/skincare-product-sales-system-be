@@ -3,14 +3,17 @@ package application.havenskin.dataAccess;
 import application.havenskin.models.Products;
 import application.havenskin.models.Users;
 import lombok.Data;
+import org.hibernate.annotations.Nationalized;
 
-import java.time.LocalDateTime;
+import java.util.Date;
+
 @Data
 public class FeedbackDTO {
 
+    @Nationalized
     private String feedbackContent;
 
-    private LocalDateTime feedbackDate;
+    private Date feedbackDate;
 
     private String productId;
 

@@ -3,8 +3,11 @@ package application.havenskin.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.ToString;
+import org.hibernate.annotations.Nationalized;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -13,9 +16,10 @@ import java.util.List;
 public class SkinTests {
     @Id
     @Column(name = "skin_test_id", length = 50)
-    @GeneratedValue(strategy = GenerationType.UUID)
+//    @GeneratedValue(strategy = GenerationType.UUID)
     private String skinTestId;
 
+    @Nationalized
     @Column(name = "test_name", length = 50)
     private String testName;
 
@@ -24,18 +28,19 @@ public class SkinTests {
 
     @NotNull
     @Column(name = "created_time")
-    private LocalDateTime createdTime;
+    private Date createdTime;
 
     @Column(name = "deleted_time")
-    private LocalDateTime deletedTime;
+    private Date deletedTime;
 
     @Column(name = "status")
     private byte status;
 
     @OneToMany(mappedBy = "skinTest")
-    private List<Answers> answers;
+    @ToString.Exclude
+    private List<Questions> questions;
 
     @OneToMany(mappedBy = "skinTest")
+    @ToString.Exclude
     private List<ResultTests> resultTests;
-
 }

@@ -4,22 +4,23 @@ import application.havenskin.models.BlogCategory;
 import application.havenskin.models.BlogImages;
 import application.havenskin.models.Users;
 import lombok.Data;
+import org.hibernate.annotations.Nationalized;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 @Data
 public class BlogDTO {
     private String blogId;
-
+    @Nationalized
     private String blogTitle;
-
+    @Nationalized
     private String blogContent;
 
     private String userId;
 
-    private LocalDateTime postedTime;
+    private Date postedTime;
 
-    private LocalDateTime deletedTime;
+    private Date deletedTime;
 
     private Users user;
 

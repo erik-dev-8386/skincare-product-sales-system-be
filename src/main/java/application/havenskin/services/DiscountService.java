@@ -19,20 +19,22 @@ public class DiscountService {
     private Mapper mapper;
     public List<Discounts> getAllDiscounts() {
         return discountsRepository.findAll();
+        //return discountsRepository.findActiveDiscountsSortedByName();
     }
     public Discounts getDiscountById(String id) {
         return discountsRepository.findByDiscountId(id);
     }
-    public Discounts createDiscount(Discounts discount) {
-        return discountsRepository.save(discount);
+    public Discounts createDiscount(DiscountDTO discount) {
+        Discounts x = mapper.toDiscounts(discount);
+        return discountsRepository.save(x);
     }
     public Discounts updateDiscount(String id, DiscountDTO discount) {
-       Discounts x = discountsRepository.findByDiscountId(id);
-       if(x == null) {
-          throw new RuntimeException("Discount not found");
-       }
-       mapper.updateDiscounts(x, discount);
-       return discountsRepository.save(x);
+        Discounts x = discountsRepository.findByDiscountId(id);
+        if(x == null) {
+            throw new RuntimeException("Discount not found");
+        }
+        mapper.updateDiscounts(x, discount);
+        return discountsRepository.save(x);
     }
     public Discounts deleteDiscount(String id) {
 //        if(getDiscountById(id) == null) {
@@ -50,7 +52,16 @@ public class DiscountService {
     public List<Discounts> addListDiscounts(List<Discounts> discounts) {
         return discountsRepository.saveAll(discounts);
     }
-    public Discounts getDiscountByName(String name) {
-        return discountsRepository.findByDiscountName(name);
+
+    public String getDiscountByName(String name) {
+        return discountsRepository.findByDiscountName(name).getDiscountId();
+    }
+
+    public List<String> getDiscountsByName() {
+        return discountsRepository.findAllDiscountByName();
+    }
+
+    public List<Discounts> searchDiscountName(String categoryName) {
+        return discountsRepository.findByDiscountsNameContaining(categoryName);
     }
 }

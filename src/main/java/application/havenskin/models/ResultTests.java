@@ -1,10 +1,14 @@
 package application.havenskin.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "ResultTests")
@@ -16,7 +20,7 @@ public class ResultTests {
     private String resultTestId;
 
     @Column(name = "total_mark")
-    private Double totalMark;
+    private double totalMark;
 
     @NotNull
     @Column(name = "user_id", length = 50)
@@ -24,10 +28,10 @@ public class ResultTests {
 
     @NotNull
     @Column(name = "created_time")
-    private LocalDateTime createdTime;
+    private Date createdTime;
 
     @Column(name = "deleted_time")
-    private LocalDateTime deletedTime;
+    private Date deletedTime;
 
     @Column(name = "status")
     private byte status;
@@ -38,6 +42,7 @@ public class ResultTests {
 
     @ManyToOne
     @JoinColumn(name = "skin_type_id", referencedColumnName = "skin_type_id", insertable = false, updatable = false)
+    @ToString.Exclude //ngăn vòng lặp khi gọi toString()
     private SkinTypes skinType;
 
     @NotNull
@@ -46,10 +51,18 @@ public class ResultTests {
 
     @ManyToOne
     @JoinColumn(name = "skin_test_id", referencedColumnName = "skin_test_id", insertable = false, updatable = false)
+    @ToString.Exclude
     private SkinTests skinTest;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
+    @ToString.Exclude
     private Users user;
+
+    @OneToMany(mappedBy = "resultTest", cascade = CascadeType.ALL)
+    @JsonIgnore
+    @ToString.Exclude
+    private List<UserAnswers> userAnswers;
+
 
 }

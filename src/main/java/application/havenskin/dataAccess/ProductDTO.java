@@ -3,32 +3,35 @@ package application.havenskin.dataAccess;
 import application.havenskin.enums.ProductEnums;
 import application.havenskin.models.*;
 import lombok.Data;
+import org.hibernate.annotations.Nationalized;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 @Data
 public class ProductDTO {
 
+    @Nationalized
     private String productName;
 
     private double unitPrice;
 
     private Double discountPrice;
 
+    @Nationalized
     private String description;
 
+    @Nationalized
     private String ingredients;
 
     private int quantity;
 
-    private LocalDateTime createdTime;
+    private Date createdTime = new Date();
 
-    private LocalDateTime deletedTime;
+    private Date deletedTime;
 
-    private LocalDate mfg;
+    private Date mfg;
 
-    private LocalDate exp;
+    private Date exp;
 
     private double netWeight;
 
@@ -37,6 +40,8 @@ public class ProductDTO {
     private String discountId;
 
     private Discounts discounts;
+
+    private String usageInstruction;
 
     private String categoryId;
 

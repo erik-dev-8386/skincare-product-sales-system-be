@@ -1,5 +1,6 @@
 package application.havenskin.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -14,16 +15,17 @@ public class SkinTypeImages {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String imageId;
 
-    @Column(name = "image_url", length = 255)
+    @Column(name = "image_url", length = 1000)
     private String imageURL;
 
-    @Column(name = "description", length = 500)
-    private String description;
+//    @Column(name = "description", length = 500)
+//  private String description;
 
     @NotNull
     @Column(name = "skin_type_id", length = 50)
     private String skinTypeId;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "skin_type_id", referencedColumnName = "skin_type_id", insertable = false, updatable = false)
     private SkinTypes skinType;

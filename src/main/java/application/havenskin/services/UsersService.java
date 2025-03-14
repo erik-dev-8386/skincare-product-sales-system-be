@@ -1,13 +1,18 @@
 package application.havenskin.services;
 
-import application.havenskin.models.Orders;
-import application.havenskin.models.Users;
+import application.havenskin.dataAccess.UserDTO;
 import application.havenskin.dataAccess.UserServiceResponseDto;
+import application.havenskin.enums.Role;
+import application.havenskin.models.Users;
 import application.havenskin.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +22,8 @@ public class UsersService {
     private final UserRepository usersRepository;
     private static final Logger logger = LoggerFactory.getLogger(UsersService.class);
 
+    @Autowired
+    private FirebaseService firebaseService;
     public UsersService(UserRepository usersRepository) {
         this.usersRepository = usersRepository;
     }
@@ -29,8 +36,27 @@ public class UsersService {
         return usersRepository.findById(userId).orElse(null);
     }
 
+    public Users getUserByEmail(String email) {
+        return usersRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
     public Users saveUser(Users user) {
         return usersRepository.save(user);
+    }
+
+    public Users createUser(UserDTO user) {
+//        Users x = mapper.toUsers(user);
+//        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+//        x.setPassword(passwordEncoder.encode(user.getPassword()));
+//        return userRepository.save(x);
+        Users x = new Users();
+        x.setFirstName(user.getFirstName());
+        x.setLastName(user.getLastName());
+        x.setPassword(new BCryptPasswordEncoder(10).encode(user.getPassword()));
+        x.setEmail(user.getEmail());
+        x.setPhone(user.getPhone());
+        x.setRole(Role.CUSTOMER.getValue());
+        return usersRepository.save(x);
     }
 
     public List<Users> addListOfUsers(List<Users> users) {
@@ -77,6 +103,35 @@ public class UsersService {
     public List<Users> getCustomerUsers() {
         return usersRepository.findByRole((byte) 3);
     }
+
+    public Users updateUser(String email,  UserDTO user, MultipartFile file) throws IOException {
+        String userId = usersRepository.findByEmail(email).get().getUserId();
+        if(userId == null) {
+            throw new RuntimeException("User not found");
+        }
+        else{
+          Users existingUser = usersRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found!"));
+
+          existingUser.setFirstName(user.getFirstName());
+          existingUser.setLastName(user.getLastName());
+          existingUser.setEmail(user.getEmail());
+          existingUser.setPhone(user.getPhone());
+          existingUser.setGender(user.getGender());
+          existingUser.setAddress(user.getAddress()
+          );
+          existingUser.setBirthDate(user.getBirthDate());
+
+          if(file != null && !file.isEmpty()) {
+              String avatar = firebaseService.uploadImage(file);
+              existingUser.setImage(avatar);
+          }
+//          else {
+//              existingUser.setImage(null);
+//          }
+          return usersRepository.save(existingUser);
+        }
+    }
+
 
 
 }

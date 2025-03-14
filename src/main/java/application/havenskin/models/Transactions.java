@@ -1,11 +1,15 @@
 package application.havenskin.models;
 
+import com.google.firebase.database.DatabaseError;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.checkerframework.common.aliasing.qual.Unique;
+import org.checkerframework.common.aliasing.qual.Unique;
+import org.hibernate.annotations.Nationalized;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "Transactions")

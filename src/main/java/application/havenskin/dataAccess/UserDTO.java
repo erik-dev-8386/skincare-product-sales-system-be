@@ -2,26 +2,30 @@ package application.havenskin.dataAccess;
 
 import application.havenskin.models.*;
 import lombok.Data;
+import org.hibernate.annotations.Nationalized;
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 @Data
 public class UserDTO {
+    @Nationalized
     private String firstName;
 
+    @Nationalized
     private String lastName;
 
     private String gender;
 
+    @Nationalized
     private String address;
 
-    private LocalDate birthDate;
+    private Date birthDate;
 
     private String email;
 
     private String password;
 
-    private String phoneNumber;
+    private String phone;
 
     private byte rating;
 

@@ -1,10 +1,13 @@
 package application.havenskin.models;
 
+import com.google.firebase.database.DatabaseError;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.hibernate.annotations.Nationalized;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "Feedbacks")
@@ -16,10 +19,11 @@ public class Feedbacks {
     private String feedbackId;
 
     @Column(name = "feedback_content", length = 255)
+    @Nationalized
     private String feedbackContent;
 
     @Column(name = "feedback_date", length = 50)
-    private LocalDateTime feedbackDate;
+    private Date feedbackDate;
 
     @NotNull
     @Column(name = "product_id", length = 50)

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.ToString;
 
 @Entity
 @Table(name = "OrderDetails")
@@ -35,6 +36,7 @@ public class OrderDetails {
     @Column(name = "order_id", length = 50)
     private String orderId;
 
+    @ToString.Exclude
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "order_id", referencedColumnName = "order_id", insertable = false, updatable = false)
@@ -42,5 +44,5 @@ public class OrderDetails {
 
     @NotNull
     @Column(name = "status")
-    private Byte status = OrderDetailEnums.ACTIVE.getValue();
+    private Byte status;
 }
