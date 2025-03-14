@@ -3,14 +3,14 @@ package application.havenskin.services;
 import application.havenskin.config.MomoConfig;
 import application.havenskin.dataAccess.CreateMomoRequest;
 import application.havenskin.dataAccess.CreateMomoResponse;
+import application.havenskin.dataAccess.MomoIPNResponse;
+import application.havenskin.enums.OrderEnums;
 import application.havenskin.repositories.MomoRepository;
 import application.havenskin.models.Orders;
-import application.havenskin.services.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -95,5 +95,31 @@ public class MomoService {
             hexString.append(hex);
         }
         return hexString.toString();
+    }
+
+    public boolean handleMomoIPN(MomoIPNResponse ipnResponse) {
+        log.info("Nhận IPN từ MoMo: {}", ipnResponse);
+
+        if (ipnResponse == null || ipnResponse.getOrderId() == null) {
+            log.error("IPN không hợp lệ");
+            return false;
+        }
+
+        // Kiểm tra resultCode từ MoMo (0 là thanh toán thành công)
+        if (ipnResponse.getResultCode() == 0) {
+            log.info("Thanh toán thành công, cập nhật Order: {}", ipnResponse.getOrderId());
+
+            // Cập nhật trạng thái đơn hàng thành PROCESSING
+            boolean updated = orderService.updateOrderStatus(ipnResponse.getOrderId(), OrderEnums.PROCESSING.getOrder_status());
+
+            if (!updated) {
+                log.error("Cập nhật trạng thái đơn hàng thất bại");
+                return false;
+            }
+            return true;
+        } else {
+            log.warn("Thanh toán thất bại với mã lỗi: {}", ipnResponse.getResultCode());
+            return false;
+        }
     }
 }

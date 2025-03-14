@@ -26,7 +26,7 @@ public enum TransactionsEnums {
 
     // For type
     public enum Type {
-        VNPAY((byte) 1),
+        MOMO((byte) 1),
         COD((byte) 2);
 
         private final byte value;

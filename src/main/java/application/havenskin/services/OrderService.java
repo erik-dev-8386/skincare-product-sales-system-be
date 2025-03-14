@@ -4,12 +4,14 @@ import application.havenskin.dataAccess.*;
 import application.havenskin.enums.OrderDetailEnums;
 import application.havenskin.enums.OrderEnums;
 import application.havenskin.enums.ProductEnums;
+import application.havenskin.enums.TransactionsEnums;
 import application.havenskin.mapper.Mapper;
 import application.havenskin.models.*;
 import application.havenskin.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -28,54 +30,9 @@ public class OrderService {
     private OrderDetailsRepository orderDetailsRepository;
     @Autowired
     private CoinWalletsRepository coinWalletsRepository;
-//
-//    public void checkout(CheckoutRequestDTO checkoutRequestDTO) {
-//        Users x = userRepository.findByEmail(checkoutRequestDTO.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
-//
-//        // tao đơn hàng mới
-//        Orders order = new Orders();
-//        order.setUserId(x.getUserId());
-//        order.setStatus(OrderEnums.PENDING.getOrder_status());
-//        order.setOrderTime(new Date());
+    @Autowired
+    private TransactionService transactionService;
 
-    /// /        ordersRepository.save(order);
-//
-//        double totalOrderPrice = 0;
-//        for (CartItemDTO cartItemDTO : checkoutRequestDTO.getCartItemDTO()) {
-//            Products products = productsRepository.findByProductName(cartItemDTO.getProductName());
-//            if(products == null) {
-//                throw new RuntimeException(cartItemDTO.getProductName() + " not found");
-//            }
-//            if(products.getQuantity() < cartItemDTO.getQuantity()) {
-//                throw  new RuntimeException(cartItemDTO.getProductName()+" not enough");
-//            }
-//
-//            double itemTotalPrice = products.getDiscountPrice() * cartItemDTO.getQuantity();
-//            totalOrderPrice += itemTotalPrice;
-//
-//            OrderDetails orderDetails = new OrderDetails();
-//            orderDetails.setOrderId(order.getOrderId());
-//            orderDetails.setProductId(products.getProductId());
-//            orderDetails.setQuantity(cartItemDTO.getQuantity());
-//            orderDetails.setDiscountPrice(products.getDiscountPrice());
-//            orderDetails.setStatus(OrderEnums.PENDING.getOrder_status());
-//
-//            orderDetailsRepository.save(orderDetails);
-//
-//            // cập nhật so luong ton kho
-//            products.setQuantity(products.getQuantity() - cartItemDTO.getQuantity());
-//            if(products.getQuantity() <= 0){
-//                products.setStatus(ProductEnums.OUT_OF_STOCK.getValue());
-//            }
-//            productsRepository.save(products);
-//
-//            order.setTotalAmount(totalOrderPrice);
-//            ordersRepository.save(order);
-//
-//            order.setStatus(OrderEnums.PENDING.getOrder_status());
-//            ordersRepository.save(order);
-//        }
-//    }
     public CheckOutResponseDTO checkout(CheckoutRequestDTO checkoutRequestDTO) {
 //        if (checkoutRequestDTO.getCartItemDTO() == null || checkoutRequestDTO.getCartItemDTO().isEmpty()) {
 //            throw new RuntimeException("Cart is empty. Cannot create order.");
@@ -236,10 +193,6 @@ public class OrderService {
         return ordersRepository.saveAll(orders);
     }
 
-//    public int ShowQuantityByOrderId(String id) {
-//        return ordersRepository.findById(id).get().getTotalAmount();
-//    }
-
     public boolean updateOrderStatus(String orderId, byte newStatusByte) {
         Optional<Orders> orderOpt = ordersRepository.findById(orderId);
         if (orderOpt.isPresent()) {
@@ -249,11 +202,16 @@ public class OrderService {
 
             // Kiểm tra trạng thái hợp lệ
             if (!isValidStatusTransition(currentStatus, newStatus)) {
-                return false; // Tránh cập nhật trạng thái sai logic
+                return false;
             }
 
             if (currentStatus == OrderEnums.UNORDERED && newStatus != OrderEnums.UNORDERED) {
                 lockOrderDetails(order.getOrderId());
+            }
+
+            // Trong updateOrderStatus
+            if (newStatus == OrderEnums.PROCESSING) {
+                transactionService.createTransaction(order.getOrderId(), order.getTotalAmount());
             }
 
             if (newStatus == OrderEnums.DELIVERED) {
@@ -262,7 +220,7 @@ public class OrderService {
                     CoinWallets coinWallet = coinWalletOpt.get();
                     double rewardAmount = order.getTotalAmount() * 0.01; // 1% thưởng
                     coinWallet.setBalance(coinWallet.getBalance() + rewardAmount);
-                    coinWalletsRepository.save(coinWallet); // Lưu số dư mới
+                    coinWalletsRepository.save(coinWallet);
                 }
             }
 

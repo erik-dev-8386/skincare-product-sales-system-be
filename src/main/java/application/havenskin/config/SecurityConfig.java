@@ -36,7 +36,7 @@ public class SecurityConfig {
     public SecurityConfig(ClientRegistrationRepository clientRegistrationRepository) {
         this.clientRegistrationRepository = clientRegistrationRepository;
     }
-    private final String[] PUBLIC_ENDPOINTS = {"/haven-skin/brands","/haven-skin/categories", "/haven-skin/discounts", "/haven-skin/products", "/haven-skin/skin-types", "/haven-skin/products/{id}", "/haven-skin/categories/name/","/haven-skin/products/category/{categoryname}", "/haven-skin/momo/create/**"};
+    private final String[] PUBLIC_ENDPOINTS = {"/haven-skin/brands","/haven-skin/categories", "/haven-skin/discounts", "/haven-skin/products", "/haven-skin/skin-types", "/haven-skin/products/{id}", "/haven-skin/categories/name/","/haven-skin/products/category/{categoryname}", "/haven-skin/momo/create/**", "/haven-skin/momo/ipn-handler", "/haven-skin/momo/ipn-handler/**"};
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.
@@ -46,6 +46,8 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.POST,"/haven-skin/users/add-new-user").permitAll()
                                 .requestMatchers(HttpMethod.POST,"/haven-skin/users/login/google").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/haven-skin/momo/create/**").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/haven-skin/momo/ipn-handler").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/haven-skin/momo/ipn-handler/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS).permitAll()
                                 .anyRequest().authenticated())
                 .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable())
