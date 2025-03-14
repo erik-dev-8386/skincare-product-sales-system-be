@@ -33,4 +33,6 @@ public interface Mapper {
     Feedbacks toFeedbacks(FeedbackDTO feedbackDTO);
     void updateFeedbacks(@MappingTarget Feedbacks feedbacks, FeedbackDTO feedbackDTO);
     Users toUsers(UserDTO userDTO);
+    CoinWallets toCoinWallets(CoinWalletDTO coinWalletDTO);
+    void updateCoinWallets(@MappingTarget CoinWallets coinWallets, CoinWalletDTO coinWalletDTO);
 }

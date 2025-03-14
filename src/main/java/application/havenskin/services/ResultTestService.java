@@ -61,24 +61,41 @@ public class ResultTestService {
             userAnswersRepository.save(userAnswer);
         }
 
+
         // 4) Tính loại da
         resultTest.setTotalMark(totalMark);
-        resultTest.setSkinTypeId(determineSkinType(totalMark));
+        // xac dinh theo loai da
+        resultTest.setSkinTestId("1");
+        String skinName = determineSkinType(totalMark);
+        SkinTypes skinTypes = skinTypesRepository.findBySkinName(skinName).orElseThrow(()->new RuntimeException("Skin type not found"));
+
+        resultTest.setSkinTypeId(skinTypes.getSkinTypeId());
         return resultTestsRepository.save(resultTest);
     }
 
+//    private String determineSkinType(double totalMark) {
+//        String skinName;
+//        if (totalMark <= 15) skinName = "Dryer";
+//        else if (totalMark <= 25) skinName = "Normal";
+//        else if (totalMark <= 35) skinName = "Combination";
+//        else skinName = "Oily";
+//
+//        // Tìm skinType trong database bằng skinName
+//        SkinTypes skinType = skinTypesRepository.findBySkinName(skinName)
+//                .orElseThrow(() -> new RuntimeException("Skin Type not found: " + skinName));
+//
+//        return skinType.getSkinTypeId(); // Trả về ID hợp lệ thay vì chuỗi
+//    }
     private String determineSkinType(double totalMark) {
-        String skinName;
-        if (totalMark <= 15) skinName = "Dryer";
-        else if (totalMark <= 25) skinName = "Normal";
-        else if (totalMark <= 35) skinName = "Combination";
-        else skinName = "Oily";
+        List<SkinTypes> allSkinTypes = skinTypesRepository.findAll();
 
-        // Tìm skinType trong database bằng skinName
-        SkinTypes skinType = skinTypesRepository.findBySkinName(skinName)
-                .orElseThrow(() -> new RuntimeException("Skin Type not found: " + skinName));
-
-        return skinType.getSkinTypeId(); // Trả về ID hợp lệ thay vì chuỗi
+        for (SkinTypes x : allSkinTypes) {
+            if(totalMark >= x.getMinMark() && totalMark <= x.getMaxMark()) {
+                return x.getSkinName();
+//                x.getSkinTypeId();
+            }
+        }
+        throw new RuntimeException("No matching SkinType for totalMark " + totalMark);
     }
     public ResultTestDto getResultTestsWithDetails(String resultTestId) {
         //Lấy resultTest

@@ -8,6 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/haven-skin/categories")
@@ -15,29 +16,33 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-   // @PreAuthorize("hasAnyRole('ADMIN','STAFF', 'CUSTOMER')")
+    // @PreAuthorize("hasAnyRole('ADMIN','STAFF', 'CUSTOMER')")
     @GetMapping
     public List<Categories> getAllCategories() {
         return categoryService.getAllCategories();
     }
+
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @PostMapping
     public Categories addCategory(@RequestBody CategoryDTO categories) {
         return categoryService.addCategories(categories);
     }
+
     @GetMapping("/{id}")
     public Categories getCategoryById(@PathVariable String id) {
         return categoryService.getCategoriesById(id);
     }
+
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @PutMapping("/{id}")
     public Categories updateCategory(@PathVariable String id, @RequestBody CategoryDTO categories) {
         return categoryService.updateCategories(id, categories);
     }
-    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
+
+    //    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public Categories deleteCategory(@PathVariable String id)
-    {
+    public Categories deleteCategory(@PathVariable String id) {
         return categoryService.deleteCategories(id);
     }
 
@@ -51,13 +56,14 @@ public class CategoryController {
     public List<Categories> addListCategory(@RequestBody List<Categories> categories) {
         return categoryService.addListOfCategory(categories);
     }
+
     @GetMapping("/list-name-categories")
-    public List<String> listCategoryName(){
+    public List<String> listCategoryName() {
         return categoryService.getAllCategoriesNames();
     }
 
     @GetMapping("/search/{categoriesName}")
-   public List<Categories> searchCategory(@PathVariable String categoriesName) {
+    public List<Categories> searchCategory(@PathVariable String categoriesName) {
         return categoryService.searchByName(categoriesName);
     }
 }

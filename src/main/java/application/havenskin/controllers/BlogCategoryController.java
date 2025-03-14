@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/haven-skin/blogCategory")
@@ -19,16 +20,16 @@ public class BlogCategoryController {
         return blogCategoryService.getAll();
     }
 
-    // Lấy Blog Category theo tên
+    // Lấy Blog Category theo tên, FE truyền về name của category
     @GetMapping("/name/{name}")
-    public BlogCategory getByBlogCategoryName(@PathVariable String name) {
+    public Optional<BlogCategory> getByBlogCategoryName(@PathVariable String name) {
         return blogCategoryService.getByBlogCategoryName(name);
     }
 
-    @GetMapping("/id/{id}")
-    public BlogCategory getByBlogCategoryId(@PathVariable String id) {
-        return blogCategoryService.getByBlogCategoryId(id);
-    }
+//    @GetMapping("/id/{id}")
+//    public BlogCategory getByBlogCategoryId(@PathVariable String id) {
+//        return blogCategoryService.getByBlogCategoryId(id);
+//    }
 
     // Thêm mới Blog Category
     @PostMapping
@@ -37,14 +38,14 @@ public class BlogCategoryController {
     }
 
     // Cập nhật Blog Category theo tên
-    @PutMapping("/{id}")
-    public BlogCategory updateBlogCategoryById(@PathVariable String id, @RequestBody BlogCategory blogCategory) {
-        return blogCategoryService.updateBlogCategoryById(id, blogCategory);
+    @PutMapping("/{blogCategoryName}")
+    public BlogCategory updateBlogCategory(@PathVariable String blogCategoryName, @RequestBody BlogCategory blogCategory) {
+        return blogCategoryService.updateBlogCategoryByName(blogCategoryName, blogCategory);
     }
 
     // Xóa mềm Blog Category theo tên
-    @DeleteMapping("/{id}")
-    public String deleteBlogCategoryById(@PathVariable String id) {
-        return blogCategoryService.deleteBlogCategoryById(id);
+    @DeleteMapping("/{blogCategoryName}")
+    public String deleteBlogCategory(@PathVariable String blogCategoryName) {
+        return blogCategoryService.deleteBlogCategoryByName(blogCategoryName);
     }
 }

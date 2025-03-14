@@ -90,6 +90,10 @@ public class CartController  {
         return orderService.getHistoryOrder(email);
     }
 
+    @GetMapping("/{email}/{orderId}")
+    public HistoryOrderDTO getHistoryOrder(@PathVariable String email, @PathVariable String orderId){
+        return orderService.getOrderById(email, orderId);
+    }
 
 
 

@@ -1,7 +1,11 @@
 package application.havenskin.controllers;
 
 import application.havenskin.config.Config;
+import application.havenskin.models.Orders;
+import application.havenskin.services.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,13 +18,23 @@ import java.util.*;
 @RestController
 @RequestMapping("/vnpays")
 public class VnPayController {
-    @GetMapping("/pay")
-    public String getPay() throws UnsupportedEncodingException {
+    @Autowired
+    private OrderService orderService;
+
+    @GetMapping("/pay/{orderId}")
+    public String getPay(@PathVariable String orderId) throws UnsupportedEncodingException {
+
+        // Lấy thông tin đơn hàng từ orderId
+        Orders order = orderService.getOrderById(orderId);
+        if (order == null) {
+            throw new RuntimeException("Order not found");
+        }
+
+        double amount = order.getTotalAmount(); // VNPAY yêu cầu số tiền
 
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String orderType = "other";
-        long amount = 10000*100;
         String bankCode = "NCB";
 
         String vnp_TxnRef = Config.getRandomNumber(8);
@@ -33,6 +47,9 @@ public class VnPayController {
         vnp_Params.put("vnp_Command", vnp_Command);
         vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
         vnp_Params.put("vnp_Amount", String.valueOf(amount));
+        vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + orderId);
+        vnp_Params.put("vnp_OrderType", "other");
+        vnp_Params.put("vnp_Locale", "vn");
         vnp_Params.put("vnp_CurrCode", "VND");
 
         if (bankCode != null && !bankCode.isEmpty()) {
@@ -43,8 +60,8 @@ public class VnPayController {
         vnp_Params.put("vnp_OrderType", orderType);
 
         vnp_Params.put("vnp_Locale", "vn");
-        vnp_Params.put("vnp_ReturnUrl", "http://localhost:8080/vnpays/return");
-        //vnp_Params.put("vnp_ReturnUrl", config.vnp_ReturnUrl);
+        //vnp_Params.put("vnp_ReturnUrl", "http://localhost:8080/haven-skin/transactions/return");
+        vnp_Params.put("vnp_ReturnUrl", "http://localhost:8080/haven-skin/transactions/return?orderId=" + orderId);
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
         Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
@@ -89,5 +106,6 @@ public class VnPayController {
         System.out.println("Generated VNPAY URL: " + paymentUrl);
         return paymentUrl;
     }
+
 
 }
