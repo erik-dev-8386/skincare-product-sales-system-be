@@ -35,15 +35,15 @@ public class MomoService {
         // Lấy thông tin đơn hàng từ orderId
         Orders order = orderService.getOrderById(orderId);
         if (order == null) {
+            log.error("Order not found: {}", orderId);
             throw new RuntimeException("Order not found");
         }
 
-        log.info("SECRET_KEY: {}", momoConfig.getSecretKey());
+        log.info("Tạo QR cho đơn hàng: {}", orderId);
 
-        //String orderId = UUID.randomUUID().toString();
-        String orderInfo = "Thanh toan don hang: orderId" + orderId;
+        String orderInfo = "Thanh toán đơn hàng: " + orderId;
         String requestId = UUID.randomUUID().toString();
-        String extraData = "Khong co khuyen mai gi het";
+        String extraData = "Không có khuyến mãi";
         long amount = (long) order.getTotalAmount();
 
         String rawSignature = String.format(
@@ -51,17 +51,16 @@ public class MomoService {
                 momoConfig.getAccessKey(), amount, extraData, momoConfig.getIpnUrl(), orderId, orderInfo,
                 momoConfig.getPartnerCode(), momoConfig.getReturnUrl(), requestId, momoConfig.getRequestType());
 
-        String prettySignature = "";
-
+        String prettySignature;
         try {
             prettySignature = signHmacSHA256(rawSignature, momoConfig.getSecretKey());
         } catch (Exception e) {
-            log.error("Lỗi khi hash code: ", e);
+            log.error("Lỗi khi tạo chữ ký: ", e);
             return null;
         }
 
         if (prettySignature.isBlank()) {
-            log.error("Signature is blank");
+            log.error("Chữ ký tạo ra bị trống");
             return null;
         }
 
@@ -101,7 +100,7 @@ public class MomoService {
         log.info("Nhận IPN từ MoMo: {}", ipnResponse);
 
         if (ipnResponse == null || ipnResponse.getOrderId() == null) {
-            log.error("IPN không hợp lệ");
+            log.error("IPN không hợp lệ, thiếu orderId");
             return false;
         }
 
@@ -111,6 +110,7 @@ public class MomoService {
 
             // Cập nhật trạng thái đơn hàng thành PROCESSING
             boolean updated = orderService.updateOrderStatus(ipnResponse.getOrderId(), OrderEnums.PROCESSING.getOrder_status());
+            log.info("Cập nhật đơn hàng trạng thái PROCESSING: {}", updated);
 
             if (!updated) {
                 log.error("Cập nhật trạng thái đơn hàng thất bại");
@@ -118,7 +118,7 @@ public class MomoService {
             }
             return true;
         } else {
-            log.warn("Thanh toán thất bại với mã lỗi: {}", ipnResponse.getResultCode());
+            log.warn("Thanh toán thất bại, mã lỗi: {}", ipnResponse.getResultCode());
             return false;
         }
     }

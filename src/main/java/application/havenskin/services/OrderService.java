@@ -8,6 +8,8 @@ import application.havenskin.enums.TransactionsEnums;
 import application.havenskin.mapper.Mapper;
 import application.havenskin.models.*;
 import application.havenskin.repositories.*;
+import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,7 @@ import java.util.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class OrderService {
     @Autowired
@@ -206,46 +209,52 @@ public class OrderService {
         return ordersRepository.saveAll(orders);
     }
 
-//    public int ShowQuantityByOrderId(String id) {
-//        return ordersRepository.findById(id).get().getTotalAmount();
-//    }
-
+    @Transactional
     public boolean updateOrderStatus(String orderId, byte newStatusByte) {
         Optional<Orders> orderOpt = ordersRepository.findById(orderId);
-        if (orderOpt.isPresent()) {
-            Orders order = orderOpt.get();
-            OrderEnums currentStatus = OrderEnums.fromOrderStatus(order.getStatus());
-            OrderEnums newStatus = OrderEnums.fromOrderStatus(newStatusByte);
-
-            // Kiểm tra trạng thái hợp lệ
-            if (!isValidStatusTransition(currentStatus, newStatus)) {
-                return false;
-            }
-
-            if (currentStatus == OrderEnums.UNORDERED && newStatus != OrderEnums.UNORDERED) {
-                lockOrderDetails(order.getOrderId());
-            }
-
-            // Trong updateOrderStatus
-            if (newStatus == OrderEnums.PROCESSING) {
-                transactionService.createTransaction(order.getOrderId(), order.getTotalAmount());
-            }
-
-            if (newStatus == OrderEnums.DELIVERED) {
-                Optional<CoinWallets> coinWalletOpt = coinWalletsRepository.findByUserId(order.getUserId());
-                if (coinWalletOpt.isPresent()) {
-                    CoinWallets coinWallet = coinWalletOpt.get();
-                    double rewardAmount = order.getTotalAmount() * 0.01; // 1% thưởng
-                    coinWallet.setBalance(coinWallet.getBalance() + rewardAmount);
-                    coinWalletsRepository.save(coinWallet);
-                }
-            }
-
-            order.setStatus(newStatus.getOrder_status());
-            ordersRepository.save(order);
-            return true;
+        if (orderOpt.isEmpty()) {
+            log.warn("Không tìm thấy đơn hàng với ID: {}", orderId);
+            return false;
         }
-        return false;
+
+        Orders order = orderOpt.get();
+        OrderEnums currentStatus = OrderEnums.fromOrderStatus(order.getStatus());
+        OrderEnums newStatus = OrderEnums.fromOrderStatus(newStatusByte);
+
+        // Kiểm tra trạng thái hợp lệ
+        if (!isValidStatusTransition(currentStatus, newStatus)) {
+            log.warn("Chuyển trạng thái không hợp lệ: {} → {}", currentStatus, newStatus);
+            return false;
+        }
+
+        // Lock đơn hàng nếu cần
+        if (currentStatus == OrderEnums.UNORDERED && newStatus != OrderEnums.UNORDERED) {
+            lockOrderDetails(order.getOrderId());
+        }
+
+        // Tạo giao dịch nếu chuyển sang PROCESSING
+        if (newStatus == OrderEnums.PROCESSING) {
+            transactionService.createTransaction(order.getOrderId(), order.getTotalAmount());
+        }
+
+        // Cộng tiền thưởng vào ví nếu giao hàng thành công
+        if (newStatus == OrderEnums.DELIVERED) {
+            Optional<CoinWallets> coinWalletOpt = coinWalletsRepository.findByUserId(order.getUserId());
+            if (coinWalletOpt.isPresent()) {
+                CoinWallets coinWallet = coinWalletOpt.get();
+                double rewardAmount = order.getTotalAmount() * 0.01; // 1% thưởng
+                coinWallet.setBalance(coinWallet.getBalance() + rewardAmount);
+                coinWalletsRepository.save(coinWallet);
+                log.info("Thêm {} vào ví của user {}.", rewardAmount, order.getUserId());
+            } else {
+                log.warn("Không tìm thấy ví cho userId: {}", order.getUserId());
+            }
+        }
+
+        order.setStatus(newStatus.getOrder_status());
+        ordersRepository.save(order);
+        log.info("Cập nhật trạng thái đơn hàng {} thành {}", orderId, newStatus);
+        return true;
     }
 
     // Hàm khóa OrderDetails
