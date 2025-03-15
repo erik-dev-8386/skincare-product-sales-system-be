@@ -4,24 +4,35 @@ import application.havenskin.dataAccess.CreateMomoResponse;
 import application.havenskin.dataAccess.MomoIPNResponse;
 import application.havenskin.services.MomoService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/haven-skin/momo")
 public class MomoController {
     private final MomoService momoService;
 
     @PostMapping("create/{orderId}")
-    public CreateMomoResponse createQR(@PathVariable String orderId) {
-        return momoService.createQR(orderId);
+    public ResponseEntity<CreateMomoResponse> createQR(@PathVariable String orderId) {
+        CreateMomoResponse response = momoService.createQR(orderId);
+        if (response == null) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/ipn-handler")
     public ResponseEntity<String> handleMomoIPN(@RequestBody MomoIPNResponse ipnResponse) {
-        System.out.println("Nhận IPN từ MoMo: {} " + ipnResponse.getOrderId());
+        if (ipnResponse == null || ipnResponse.getOrderId() == null) {
+            log.error("IPN không hợp lệ");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("IPN không hợp lệ");
+        }
+
+        log.info("Nhận IPN từ MoMo: {}", ipnResponse);
 
         boolean success = momoService.handleMomoIPN(ipnResponse);
         if (success) {
