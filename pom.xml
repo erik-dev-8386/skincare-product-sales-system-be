@@ -37,6 +37,24 @@
             <artifactId>firebase-admin</artifactId>
             <version>9.1.1</version>
         </dependency>
+        <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-openfeign</artifactId>
+        <version>4.2.0</version>
+    </dependency>
+
+    <!-- Spring Boot Actuator (nếu bạn cần theo dõi Feign Client) -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+
+<!--    <dependency>-->
+<!--        <groupId>org.springframework.cloud</groupId>-->
+<!--        <artifactId>spring-cloud-dependencies</artifactId>-->
+<!--        <type>pom</type>-->
+<!--        <scope>import</scope>-->
+<!--    </dependency>-->
         <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
@@ -248,12 +266,12 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-dependencies</artifactId>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.cloud</groupId>-->
+<!--            <artifactId>spring-cloud-dependencies</artifactId>-->
+<!--            <type>pom</type>-->
+<!--            <scope>import</scope>-->
+<!--        </dependency>-->
 
     </dependencies>
     <build>

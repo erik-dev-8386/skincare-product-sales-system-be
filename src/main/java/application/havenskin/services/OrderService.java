@@ -146,6 +146,8 @@ public class OrderService {
     }
 
 
+
+
     public Orders findCartByUserId(String email) {
         String userId = userRepository.findByEmail(email).get().getUserId();
         if (userId == null) {
@@ -186,8 +188,17 @@ public class OrderService {
     }
 
     public Orders updateOrder(String id, OrderDTO order) {
-        Orders x = ordersRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
-        mapper.updateOrders(x, order);
+//        Orders x = ordersRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
+//        mapper.updateOrders(x, order);
+//        return ordersRepository.save(x);
+        Orders x = ordersRepository.findById(id).orElseThrow(()-> new RuntimeException("Order not found"));
+        x.setOrderId(x.getOrderId());
+        x.setOrderTime(x.getOrderTime());
+        x.setTotalAmount(x.getTotalAmount());
+        x.setAddress(x.getAddress());
+        x.setUserId(x.getUserId());
+        x.setStatus(order.getStatus());
+        x.setCancelTime(x.getCancelTime());
         return ordersRepository.save(x);
     }
 

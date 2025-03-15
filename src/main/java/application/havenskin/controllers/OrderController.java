@@ -28,17 +28,17 @@ public class OrderController {
     public Orders createOrder(@RequestBody Orders order, @RequestParam(defaultValue = "false") boolean useCoinWallet) {
         return orderService.createOrder(order, useCoinWallet);
     }
-    @GetMapping("/id")
+    @GetMapping("/{id}")
     public Orders getOrderById(@PathVariable String id){
         return orderService.getOrderById(id);
     }
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
-    @PutMapping("/id")
+    @PutMapping("/{id}")
     public Orders updateOrder(@PathVariable  String id,@RequestBody OrderDTO order){
         return orderService.updateOrder(id, order);
     }
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
-    @DeleteMapping("/id")
+    @DeleteMapping("/{id}")
     public Orders deleteOrder(@PathVariable String id){
         return orderService.deleteOrder(id);
     }

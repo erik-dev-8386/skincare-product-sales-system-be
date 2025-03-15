@@ -34,8 +34,8 @@ public class Users {
     @Nationalized
     private String gender;
 
-    @Column(name = "address", length = 50)
-    private String address;
+//    @Column(name = "address", length = 50)
+//    private String address;
 
     @Column(name = "birth_date")
     private Date birthDate;

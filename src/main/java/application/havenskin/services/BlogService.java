@@ -74,7 +74,7 @@ public class BlogService {
         // Tìm BlogCategory theo tên
         BlogCategory category = blogCategoryRepository
                 .findByBlogCategoryName(blog.getBlogCategory().getBlogCategoryName())
-                .orElseThrow(() -> new RuntimeException("BlogCategory not found with name: " + blog.getBlogCategory().getBlogCategoryName()));
+                 .orElseThrow(() -> new RuntimeException("BlogCategory not found with name: " + blog.getBlogCategory().getBlogCategoryName()));
 
 
         // Tìm Hashtags theo tên
@@ -92,8 +92,10 @@ public class BlogService {
         blog.setBlogCategory(category);
         blog.setHashtags(hashtags);
 
+
         return blogRepository.save(blog);
     }
+
 
 //    public Blogs updateBlogById(String id, Blogs blog) {
 //        Blogs existingBlog = blogRepository.findById(id)
