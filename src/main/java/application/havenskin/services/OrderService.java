@@ -11,6 +11,7 @@ import application.havenskin.repositories.*;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -35,6 +36,8 @@ public class OrderService {
     private CoinWalletsRepository coinWalletsRepository;
     @Autowired
     private TransactionService transactionService;
+    @Autowired
+    private EmailService emailService;
 
     public CheckOutResponseDTO checkout(CheckoutRequestDTO checkoutRequestDTO) {
 //        if (checkoutRequestDTO.getCartItemDTO() == null || checkoutRequestDTO.getCartItemDTO().isEmpty()) {
@@ -87,6 +90,7 @@ public class OrderService {
         order.setStatus(OrderEnums.PENDING.getOrder_status());
         ordersRepository.save(order);
 
+
         CheckOutResponseDTO response = new CheckOutResponseDTO();
         response.setTotal(totalOrderPrice);
         response.setOrderId(order.getOrderId());
@@ -116,9 +120,52 @@ public class OrderService {
 
             return temp;
         }).collect(Collectors.toList()));
+        sendOrderConfirmationEmail(checkoutRequestDTO.getEmail(), order.getOrderId(), order.getTotalAmount(), order.getOrderTime(), (List<CartItemResponseDTO>) response.getCartItems());
         return response;
     }
 
+    private void sendOrderConfirmationEmail(String to, String orderId, double totalAmount, Date orderDate, List<CartItemResponseDTO> cartItems) {
+        // Tạo nội dung email
+        String subject = "Haven Skin Xác nhận đơn hàng #" + orderId;
+
+        // Tạo danh sách sản phẩm
+        StringBuilder productDetails = new StringBuilder();
+        for (CartItemResponseDTO item : cartItems) {
+            Products product = productsRepository.findByProductName(item.getProductName());
+            if (product != null) {
+                productDetails.append("- ")
+                        .append(item.getProductName())
+                        .append(" (Số lượng: ")
+                        .append(item.getQuantity())
+                        .append(", Giá: ")
+                        .append(product.getDiscountPrice())
+                        .append(")\n");
+            }
+        }
+
+        String text = "Cảm ơn bạn đã đặt hàng! Đơn hàng của bạn đã được xác nhận.\n\n"
+                + "Chi tiết đơn hàng:\n"
+                + "Mã đơn hàng: " + orderId + "\n"
+                + "Ngày đặt hàng: " + orderDate + "\n\n"
+                + "Danh sách sản phẩm:\n"
+                + productDetails.toString() + "\n"
+                + "Tổng tiền: " + totalAmount + "\n\n"
+                + "Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ với chúng tôi:\n"
+                + "Số điện thoại: 0966340303\n"
+                + "Email:" +
+                "havenskin032025@gmail.com\n\n"
+
+
+                + "Trân trọng,\n"
+                + "Đội ngũ hỗ trợ.";
+
+        // Tạo và gửi email
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to); // Địa chỉ email người nhận
+        message.setSubject(subject); // Tiêu đề email
+        message.setText(text); // Nội dung email
+        emailService.sendEmail(to, subject, text);
+    }
     public void cancelOrder(String email, String orderId) {
 //        String userId = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"))
 //                .getUserId();

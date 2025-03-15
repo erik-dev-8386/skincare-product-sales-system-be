@@ -1,11 +1,12 @@
 package application.havenskin.models;
 
 import application.havenskin.enums.OrderEnums;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.ToString;
+import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.Nationalized;
 
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ import java.util.List;
 @Entity
 @Table(name = "Orders")
 @Data
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Orders {
     @Id
     @Column(name = "order_id", length = 50)

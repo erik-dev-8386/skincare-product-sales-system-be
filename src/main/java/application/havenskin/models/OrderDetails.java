@@ -2,6 +2,7 @@ package application.havenskin.models;
 
 import application.havenskin.enums.OrderDetailEnums;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
