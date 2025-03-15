@@ -5,7 +5,9 @@ import application.havenskin.services.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -50,8 +52,8 @@ public class BlogController {
     // *
     // Tạo mới blog
     @PostMapping
-    public Blogs createBlog(@RequestBody Blogs blog) {
-        return blogService.createBlog(blog);
+    public Blogs createBlog(@RequestPart("blogs") Blogs blog, @RequestParam("images") List<MultipartFile> images) throws IOException {
+        return blogService.createBlog(blog, images);
     }
 
     // Cập nhật blog theo title
