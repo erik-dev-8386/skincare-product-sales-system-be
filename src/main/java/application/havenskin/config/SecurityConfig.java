@@ -36,7 +36,7 @@ public class SecurityConfig {
     public SecurityConfig(ClientRegistrationRepository clientRegistrationRepository) {
         this.clientRegistrationRepository = clientRegistrationRepository;
     }
-    private final String[] PUBLIC_ENDPOINTS = {"/haven-skin/brands","/haven-skin/categories", "/haven-skin/discounts", "/haven-skin/products", "/haven-skin/skin-types", "/haven-skin/products/{id}", "/haven-skin/categories/name/","/haven-skin/products/category/{categoryname}", "/haven-skin/momo/create/**", "/haven-skin/momo/ipn-handler", "/haven-skin/momo/ipn-handler/**"};
+    private final String[] PUBLIC_ENDPOINTS = {"/haven-skin/brands","/haven-skin/categories", "/haven-skin/discounts", "/haven-skin/products", "/haven-skin/skin-types", "/haven-skin/products/{id}", "/haven-skin/categories/name/","/haven-skin/products/category/{categoryname}", "/haven-skin/momo/create/**", "/haven-skin/momo/ipn-handler", "/haven-skin/momo/ipn-handler/**", "/haven-skin/products//best-seller"};
 //    @Bean
 //    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 //        httpSecurity.
@@ -57,7 +57,6 @@ public class SecurityConfig {
 //
 //        //return http.build();
 //    }
-    private final String[] PUBLIC_ENDPOINTS = {"/haven-skin/brands","/haven-skin/categories", "/haven-skin/discounts", "/haven-skin/products", "/haven-skin/skin-types", "/haven-skin/products/{id}", "/haven-skin/categories/name/","/haven-skin/products/category/{categoryname}", "/haven-skin/momo/create/**", "/haven-skin/momo/ipn-handler", "/haven-skin/momo/ipn-handler/**", "/haven-skin/products//best-seller"};
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
