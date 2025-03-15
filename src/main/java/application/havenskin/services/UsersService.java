@@ -117,8 +117,7 @@ public class UsersService {
           existingUser.setEmail(user.getEmail());
           existingUser.setPhone(user.getPhone());
           existingUser.setGender(user.getGender());
-          existingUser.setAddress(user.getAddress()
-          );
+          existingUser.setAddress(user.getAddress());
           existingUser.setBirthDate(user.getBirthDate());
 
           if(file != null && !file.isEmpty()) {

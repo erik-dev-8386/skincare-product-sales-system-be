@@ -1,16 +1,12 @@
 package application.havenskin.services;
 
-import application.havenskin.models.BlogCategory;
-import application.havenskin.models.BlogHashtag;
-import application.havenskin.models.Blogs;
-import application.havenskin.models.Users;
-import application.havenskin.repositories.BlogCategoryRepository;
-import application.havenskin.repositories.BlogHashtagRepository;
-import application.havenskin.repositories.BlogRepository;
-import application.havenskin.repositories.UserRepository;
+import application.havenskin.models.*;
+import application.havenskin.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +23,10 @@ public class BlogService {
 
     @Autowired
     private BlogCategoryRepository blogCategoryRepository;
+    private FirebaseService firebaseService;
+
+    @Autowired
+    private BlogImagesRepository blogImagesRepository;
 //    @Autowired
 //    private Mapper mapper;
 //    public List<Blogs>  getAllBlogs(){
@@ -66,7 +66,7 @@ public class BlogService {
 //        return blogRepository.save(blog);
 //    }
 
-    public Blogs createBlog(Blogs blog) {
+    public Blogs createBlog(Blogs blog, List<MultipartFile> images) throws IOException {
         // Tìm User theo email
         Users user = userRepository.findByEmail(blog.getUser().getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found with email: " + blog.getUser().getEmail()));
@@ -87,11 +87,29 @@ public class BlogService {
             }
         }
 
+
+
         // Gán dữ liệu vào blog mới
         blog.setUser(user);
         blog.setBlogCategory(category);
         blog.setHashtags(hashtags);
+        Blogs savedBlog = blogRepository.save(blog);
 
+        if(images != null && !images.isEmpty()) {
+            List<BlogImages> list = new ArrayList<>();
+            for (MultipartFile file : images) {
+                String imageUrl = firebaseService.uploadImage(file);
+
+                BlogImages blogImages = new BlogImages();
+                blogImages.setImageURL(imageUrl);
+                blogImages.setBlogId(blog.getBlogId());
+                blogImages.setBlog(savedBlog);
+
+                list.add(blogImages);
+            }
+            blogImagesRepository.saveAll(list);
+            savedBlog.setBlogImages(list);
+        }
 
         return blogRepository.save(blog);
     }
