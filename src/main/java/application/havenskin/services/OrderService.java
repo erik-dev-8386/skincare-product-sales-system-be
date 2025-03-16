@@ -240,15 +240,19 @@ public class OrderService {
         // Cộng tiền thưởng vào ví nếu giao hàng thành công
         if (newStatus == OrderEnums.DELIVERED) {
             Optional<CoinWallets> coinWalletOpt = coinWalletsRepository.findByUserId(order.getUserId());
-            if (coinWalletOpt.isPresent()) {
-                CoinWallets coinWallet = coinWalletOpt.get();
-                double rewardAmount = order.getTotalAmount() * 0.01; // 1% thưởng
-                coinWallet.setBalance(coinWallet.getBalance() + rewardAmount);
-                coinWalletsRepository.save(coinWallet);
-                log.info("Thêm {} vào ví của user {}.", rewardAmount, order.getUserId());
-            } else {
-                log.warn("Không tìm thấy ví cho userId: {}", order.getUserId());
-            }
+            double rewardAmount = order.getTotalAmount() * 0.01; // 1% thưởng
+
+            CoinWallets coinWallet = coinWalletOpt.orElseGet(() -> {
+                log.info("Không tìm thấy ví cho userId: {}, tạo ví mới.", order.getUserId());
+                CoinWallets newWallet = new CoinWallets();
+                newWallet.setUserId(order.getUserId());
+                newWallet.setBalance(0.0); // Khởi tạo số dư = 0
+                return coinWalletsRepository.save(newWallet); // Lưu ví mới vào DB
+            });
+
+            coinWallet.setBalance(coinWallet.getBalance() + rewardAmount);
+            coinWalletsRepository.save(coinWallet);
+            log.info("Thêm {} vào ví của user {}.", rewardAmount, order.getUserId());
         }
 
         order.setStatus(newStatus.getOrder_status());
