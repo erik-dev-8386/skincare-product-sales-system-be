@@ -66,9 +66,9 @@ public class BlogService {
 //        return blogRepository.save(blog);
 //    }
 
-    public Blogs createBlog(Blogs blog, List<MultipartFile> images) throws IOException {
+    public Blogs createBlog(Blogs blog,String email, List<MultipartFile> images) throws IOException {
         // Tìm User theo email
-        Users user = userRepository.findByEmail(blog.getUser().getEmail())
+        Users user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found with email: " + blog.getUser().getEmail()));
 
         // Tìm BlogCategory theo tên

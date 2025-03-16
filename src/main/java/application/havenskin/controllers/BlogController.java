@@ -52,8 +52,8 @@ public class BlogController {
     // *
     // Tạo mới blog
     @PostMapping
-    public Blogs createBlog(@RequestPart("blogs") Blogs blog, @RequestParam("images") List<MultipartFile> images) throws IOException {
-        return blogService.createBlog(blog, images);
+    public Blogs createBlog(@RequestPart("blogs") Blogs blog,@RequestPart("email") String email, @RequestParam("images") List<MultipartFile> images) throws IOException {
+        return blogService.createBlog(blog, email, images);
     }
 
     // Cập nhật blog theo title
