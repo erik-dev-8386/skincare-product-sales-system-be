@@ -29,12 +29,6 @@ public class FeedbackService {
         mapper.updateFeedbacks(x, feedback);
         return feedbacksRepository.save(x);
     }
-    public void deleteFeedback(String id) {
-        if(!feedbacksRepository.existsById(id)) {
-            throw new RuntimeException("Feedback does not exist");
-        }
-        feedbacksRepository.deleteById(id);
-    }
     public List<Feedbacks> addListOfFeedbacks(List<Feedbacks> feedbacks) {
         return feedbacksRepository.saveAll(feedbacks);
     }

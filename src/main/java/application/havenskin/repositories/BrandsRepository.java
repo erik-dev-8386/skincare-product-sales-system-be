@@ -14,7 +14,7 @@ public interface BrandsRepository extends JpaRepository<Brands, String> {
     Brands findByBrandName(String name);
     List<Brands> findByCountry(String country);
     List<Brands> findByStatus(byte status);
-    @Query("select brandName  from Brands")
+    @Query("select b.brandName from Brands b where b.status = 1")
     List<String> findAllByBrandName();
     @Query("SELECT b FROM Brands b WHERE b.status = 1 ORDER BY b.brandName ASC")
     List<Brands> findActiveBrandsSortedByName();

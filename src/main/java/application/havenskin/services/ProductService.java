@@ -32,6 +32,7 @@ public class ProductService {
     private ProductImagesRepository productImagesRepository;
     @Autowired
     private DiscountsRepository discountsRepository;
+
     public List<Products> getAllProducts() {
         return productsRepository.findAll();
     }
@@ -40,41 +41,41 @@ public class ProductService {
         return productsRepository.findById(id).get();
     }
 
-//    public Products addProduct(ProductDTO product) {
+    //    public Products addProduct(ProductDTO product) {
 //        Products x = mapper.toProducts(product);
 //        return productsRepository.save(x);
 //    }
     public Products addProduct(ProductDTO product, List<MultipartFile> images) throws IOException {
-    Products x = mapper.toProducts(product);
-    if(product.getDiscountId() == null || product.getDiscountId().isEmpty()) {
-        x.setDiscountId(null);
-        x.setDiscountPrice(x.getUnitPrice());
-    }
-    else {
-        x.setDiscountPrice(x.getUnitPrice() - CalculateDisscountPrice(x.getDiscountId()) / 100 * x.getUnitPrice());
-    }
-    x.setSoldQuantity(0);
-    Products saved = productsRepository.save(x);
-    if(images != null && !images.isEmpty()) {
-        List<ProductImages> productImagesList = new ArrayList<>();
-        for (MultipartFile file : images) {
-            String imageUrl = firebaseService.uploadImage(file);
-
-            ProductImages productImages = new ProductImages();
-            productImages.setImageURL(imageUrl);
-            productImages.setProductId(saved.getProductId());
-            productImages.setProducts(saved);
-
-            productImagesList.add(productImages);
+        Products x = mapper.toProducts(product);
+        if (product.getDiscountId() == null || product.getDiscountId().isEmpty()) {
+            x.setDiscountId(null);
+            x.setDiscountPrice(x.getUnitPrice());
+        } else {
+            x.setDiscountPrice(x.getUnitPrice() - CalculateDisscountPrice(x.getDiscountId()) / 100 * x.getUnitPrice());
         }
-        productImagesRepository.saveAll(productImagesList);
-        saved.setProductImages(productImagesList);
+        x.setSoldQuantity(0);
+        Products saved = productsRepository.save(x);
+        if (images != null && !images.isEmpty()) {
+            List<ProductImages> productImagesList = new ArrayList<>();
+            for (MultipartFile file : images) {
+                String imageUrl = firebaseService.uploadImage(file);
+
+                ProductImages productImages = new ProductImages();
+                productImages.setImageURL(imageUrl);
+                productImages.setProductId(saved.getProductId());
+                productImages.setProducts(saved);
+
+                productImagesList.add(productImages);
+            }
+            productImagesRepository.saveAll(productImagesList);
+            saved.setProductImages(productImagesList);
+        }
+        return saved;
     }
-    return saved;
-}
+
     public double CalculateDisscountPrice(String discountId) {
         Optional<Discounts> discounts = discountsRepository.findById(discountId);
-        if(discounts.isPresent()) {
+        if (discounts.isPresent()) {
             Discounts discount = discounts.get();
             return discount.getDiscountPercent();
         }
@@ -93,21 +94,20 @@ public class ProductService {
 //    return productsRepository.save(products);
 //}
 
-    public Products updateProduct(String id,ProductDTO product, List<MultipartFile> images) throws IOException {
+    public Products updateProduct(String id, ProductDTO product, List<MultipartFile> images) throws IOException {
         Products existingProduct = productsRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
 
         mapper.updateProducts(existingProduct, product);
 
-        if(product.getDiscountId() == null || product.getDiscountId().isEmpty()) {
+        if (product.getDiscountId() == null || product.getDiscountId().isEmpty()) {
             existingProduct.setDiscountId(null);
             existingProduct.setDiscountPrice(existingProduct.getUnitPrice());
-        }
-        else {
-            existingProduct.setDiscountPrice(existingProduct.getUnitPrice() - CalculateDisscountPrice(product.getDiscountId()) /  100 * existingProduct.getUnitPrice());
+        } else {
+            existingProduct.setDiscountPrice(existingProduct.getUnitPrice() - CalculateDisscountPrice(product.getDiscountId()) / 100 * existingProduct.getUnitPrice());
         }
 
         // xử lý ảnh nếu người dùng thêm
-        if(images != null && !images.isEmpty()) {
+        if (images != null && !images.isEmpty()) {
             // thêm ảnh mới
             List<ProductImages> productImagesList = new ArrayList<>();
             for (MultipartFile file : images) {
@@ -122,8 +122,7 @@ public class ProductService {
             }
             productImagesRepository.saveAll(productImagesList);
             existingProduct.setProductImages(productImagesList);
-        }
-        else {
+        } else {
             existingProduct.setProductImages(existingProduct.getProductImages());
         }
         return productsRepository.save(existingProduct);
@@ -139,6 +138,7 @@ public class ProductService {
         }
         return null;
     }
+
     public List<Products> getProductsBestSeller() {
         return productsRepository.findTop10ByOrderBySoldQuantityDesc();
     }
@@ -146,6 +146,7 @@ public class ProductService {
     public List<Products> searchProduct(String productName) {
         return productsRepository.findByProductNameContaining(productName);
     }
+
     //    public List<Products> getProductsByCategoryName(String categoryName) {
 //       if(productsRepository.findByCategoryId(categoryName) == null) {
 //           throw new RuntimeException("Product not found");
@@ -158,6 +159,7 @@ public class ProductService {
         }
         return productsRepository.findProductsByCategories_CategoryName(categoryName);
     }
+
     //    public List<Products> getProductsByBrand(String id) {
 //        if(productsRepository.findByBrandId(id) == null) {
 //            throw new RuntimeException("Product not found");
@@ -170,18 +172,21 @@ public class ProductService {
         }
         return productsRepository.findByBrands_BrandName(brandName);
     }
-    public List<Products> getProductsByBrandCountry(String country){
-        if(productsRepository.findByCountry(country) == null){
+
+    public List<Products> getProductsByBrandCountry(String country) {
+        if (productsRepository.findByCountry(country) == null) {
             throw new RuntimeException("Product not found with " + country);
         }
         return productsRepository.findByCountry(country);
     }
+
     public List<Products> getProductsBySkinName(String skinName) {
         if (productsRepository.findBySkinName(skinName) == null) {
             throw new RuntimeException("Product not found with " + skinName);
         }
         return productsRepository.findBySkinName(skinName);
     }
+
     public List<Products> getProductsByDiscountName(String discountName) {
         if (productsRepository.findProductsByDiscounts_DiscountName(discountName) == null) {
             throw new RuntimeException("Product not found with " + discountName);
@@ -193,9 +198,12 @@ public class ProductService {
         return productsRepository.saveAll(products);
     }
 
+    //    public List<Products> getBestSellerProducts() {
+//        int max = productsRepository.findAll().stream().mapToInt(Products::getQuantity).max().orElse(0);
+//        return productsRepository.findByQuantity(max);
+//    }
     public List<Products> getBestSellerProducts() {
-        int max = productsRepository.findAll().stream().mapToInt(Products::getQuantity).max().orElse(0);
-        return productsRepository.findByQuantity(max);
+        return productsRepository.findTop10ByOrderBySoldQuantityDesc();
     }
 
     public Products getProductByName(String name) {
@@ -204,15 +212,15 @@ public class ProductService {
 
     public String getProductIDByName(String name) {
         String id = productsRepository.findProductIDByName(name);
-        if(id == null) {
+        if (id == null) {
             throw new RuntimeException("Product not found");
         }
         return id;
     }
 
-    public Products compareProducts(String productsName){
+    public Products compareProducts(String productsName) {
         Products products = productsRepository.findByProductName(productsName);
-        if(products == null){
+        if (products == null) {
             throw new RuntimeException("Product not found");
         }
         return getProductById(products.getProductId());

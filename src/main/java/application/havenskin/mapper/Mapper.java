@@ -4,6 +4,7 @@ import application.havenskin.dataAccess.*;
 import application.havenskin.models.*;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @org.mapstruct.Mapper(componentModel = "spring")
 public interface Mapper {
