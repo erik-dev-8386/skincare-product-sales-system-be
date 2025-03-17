@@ -96,5 +96,11 @@ public class CartController  {
     }
 
 
+    @DeleteMapping("/delete/{email}/{orderId}")
+    public void deleteOrder(@PathVariable String email,@PathVariable String orderId){
+        orderService.deleteOrder(email,orderId);
+    }
+
+
 
 }

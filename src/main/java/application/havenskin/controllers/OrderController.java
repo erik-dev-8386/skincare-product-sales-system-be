@@ -28,6 +28,10 @@ public class OrderController {
     public Orders createOrder(@RequestBody Orders order, @RequestParam(defaultValue = "false") boolean useCoinWallet) {
         return orderService.createOrder(order, useCoinWallet);
     }
+    @GetMapping("/search/{id}")
+    public List<Orders> searchOrderById(@PathVariable String id){
+        return orderService.getOrdersList(id);
+    }
     @GetMapping("/{id}")
     public Orders getOrderById(@PathVariable String id){
         return orderService.getOrderById(id);

@@ -8,4 +8,5 @@ public class CheckoutRequestDTO {
     private String email;
     private List<CartItemDTO> cartItemDTO;
     private double totalPrice;
+    private boolean isGuest;
 }

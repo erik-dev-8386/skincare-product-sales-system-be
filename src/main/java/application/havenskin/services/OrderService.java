@@ -39,15 +39,152 @@ public class OrderService {
     @Autowired
     private EmailService emailService;
 
+//    public CheckOutResponseDTO checkout(CheckoutRequestDTO checkoutRequestDTO) {
+////        if (checkoutRequestDTO.getCartItemDTO() == null || checkoutRequestDTO.getCartItemDTO().isEmpty()) {
+////            throw new RuntimeException("Cart is empty. Cannot create order.");
+////        }
+//        Users x = userRepository.findByEmail(checkoutRequestDTO.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
+//
+//        // tao đơn hàng mới
+//        Orders order = new Orders();
+//        order.setUserId(x.getUserId());
+//        order.setStatus(OrderEnums.PENDING.getOrder_status());
+//        order.setOrderTime(new Date());
+//        ordersRepository.save(order);
+////    Products productCart = null;
+//        double totalOrderPrice = 0;
+//        for (CartItemDTO cartItemDTO : checkoutRequestDTO.getCartItemDTO()) {
+//            Products products = productsRepository.findByProductName(cartItemDTO.getProductName());
+//
+//            if (products == null) {
+//                throw new RuntimeException(cartItemDTO.getProductName() + " not found");
+//            }
+//            if (products.getQuantity() < cartItemDTO.getQuantity()) {
+//                throw new RuntimeException(cartItemDTO.getProductName() + " not enough");
+//            }
+//
+//            double itemTotalPrice = products.getDiscountPrice() * cartItemDTO.getQuantity();
+//            totalOrderPrice += itemTotalPrice;
+//
+//            OrderDetails orderDetails = new OrderDetails();
+//            //           orderDetails.setOrderId(order.getOrderId());
+//            orderDetails.setOrderId(order.getOrderId());
+//            orderDetails.setProductId(products.getProductId());
+//            orderDetails.setQuantity(cartItemDTO.getQuantity());
+//            orderDetails.setDiscountPrice(products.getDiscountPrice());
+//            orderDetails.setStatus(OrderEnums.PENDING.getOrder_status());
+//
+//            orderDetailsRepository.save(orderDetails);
+//
+//            // cập nhật so luong ton kho
+//            products.setQuantity(products.getQuantity() - cartItemDTO.getQuantity());
+//            products.setSoldQuantity(products.getSoldQuantity() + cartItemDTO.getQuantity());
+//            if (products.getQuantity() <= 0) {
+//                products.setStatus(ProductEnums.OUT_OF_STOCK.getValue());
+//            }
+//            productsRepository.save(products);
+//        }
+//        order.setTotalAmount(totalOrderPrice);
+//        ordersRepository.save(order);
+//
+//        order.setStatus(OrderEnums.PENDING.getOrder_status());
+//        ordersRepository.save(order);
+//
+//
+//        CheckOutResponseDTO response = new CheckOutResponseDTO();
+//        response.setTotal(totalOrderPrice);
+//        response.setOrderId(order.getOrderId());
+////        response.setCartItems(checkoutRequestDTO.getCartItemDTO().stream()
+////                .map(detail ->{
+////                    CartItemDTO temp = new CartItemDTO();
+////                    temp.setProductName(detail.getProductName());
+////                    temp.setQuantity(detail.getQuantity());
+////                    temp.setPrice(detail.getPrice());
+////                    return temp;
+////                }).collect(Collectors.toList()));
+//        response.setCartItems(checkoutRequestDTO.getCartItemDTO().stream().map(detail -> {
+//            Products productsCartItem = productsRepository.findByProductName(detail.getProductName());
+//            CartItemResponseDTO temp = new CartItemResponseDTO();
+//            temp.setProductName(detail.getProductName());
+//            temp.setQuantity(detail.getQuantity());
+////            temp.setPrice(detail.getPrice());
+//            temp.setDiscountPrice(productsCartItem.getDiscountPrice());
+
+    /// /            temp.setImageUrl(productCart.getProductImages());
+//            if (productsCartItem != null && productsCartItem.getProductImages() != null && !productsCartItem.getProductImages().isEmpty()) {
+//                // chọn ảnh đầu tiên cho fe
+//                String image = productsCartItem.getProductImages().get(0).getImageURL();
+//                temp.setImageUrl(image);
+//            } else {
+//                temp.setImageUrl(null);
+//            }
+//
+//            return temp;
+//        }).collect(Collectors.toList()));
+//        sendOrderConfirmationEmail(checkoutRequestDTO.getEmail(), order.getOrderId(), order.getTotalAmount(), order.getOrderTime(), (List<CartItemResponseDTO>) response.getCartItems());
+//        return response;
+//    }
+
+    //    private void sendOrderConfirmationEmail(String to, String orderId, double totalAmount, Date orderDate, List<CartItemResponseDTO> cartItems) {
+//        // Tạo nội dung email
+//        String subject = "Haven Skin Xác nhận đơn hàng #" + orderId;
+//
+//        // Tạo danh sách sản phẩm
+//        StringBuilder productDetails = new StringBuilder();
+//        for (CartItemResponseDTO item : cartItems) {
+//            Products product = productsRepository.findByProductName(item.getProductName());
+//            if (product != null) {
+//                productDetails.append("- ")
+//                        .append(item.getProductName())
+//                        .append(" (Số lượng: ")
+//                        .append(item.getQuantity())
+//                        .append(", Giá: ")
+//                        .append(product.getDiscountPrice())
+//                        .append(")\n");
+//            }
+//        }
+//
+//        String text = "Cảm ơn bạn đã đặt hàng! Đơn hàng của bạn đã được xác nhận.\n\n"
+//                + "Chi tiết đơn hàng:\n"
+//                + "Mã đơn hàng: " + orderId + "\n"
+//                + "Ngày đặt hàng: " + orderDate + "\n\n"
+//                + "Danh sách sản phẩm:\n"
+//                + productDetails.toString() + "\n"
+//                + "Tổng tiền: " + totalAmount + "\n\n"
+//                + "Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ với chúng tôi:\n"
+//                + "Số điện thoại: 0966340303\n"
+//                + "Email:" +
+//                "havenskin032025@gmail.com\n\n"
+//
+//
+//                + "Trân trọng,\n"
+//                + "Đội ngũ hỗ trợ.";
+//
+//        // Tạo và gửi email
+//        SimpleMailMessage message = new SimpleMailMessage();
+//        message.setTo(to); // Địa chỉ email người nhận
+//        message.setSubject(subject); // Tiêu đề email
+//        message.setText(text); // Nội dung email
+//        emailService.sendEmail(to, subject, text);
+//    }
     public CheckOutResponseDTO checkout(CheckoutRequestDTO checkoutRequestDTO) {
 //        if (checkoutRequestDTO.getCartItemDTO() == null || checkoutRequestDTO.getCartItemDTO().isEmpty()) {
 //            throw new RuntimeException("Cart is empty. Cannot create order.");
 //        }
-        Users x = userRepository.findByEmail(checkoutRequestDTO.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
+//    Users x = userRepository.findByEmail(checkoutRequestDTO.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
 
+        Users users = null;
+        if (!checkoutRequestDTO.isGuest()) {
+            users = userRepository.findByEmail(checkoutRequestDTO.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
+        }
         // tao đơn hàng mới
         Orders order = new Orders();
-        order.setUserId(x.getUserId());
+        if (users != null) {
+            order.setUserId(users.getUserId());
+        } else {
+            order.setUserId(null);
+        }
+//    order.setUserId(x.getUserId());
         order.setStatus(OrderEnums.PENDING.getOrder_status());
         order.setOrderTime(new Date());
         ordersRepository.save(order);
@@ -67,7 +204,7 @@ public class OrderService {
             totalOrderPrice += itemTotalPrice;
 
             OrderDetails orderDetails = new OrderDetails();
- //           orderDetails.setOrderId(order.getOrderId());
+            //           orderDetails.setOrderId(order.getOrderId());
             orderDetails.setOrderId(order.getOrderId());
             orderDetails.setProductId(products.getProductId());
             orderDetails.setQuantity(cartItemDTO.getQuantity());
@@ -120,52 +257,61 @@ public class OrderService {
 
             return temp;
         }).collect(Collectors.toList()));
-        sendOrderConfirmationEmail(checkoutRequestDTO.getEmail(), order.getOrderId(), order.getTotalAmount(), order.getOrderTime(), (List<CartItemResponseDTO>) response.getCartItems());
+        if (checkoutRequestDTO.getEmail() != null && !checkoutRequestDTO.getEmail().isEmpty()) {
+            sendOrderConfirmationEmail(checkoutRequestDTO.getEmail(), order.getOrderId(), order.getTotalAmount(), order.getOrderTime(), (List<CartItemResponseDTO>) response.getCartItems());
+        }
+        else {
+            log.warn("Không có email để gửi xác nhận đơn hàng.");
+        }
+//    sendOrderConfirmationEmail(checkoutRequestDTO.getEmail(), order.getOrderId(), order.getTotalAmount(), order.getOrderTime(), (List<CartItemResponseDTO>) response.getCartItems());
         return response;
     }
 
     private void sendOrderConfirmationEmail(String to, String orderId, double totalAmount, Date orderDate, List<CartItemResponseDTO> cartItems) {
-        // Tạo nội dung email
-        String subject = "Haven Skin Xác nhận đơn hàng #" + orderId;
+        // Tạo tiêu đề email
+        String subject = "Haven Skin - Xác nhận đơn hàng #" + orderId;
 
         // Tạo danh sách sản phẩm
         StringBuilder productDetails = new StringBuilder();
         for (CartItemResponseDTO item : cartItems) {
             Products product = productsRepository.findByProductName(item.getProductName());
             if (product != null) {
-                productDetails.append("- ")
-                        .append(item.getProductName())
-                        .append(" (Số lượng: ")
-                        .append(item.getQuantity())
-                        .append(", Giá: ")
-                        .append(product.getDiscountPrice())
-                        .append(")\n");
+                productDetails.append(String.format("%-30s %-10s %-10s%n",
+                        item.getProductName(),
+                        "             " + item.getQuantity(),
+                        "                                                   " + product.getDiscountPrice()));
             }
         }
 
-        String text = "Cảm ơn bạn đã đặt hàng! Đơn hàng của bạn đã được xác nhận.\n\n"
-                + "Chi tiết đơn hàng:\n"
-                + "Mã đơn hàng: " + orderId + "\n"
-                + "Ngày đặt hàng: " + orderDate + "\n\n"
-                + "Danh sách sản phẩm:\n"
-                + productDetails.toString() + "\n"
-                + "Tổng tiền: " + totalAmount + "\n\n"
-                + "Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ với chúng tôi:\n"
-                + "Số điện thoại: 0966340303\n"
-                + "Email:" +
-                "havenskin032025@gmail.com\n\n"
+        // Tạo nội dung email
+        StringBuilder emailContent = new StringBuilder();
+        emailContent.append("=============================================\n");
+        emailContent.append("           HAVEN SKIN - XÁC NHẬN ĐƠN HÀNG          \n");
+        emailContent.append("=============================================\n\n");
+        emailContent.append("Cảm ơn bạn đã đặt hàng tại Haven Skin! Đơn hàng của bạn đã được xác nhận.\n\n");
+        emailContent.append("Chi tiết đơn hàng:\n");
+        emailContent.append("Mã đơn hàng: ").append(orderId).append("\n");
+        emailContent.append("Ngày đặt hàng: ").append(orderDate).append("\n\n");
+        emailContent.append("Danh sách sản phẩm:\n");
+        emailContent.append(String.format("%-50s %-50s %-30s%n", "Tên sản phẩm", "Số lượng", "Giá"));
+        emailContent.append("-----------------------------------------------------------------------------------------------------------------------------------\n");
+        emailContent.append(productDetails.toString()).append("\n");
+        emailContent.append("Tổng tiền: ").append(totalAmount).append("\n\n");
+        emailContent.append("Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ với chúng tôi:\n");
+        emailContent.append("Số điện thoại: 0966340303\n");
+        emailContent.append("Email: havenskin032025@gmail.com\n\n");
+        emailContent.append("Trân trọng,\n");
+        emailContent.append("Đội ngũ hỗ trợ Haven Skin\n");
+//        emailContent.append("=============================================\n");
 
-
-                + "Trân trọng,\n"
-                + "Đội ngũ hỗ trợ.";
-
-        // Tạo và gửi email
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(to); // Địa chỉ email người nhận
-        message.setSubject(subject); // Tiêu đề email
-        message.setText(text); // Nội dung email
-        emailService.sendEmail(to, subject, text);
+        // Gửi email
+        emailService.sendEmail(to, subject, emailContent.toString());
     }
+
+    public List<Orders> getOrdersList(String orderId) {
+        return ordersRepository.findByOrderIdContaining(orderId);
+    }
+
     public void cancelOrder(String email, String orderId) {
 //        String userId = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"))
 //                .getUserId();
@@ -174,7 +320,7 @@ public class OrderService {
         Orders orders = ordersRepository.findByOrderIdAndUserId(orderId, userId).orElseThrow(() -> new RuntimeException("Order not found"));
 //        Orders orders = ordersRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Order not found"));
         System.out.println("Order:" + orders.toString());
-        if(orders.getStatus() != OrderEnums.PENDING.getOrder_status()) {
+        if (orders.getStatus() != OrderEnums.PENDING.getOrder_status()) {
             throw new RuntimeException("Chỉ có thể hủy đơn hàng ở trạng thái PENDING");
         }
 
@@ -186,7 +332,7 @@ public class OrderService {
             products.setQuantity(products.getQuantity() + orderDetail.getQuantity());
             products.setSoldQuantity(products.getSoldQuantity() - orderDetail.getQuantity());
 
-            if(products.getQuantity() <= 0) {
+            if (products.getQuantity() <= 0) {
                 products.setStatus(ProductEnums.OUT_OF_STOCK.getValue());
             }
             productsRepository.save(products);
@@ -194,8 +340,6 @@ public class OrderService {
         orders.setStatus(OrderEnums.CANCELLED.getOrder_status());
         ordersRepository.save(orders);
     }
-
-
 
 
     public Orders findCartByUserId(String email) {
@@ -241,7 +385,7 @@ public class OrderService {
 //        Orders x = ordersRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
 //        mapper.updateOrders(x, order);
 //        return ordersRepository.save(x);
-        Orders x = ordersRepository.findById(id).orElseThrow(()-> new RuntimeException("Order not found"));
+        Orders x = ordersRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
         x.setOrderId(x.getOrderId());
         x.setOrderTime(x.getOrderTime());
         x.setTotalAmount(x.getTotalAmount());
@@ -327,6 +471,7 @@ public class OrderService {
         }
         orderDetailsRepository.saveAll(orderDetailsList);
     }
+
     private boolean isValidStatusTransition(OrderEnums currentStatus, OrderEnums newStatus) {
         Map<OrderEnums, List<OrderEnums>> validTransitions = new HashMap<>();
 
@@ -350,7 +495,7 @@ public class OrderService {
         String userId = user.getUserId();
         List<Orders> orders = ordersRepository.findByUserId(userId);
 
-        List<HistoryOrderDTO> historyOrders = orders.stream().map(x->{
+        List<HistoryOrderDTO> historyOrders = orders.stream().map(x -> {
             HistoryOrderDTO historyOrder = new HistoryOrderDTO();
             historyOrder.setOrderId(x.getOrderId());
             historyOrder.setOrderTime(x.getOrderTime());
@@ -358,18 +503,18 @@ public class OrderService {
             historyOrder.setStatus(x.getStatus());
             List<OrderDetails> orderDetails = orderDetailsRepository.findByOrderId(x.getOrderId());
             historyOrder.setQuantity(orderDetails.size());
-            List<ProductDetailsDTO> productDetails = orderDetails.stream().map(detail ->{
+            List<ProductDetailsDTO> productDetails = orderDetails.stream().map(detail -> {
                 ProductDetailsDTO productDetail = new ProductDetailsDTO();
                 Products products = productsRepository.findById(detail.getProductId()).get();
-                if(products == null) {
+                if (products == null) {
                     throw new RuntimeException("Product not found");
                 }
                 productDetail.setProductName(products.getProductName());
                 productDetail.setQuantity(detail.getQuantity());
                 productDetail.setDiscountPrice(detail.getDiscountPrice());
-                if(products.getProductImages() != null && !products.getProductImages().isEmpty()) {
+                if (products.getProductImages() != null && !products.getProductImages().isEmpty()) {
                     productDetail.setImageUrl(products.getProductImages().get(0).getImageURL());
-                }else{
+                } else {
                     productDetail.setImageUrl(null);
                 }
 
@@ -385,16 +530,16 @@ public class OrderService {
         return historyOrders;
     }
 
-    public HistoryOrderDTO getOrderById(String email, String orderId){
+    public HistoryOrderDTO getOrderById(String email, String orderId) {
         Optional<Users> userOpt = userRepository.findByEmail(email);
-        if(!userOpt.isPresent()) {
+        if (!userOpt.isPresent()) {
             throw new RuntimeException("User not found");
         }
         Users user = userOpt.get();
         String userId = user.getUserId();
 
         Optional<Orders> orderOpt = ordersRepository.findByOrderIdAndUserId(orderId, userId);
-        if(!orderOpt.isPresent()) {
+        if (!orderOpt.isPresent()) {
             throw new RuntimeException("Order not found");
         }
         Orders order = orderOpt.get();
@@ -408,7 +553,7 @@ public class OrderService {
         List<OrderDetails> orderDetails = orderDetailsRepository.findByOrderId(order.getOrderId());
         historyOrder.setQuantity(orderDetails.size());
 
-        List<ProductDetailsDTO> productDetails = orderDetails.stream().map(detail->{
+        List<ProductDetailsDTO> productDetails = orderDetails.stream().map(detail -> {
             ProductDetailsDTO productDetail = new ProductDetailsDTO();
             Products products = productsRepository.findById(detail.getProductId()).orElseThrow(() -> new RuntimeException("Product not found"));
 
@@ -416,16 +561,40 @@ public class OrderService {
             productDetail.setQuantity(detail.getQuantity());
             productDetail.setDiscountPrice(detail.getDiscountPrice());
 
-            if(products.getProductImages() != null && !products.getProductImages().isEmpty()) {
+            if (products.getProductImages() != null && !products.getProductImages().isEmpty()) {
                 productDetail.setImageUrl(products.getProductImages().get(0).getImageURL());
-            }
-            else{
+            } else {
                 productDetail.setImageUrl(null);
             }
             return productDetail;
         }).collect(Collectors.toList());
         historyOrder.setProductName(productDetails);
         return historyOrder;
+    }
+    public void deleteOrder(String email, String orderId) {
+        Optional<Users> userOpt = userRepository.findByEmail(email);
+        if (!userOpt.isPresent()) {
+            throw new RuntimeException("User not found");
+        }
+        Users user = userOpt.get();
+        String userId = user.getUserId();
+        Optional<Orders> orders = ordersRepository.findByUserIdAndStatus(userId, OrderEnums.PENDING.getOrder_status());
+        if (!orders.isPresent()) {
+            throw new RuntimeException("Order not found");
+        }
+        Orders order = orders.get();
+        List<OrderDetails> orderDetails = orderDetailsRepository.findByOrderId(order.getOrderId());
+//        Optional<OrderDetails> orderDetails = orderDetailsRepository.findByOrderIdAndUserId()
+        for(OrderDetails orderDetail : orderDetails) {
+            Products products = productsRepository.findById(orderDetail.getProductId()).orElseThrow(() -> new RuntimeException("Product not found"));
+            products.setQuantity(products.getQuantity() + orderDetail.getQuantity());
+            products.setSoldQuantity(products.getSoldQuantity() - orderDetail.getQuantity());
+            productsRepository.save(products);
+//            orderDetailsRepository.deleteAll(orderDetails);
+        }
+
+        orderDetailsRepository.deleteAll(orderDetails);
+        ordersRepository.delete(order);
     }
 
 }

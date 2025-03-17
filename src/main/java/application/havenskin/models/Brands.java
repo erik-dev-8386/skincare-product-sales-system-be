@@ -22,7 +22,7 @@ public class Brands {
     @Nationalized
     private String brandName;
 
-    @Column(name = "description", length = 250)
+    @Column(name = "description", length = 10000)
     @Nationalized
     private String description;
 

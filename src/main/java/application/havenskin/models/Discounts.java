@@ -27,7 +27,7 @@ public class Discounts {
     @Column(name = "discount_code", length = 50)
     private String discountCode;
 
-    @Column(name = "description", length = 250)
+    @Column(name = "description", length = 10000)
     @Nationalized
     private String description;
 

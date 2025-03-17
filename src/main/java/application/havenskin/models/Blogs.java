@@ -23,7 +23,7 @@ public class Blogs {
     @Nationalized
     private String blogTitle;
 
-    @Column(name = "blog_content", length = 250)
+    @Column(name = "blog_content", length = 10000)
     @Nationalized
     private String blogContent;
 

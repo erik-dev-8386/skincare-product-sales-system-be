@@ -22,7 +22,7 @@ public class Categories {
     @Nationalized
     private String categoryName;
 
-    @Column(name = "description", length = 250)
+    @Column(name = "description", length = 10000)
     @Nationalized
     private String description;
 

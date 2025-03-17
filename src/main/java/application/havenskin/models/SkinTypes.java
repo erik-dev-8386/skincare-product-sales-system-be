@@ -23,7 +23,7 @@ public class SkinTypes {
     @Nationalized
     private String skinName;
 
-    @Column(name = "description", length = 500)
+    @Column(name = "description", length = 10000)
     @Nationalized
     private String description;
 

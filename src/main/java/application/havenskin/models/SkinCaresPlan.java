@@ -20,7 +20,7 @@ public class SkinCaresPlan {
     @Column(name = "skin_type_id", length = 50)
     private String skinTypeId;
 
-    @Column(name = "description", length = 250)
+    @Column(name = "description", length = 10000)
     @Nationalized
     private String description;
 
