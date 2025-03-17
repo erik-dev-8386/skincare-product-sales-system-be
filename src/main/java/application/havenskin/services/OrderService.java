@@ -181,13 +181,19 @@ public class OrderService {
         Orders order = new Orders();
         if (users != null) {
             order.setUserId(users.getUserId());
+            order.setAddress(users.getAddress());
+            order.setCustomerName(users.getFirstName() +" "+ users.getLastName());
+            order.setCustomerPhone(users.getPhone());
+            order.setStatus(OrderEnums.PENDING.getOrder_status());
+            order.setOrderTime(new Date());
+            ordersRepository.save(order);
         } else {
             order.setUserId(null);
         }
 //    order.setUserId(x.getUserId());
-        order.setStatus(OrderEnums.PENDING.getOrder_status());
-        order.setOrderTime(new Date());
-        ordersRepository.save(order);
+//        order.setStatus(OrderEnums.PENDING.getOrder_status());
+//        order.setOrderTime(new Date());
+//        ordersRepository.save(order);
 //    Products productCart = null;
         double totalOrderPrice = 0;
         for (CartItemDTO cartItemDTO : checkoutRequestDTO.getCartItemDTO()) {
@@ -578,7 +584,8 @@ public class OrderService {
         }
         Users user = userOpt.get();
         String userId = user.getUserId();
-        Optional<Orders> orders = ordersRepository.findByUserIdAndStatus(userId, OrderEnums.PENDING.getOrder_status());
+//        Optional<Orders> orders = ordersRepository.findByUserIdAndStatus(userId, OrderEnums.PENDING.getOrder_status());
+        Optional<Orders> orders = ordersRepository.findByOrderIdAndUserId(orderId, userId);
         if (!orders.isPresent()) {
             throw new RuntimeException("Order not found");
         }

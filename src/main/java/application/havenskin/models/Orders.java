@@ -65,4 +65,11 @@ public class Orders {
     @JsonIgnore
     @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
     private List<OrderDetails> orderDetails;
+
+    @Column(name = "customer_name", length = 100)
+    @Nationalized
+    private String customerName;
+
+    @Column(name = "customer_phone", length = 15)
+    private String customerPhone;
 }

@@ -13,9 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UsersService {
@@ -40,6 +38,33 @@ public class UsersService {
         return usersRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
     }
 
+    public Users getUserByEmailCheckOut(String email) {
+        Users user = usersRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+
+        validateUserProfileForCheckout(user.getEmail());
+        return user;
+    }
+
+
+    public Map<String, String> validateUserProfileForCheckout(String email) {
+        Users user = getUserByEmail(email);
+        Map<String, String> validationErrors = new HashMap<>();
+
+        if (user.getAddress() == null || user.getAddress().trim().isEmpty()) {
+            validationErrors.put("address", "Vui lòng cập nhật địa chỉ");
+        }
+
+        if (user.getPhone() == null || user.getPhone().trim().isEmpty()) {
+            validationErrors.put("phone", "Vui lòng cập nhật số điện thoại");
+        }
+
+        if ((user.getFirstName() == null || user.getFirstName().trim().isEmpty()) ||
+                (user.getLastName() == null || user.getLastName().trim().isEmpty())) {
+            validationErrors.put("name", "Vui lòng cập nhật họ và tên");
+        }
+
+        return validationErrors;
+    }
     public Users saveUser(Users user) {
         return usersRepository.save(user);
     }
