@@ -105,6 +105,7 @@ public class  Products {
     @OneToMany(mappedBy = "products")
     private List<ProductImages> productImages;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "products")
     private List<Feedbacks> feedbacks;
 

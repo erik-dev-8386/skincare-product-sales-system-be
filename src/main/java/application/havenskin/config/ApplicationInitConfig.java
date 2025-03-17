@@ -42,6 +42,7 @@ public class ApplicationInitConfig {
                 SkinTests x = new SkinTests();
                 x.setSkinTestId("1");
                 x.setTestName("Bài kiểm tra xác định loại da");
+                skinTestsRepository.save(x);
             }
         };
     }
