@@ -51,7 +51,7 @@ public class Orders {
     @OneToMany(mappedBy = "orders")
     private List<Shipments> shipments;
 
-    @JsonIgnore
+//    @JsonIgnore
     @OneToOne(mappedBy = "orders")
     private Transactions transactions;
 

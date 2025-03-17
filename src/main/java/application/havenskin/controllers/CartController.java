@@ -7,6 +7,7 @@ import application.havenskin.dataAccess.HistoryOrderDTO;
 import application.havenskin.models.OrderDetails;
 import application.havenskin.services.OrderDetailsService;
 import application.havenskin.services.OrderService;
+import application.havenskin.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,9 @@ public class CartController  {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private TransactionService transactionService;
 
     // hàm này được gọi khi ở trang sản phẩm người dùng bấm add-to-cart
     @PreAuthorize("hasAnyRole('ADMIN','STAFF','CUSTOMER')")
@@ -99,6 +103,11 @@ public class CartController  {
     @DeleteMapping("/delete/{email}/{orderId}")
     public void deleteOrder(@PathVariable String email,@PathVariable String orderId){
         orderService.deleteOrder(email,orderId);
+    }
+
+    @GetMapping("/pay/{orderId}")
+    public void succesPay(@PathVariable String orderId){
+        transactionService.successTransactions(orderId);
     }
 
 

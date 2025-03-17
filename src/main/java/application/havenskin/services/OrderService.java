@@ -39,6 +39,8 @@ public class OrderService {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private TransactionsRepository transactionsRepository;
 //    public CheckOutResponseDTO checkout(CheckoutRequestDTO checkoutRequestDTO) {
 ////        if (checkoutRequestDTO.getCartItemDTO() == null || checkoutRequestDTO.getCartItemDTO().isEmpty()) {
 ////            throw new RuntimeException("Cart is empty. Cannot create order.");
@@ -234,6 +236,7 @@ public class OrderService {
         ordersRepository.save(order);
 
 
+
         CheckOutResponseDTO response = new CheckOutResponseDTO();
         response.setTotal(totalOrderPrice);
         response.setOrderId(order.getOrderId());
@@ -261,6 +264,10 @@ public class OrderService {
                 temp.setImageUrl(null);
             }
 
+            Transactions transactions = new Transactions();
+            transactions.setOrderId(order.getOrderId());
+            transactions.setTransactionTime(LocalDateTime.now());
+            transactionsRepository.save(transactions);
             return temp;
         }).collect(Collectors.toList()));
         if (checkoutRequestDTO.getEmail() != null && !checkoutRequestDTO.getEmail().isEmpty()) {
