@@ -52,7 +52,7 @@ public class Orders {
     private List<Shipments> shipments;
 
 //    @JsonIgnore
-    @OneToOne(mappedBy = "orders")
+    @OneToOne(mappedBy = "orders", cascade = CascadeType.ALL)
     private Transactions transactions;
 
     @ToString.Exclude

@@ -40,6 +40,9 @@ public class OrderService {
     private EmailService emailService;
 
     @Autowired
+    private TransactionsRepository transactionRepository;
+
+    @Autowired
     private TransactionsRepository transactionsRepository;
 //    public CheckOutResponseDTO checkout(CheckoutRequestDTO checkoutRequestDTO) {
 ////        if (checkoutRequestDTO.getCartItemDTO() == null || checkoutRequestDTO.getCartItemDTO().isEmpty()) {
@@ -599,6 +602,7 @@ public class OrderService {
         Orders order = orders.get();
         List<OrderDetails> orderDetails = orderDetailsRepository.findByOrderId(order.getOrderId());
 //        Optional<OrderDetails> orderDetails = orderDetailsRepository.findByOrderIdAndUserId()
+        Transactions transactions = transactionsRepository.findByOrderId(order.getOrderId());
         for(OrderDetails orderDetail : orderDetails) {
             Products products = productsRepository.findById(orderDetail.getProductId()).orElseThrow(() -> new RuntimeException("Product not found"));
             products.setQuantity(products.getQuantity() + orderDetail.getQuantity());
@@ -608,7 +612,9 @@ public class OrderService {
         }
 
         orderDetailsRepository.deleteAll(orderDetails);
+
         ordersRepository.delete(order);
+
     }
 
 }
