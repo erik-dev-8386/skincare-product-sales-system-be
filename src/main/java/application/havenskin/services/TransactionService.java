@@ -18,7 +18,7 @@ import java.util.List;
 public class TransactionService {
     @Autowired
     private TransactionsRepository transactionsRepository;
-    @Lazy // Trì hoãn khởi tạo OrderService để tránh vòng lặp
+    @Lazy
     @Autowired
     private OrderService orderService;
     @Autowired
@@ -50,51 +50,16 @@ public class TransactionService {
         return transactionsRepository.saveAll(transactions);
     }
 
-    public Transactions createTransaction(String orderId, double amount) {
+    public Transactions createTransaction(String orderId, double amount, byte status, String code) {
         Transactions transaction = new Transactions();
         transaction.setOrderId(orderId);
+        transaction.setBankName("Momo");
+        transaction.setContent("Thanh toan cho don hang: " + orderId);
+        transaction.setTransactionCode(code);
         transaction.setAmount(amount);
         transaction.setTransactionType(TransactionsEnums.Type.MOMO.getValue());
-        transaction.setTransactionStatus(TransactionsEnums.PAID.getValue());
+        transaction.setTransactionStatus(status);
         transaction.setTransactionTime(LocalDateTime.now());
         return transactionsRepository.save(transaction);
     }
-
-//    public void saveTransactionToDB(String orderId, String transactionCode, String amount, String bankName, String payDate, boolean isSuccess) {
-//        try {
-//            System.out.println("🔹 Đang lưu giao dịch...");
-//            System.out.println("Mã giao dịch: " + transactionCode);
-//            System.out.println("Số tiền: " + amount);
-//            System.out.println("Ngân hàng: " + bankName);
-//            System.out.println("Ngày thanh toán: " + payDate);
-//            System.out.println("Trạng thái: " + (isSuccess ? "PAID" : "NOT_PAID"));
-//
-//
-//            Transactions transaction = new Transactions();
-//            System.out.println("orderId: " + transaction.getOrderId());
-//            transaction.setOrderId(orderId);
-//            transaction.setTransactionCode(transactionCode);
-//            transaction.setTransactionType((byte) 1);
-//            transaction.setAmount(Double.parseDouble(amount) / 100);
-//            transaction.setBankName(bankName);
-//            transaction.setTransactionTime(LocalDateTime.parse(payDate, DateTimeFormatter.ofPattern("yyyyMMddHHmmss")));
-//            transaction.setTransactionStatus(isSuccess ? TransactionsEnums.PAID.getValue() : TransactionsEnums.NOT_PAID.getValue());
-//
-//            transactionsRepository.save(transaction);
-//
-//            // Cập nhật trạng thái đơn hàng
-//            if (isSuccess) {
-//                boolean updated = orderService.updateOrderStatus(orderId, OrderEnums.PROCESSING.getOrder_status());
-//                if (!updated) {
-//                    System.out.println("Cập nhật trạng thái đơn hàng thất bại");
-//                    return;
-//                }
-//            }
-//
-//            System.out.println("✅ Giao dịch đã lưu thành công!");
-//        } catch (Exception e) {
-//            System.out.println("❌ Lỗi khi lưu giao dịch:");
-//            e.printStackTrace();
-//        }
-//    }
 }

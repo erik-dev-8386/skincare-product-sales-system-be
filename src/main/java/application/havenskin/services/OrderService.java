@@ -267,7 +267,7 @@ public class OrderService {
         return ordersRepository.saveAll(orders);
     }
 
-    @Transactional
+    //@Transactional
     public boolean updateOrderStatus(String orderId, byte newStatusByte) {
         Optional<Orders> orderOpt = ordersRepository.findById(orderId);
         if (orderOpt.isEmpty()) {
@@ -288,11 +288,6 @@ public class OrderService {
         // Lock đơn hàng nếu cần
         if (currentStatus == OrderEnums.UNORDERED && newStatus != OrderEnums.UNORDERED) {
             lockOrderDetails(order.getOrderId());
-        }
-
-        // Tạo giao dịch nếu chuyển sang PROCESSING
-        if (newStatus == OrderEnums.PROCESSING) {
-            transactionService.createTransaction(order.getOrderId(), order.getTotalAmount());
         }
 
         // Cộng tiền thưởng vào ví nếu giao hàng thành công

@@ -150,21 +150,10 @@ public class UsersController {
             userDTO.setEmail(user.getEmail());
             userDTO.setRole(user.getRole());
 
-            // ✅ Chuyển hướng FE theo vai trò
-            String redirectUrl = switch (user.getRole()) {
-                case 1, 2 -> "/admin-dashboard";
-                case 3 -> "/";
-                default -> null;
-            };
-
-            if (redirectUrl == null) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Role not recognized"));
-            }
 
             return ResponseEntity.ok(Map.of(
                     "token", token,
-                    "user", userDTO,
-                    "redirectUrl", redirectUrl
+                    "user", userDTO
             ));
 
         } catch (Exception e) {

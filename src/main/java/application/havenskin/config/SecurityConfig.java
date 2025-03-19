@@ -44,9 +44,10 @@ public class SecurityConfig {
                         request.requestMatchers(HttpMethod.POST, "/haven-skin/users/login")
                                 .permitAll()
                                 .requestMatchers(HttpMethod.POST,"/haven-skin/users/add-new-user").permitAll()
-                                .requestMatchers(HttpMethod.POST,"/haven-skin/users/login/google").permitAll()
+                                .requestMatchers(HttpMethod.POST,"/haven-skin/users/login/google/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/haven-skin/momo/create/**").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/haven-skin/momo/ipn-handler/**").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/haven-skin/momo/ipn-handler-new").permitAll()
+                                .requestMatchers("/haven-skin/momo/**").permitAll() // Bỏ xác thực cho API MoMo
                                 .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS).permitAll()
                                 .anyRequest().authenticated())
                 .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable())

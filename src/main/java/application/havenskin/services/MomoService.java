@@ -5,11 +5,13 @@ import application.havenskin.dataAccess.CreateMomoRequest;
 import application.havenskin.dataAccess.CreateMomoResponse;
 import application.havenskin.dataAccess.MomoIPNResponse;
 import application.havenskin.enums.OrderEnums;
+import application.havenskin.enums.TransactionsEnums;
 import application.havenskin.repositories.MomoRepository;
 import application.havenskin.models.Orders;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.Mac;
@@ -26,6 +28,8 @@ public class MomoService {
     private final MomoRepository momoRepository;
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private TransactionService transactionService;
 
     public void testConfig() {
         log.info("SECRET_KEY: {}", momoConfig.getSecretKey());
@@ -104,23 +108,33 @@ public class MomoService {
             return false;
         }
 
-        // Kiểm tra resultCode từ MoMo (0 là thanh toán thành công)
-        if (ipnResponse.getResultCode() == 0) {
-            log.info("Thanh toán thành công, cập nhật Order: {}", ipnResponse.getOrderId());
+        String orderId = ipnResponse.getOrderId();
+        double amount = ipnResponse.getAmount();
+        String requestId = ipnResponse.getRequestId(); // transactionCode
+        String partnerCode = momoConfig.getPartnerCode();
 
-            // Cập nhật trạng thái đơn hàng thành PROCESSING
-            boolean updated = orderService.updateOrderStatus(ipnResponse.getOrderId(), OrderEnums.PROCESSING.getOrder_status());
-            log.info("Cập nhật đơn hàng trạng thái PROCESSING: {}", updated);
+        // Xác định trạng thái thanh toán
+        boolean isPaid = ipnResponse.getResultCode() == 0;
+        TransactionsEnums transactionStatus = isPaid ? TransactionsEnums.PAID : TransactionsEnums.NOT_PAID;
 
+        // Tạo Transaction
+        transactionService.createTransaction(
+                orderId,
+                amount,
+                transactionStatus.getValue(),
+                requestId // transactionCode
+        );
+
+        // Nếu thanh toán thành công, cập nhật trạng thái đơn hàng
+        if (isPaid) {
+            boolean updated = orderService.updateOrderStatus(orderId, OrderEnums.PROCESSING.getOrder_status());
             if (!updated) {
-                log.error("Cập nhật trạng thái đơn hàng thất bại");
-                return false;
+                log.warn("Cập nhật trạng thái đơn hàng thất bại cho orderId: {}", orderId);
             }
-            return true;
-        } else {
-            log.warn("Thanh toán thất bại, mã lỗi: {}", ipnResponse.getResultCode());
-            return false;
         }
+
+        return true;
     }
+
 
 }
