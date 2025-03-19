@@ -1,5 +1,6 @@
 package application.havenskin.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.firebase.database.DatabaseError;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -47,6 +48,7 @@ public class Transactions {
     @Column(name="transaction_type")
     private byte transactionType;
 
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "order_id", referencedColumnName = "order_id", insertable = false, updatable = false)
     private Orders orders;

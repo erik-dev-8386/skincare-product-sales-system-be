@@ -33,4 +33,9 @@ public class OrderDTO {
     private List<Shipments> shipments;
 
     private Transactions transactions;
+
+    private String customerName;
+
+    private String customerPhone;
+
 }

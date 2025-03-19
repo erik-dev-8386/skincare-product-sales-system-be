@@ -4,6 +4,7 @@ import application.havenskin.dataAccess.TransactionDTO;
 import application.havenskin.enums.OrderEnums;
 import application.havenskin.enums.TransactionsEnums;
 import application.havenskin.mapper.Mapper;
+import application.havenskin.models.Orders;
 import application.havenskin.models.Transactions;
 import application.havenskin.repositories.TransactionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,4 +63,14 @@ public class TransactionService {
         transaction.setTransactionTime(LocalDateTime.now());
         return transactionsRepository.save(transaction);
     }
-}
+
+    public void successTransactions(String orderId){
+//        Orders orders = ordersRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Order not found"));
+        Orders order = orderService.getOrderById(orderId);
+        Transactions transaction = transactionsRepository.findByOrderId(orderId);
+        transaction.setTransactionStatus(TransactionsEnums.PROCESSING.getValue());
+        transaction.setTransactionType(TransactionsEnums.Type.COD.getValue());
+        transaction.setAmount(order.getTotalAmount());
+        transaction.setTransactionTime(LocalDateTime.now());
+        transactionsRepository.save(transaction);
+    }

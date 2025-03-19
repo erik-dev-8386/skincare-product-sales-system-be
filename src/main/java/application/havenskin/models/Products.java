@@ -21,11 +21,11 @@ public class  Products {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String productId;
 
-    @Column(name = "product_name", length = 50)
+    @Column(name = "product_name", length = 10000)
     @Nationalized
     private String productName;
 
-    @Column(name = "usage_instruction", length = 255)
+    @Column(name = "usage_instruction", length = 10000)
     @Nationalized
     private String usageInstruction;
 
@@ -35,11 +35,11 @@ public class  Products {
     @Column(name = "discount_price")
     private Double discountPrice;
 
-    @Column(name = "description", length = 255)
+    @Column(name = "description", length = 10000)
     @Nationalized
     private String description;
 
-    @Column(name = "ingredients", length = 255)
+    @Column(name = "ingredients", length = 10000)
     @Nationalized
     private String ingredients;
 
@@ -105,6 +105,7 @@ public class  Products {
     @OneToMany(mappedBy = "products")
     private List<ProductImages> productImages;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "products")
     private List<Feedbacks> feedbacks;
 

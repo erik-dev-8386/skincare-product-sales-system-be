@@ -23,6 +23,8 @@ public class BlogService {
 
     @Autowired
     private BlogCategoryRepository blogCategoryRepository;
+
+    @Autowired
     private FirebaseService firebaseService;
 
     @Autowired
@@ -146,7 +148,7 @@ public class BlogService {
 //
 //        return blogRepository.save(existingBlog);
 //    }
-public Blogs updateBlogByTitle(String blogTitle, Blogs blog) {
+public Blogs updateBlogByTitle(String blogTitle, Blogs blog,List<MultipartFile> images) throws IOException {
     Blogs existingBlog =  blogRepository.findByTitle(blogTitle);
     if (existingBlog == null) {
         throw new RuntimeException("Blog not found with title: " + blogTitle);
@@ -203,6 +205,22 @@ public Blogs updateBlogByTitle(String blogTitle, Blogs blog) {
     }
     if (blog.getStatus() != 0) {
         existingBlog.setStatus(blog.getStatus());
+    }
+
+    if(images != null && !images.isEmpty()) {
+        List<BlogImages> list = new ArrayList<>();
+        for (MultipartFile file : images) {
+            String imageUrl = firebaseService.uploadImage(file);
+
+            BlogImages blogImages = new BlogImages();
+            blogImages.setImageURL(imageUrl);
+            blogImages.setBlogId(blog.getBlogId());
+            blogImages.setBlog(existingBlog);
+
+            list.add(blogImages);
+        }
+        blogImagesRepository.saveAll(list);
+        existingBlog.setBlogImages(list);
     }
 
     return blogRepository.save(existingBlog);

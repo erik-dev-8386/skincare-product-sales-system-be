@@ -4,6 +4,8 @@ import application.havenskin.models.OrderDetails;
 import application.havenskin.models.Orders;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,4 +19,7 @@ public interface OrdersRepository extends JpaRepository<Orders, String> {
     Optional<Orders> findByOrderIdAndUserId(@NotNull String orderId, @NotNull String userId);
 
     List<Orders> findByUserId(String userId);
+
+    @Query("SELECT o FROM Orders o where o.orderId LIKE %:orderId%")
+    List<Orders> findByOrderIdContaining(@Param("orderId") String orderId);
 }
