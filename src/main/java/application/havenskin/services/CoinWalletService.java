@@ -26,6 +26,14 @@ public class CoinWalletService {
         return coinWalletsRepository.findById(id).orElse(null);
     }
 
+    public CoinWallets getCoinWalletByUserId(String userId) {
+        return coinWalletsRepository.findByUserId(userId).orElse(null);
+    }
+
+    public CoinWallets getCoinWalletByEmail(String email) {
+        return coinWalletsRepository.findByUser_Email(email).orElse(null);
+    }
+
     public CoinWallets createCoinWallet(CoinWallets coinWallets) {
         return coinWalletsRepository.save(coinWallets);
     }

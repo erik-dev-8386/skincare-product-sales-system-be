@@ -4,6 +4,7 @@ import application.havenskin.dataAccess.CoinWalletDTO;
 import application.havenskin.models.CoinWallets;
 import application.havenskin.services.CoinWalletService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +19,18 @@ public class CoinWalletController {
     @GetMapping
     public List<CoinWallets> getAllCoinWallets(){
         return coinWalletService.getAllCoinWallets();
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<CoinWallets> getCoinWalletByUserId(@PathVariable String userId) {
+        CoinWallets wallet = coinWalletService.getCoinWalletByUserId(userId);
+        return wallet != null ? ResponseEntity.ok(wallet) : ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity<CoinWallets> getCoinWalletByEmail(@PathVariable String email) {
+        CoinWallets wallet = coinWalletService.getCoinWalletByEmail(email);
+        return wallet != null ? ResponseEntity.ok(wallet) : ResponseEntity.notFound().build();
     }
 
     @PostMapping

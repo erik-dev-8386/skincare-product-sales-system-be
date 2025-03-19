@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface CoinWalletsRepository extends JpaRepository<CoinWallets, String> {
     Optional<CoinWallets> findByUserId(String userId);
+    Optional<CoinWallets> findByUser_Email(String email);
 }
