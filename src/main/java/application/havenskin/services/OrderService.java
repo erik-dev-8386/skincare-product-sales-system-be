@@ -15,6 +15,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -44,139 +45,8 @@ public class OrderService {
 
     @Autowired
     private TransactionsRepository transactionsRepository;
-//    public CheckOutResponseDTO checkout(CheckoutRequestDTO checkoutRequestDTO) {
-////        if (checkoutRequestDTO.getCartItemDTO() == null || checkoutRequestDTO.getCartItemDTO().isEmpty()) {
-////            throw new RuntimeException("Cart is empty. Cannot create order.");
-////        }
-//        Users x = userRepository.findByEmail(checkoutRequestDTO.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
-//
-//        // tao đơn hàng mới
-//        Orders order = new Orders();
-//        order.setUserId(x.getUserId());
-//        order.setStatus(OrderEnums.PENDING.getOrder_status());
-//        order.setOrderTime(new Date());
-//        ordersRepository.save(order);
-////    Products productCart = null;
-//        double totalOrderPrice = 0;
-//        for (CartItemDTO cartItemDTO : checkoutRequestDTO.getCartItemDTO()) {
-//            Products products = productsRepository.findByProductName(cartItemDTO.getProductName());
-//
-//            if (products == null) {
-//                throw new RuntimeException(cartItemDTO.getProductName() + " not found");
-//            }
-//            if (products.getQuantity() < cartItemDTO.getQuantity()) {
-//                throw new RuntimeException(cartItemDTO.getProductName() + " not enough");
-//            }
-//
-//            double itemTotalPrice = products.getDiscountPrice() * cartItemDTO.getQuantity();
-//            totalOrderPrice += itemTotalPrice;
-//
-//            OrderDetails orderDetails = new OrderDetails();
-//            //           orderDetails.setOrderId(order.getOrderId());
-//            orderDetails.setOrderId(order.getOrderId());
-//            orderDetails.setProductId(products.getProductId());
-//            orderDetails.setQuantity(cartItemDTO.getQuantity());
-//            orderDetails.setDiscountPrice(products.getDiscountPrice());
-//            orderDetails.setStatus(OrderEnums.PENDING.getOrder_status());
-//
-//            orderDetailsRepository.save(orderDetails);
-//
-//            // cập nhật so luong ton kho
-//            products.setQuantity(products.getQuantity() - cartItemDTO.getQuantity());
-//            products.setSoldQuantity(products.getSoldQuantity() + cartItemDTO.getQuantity());
-//            if (products.getQuantity() <= 0) {
-//                products.setStatus(ProductEnums.OUT_OF_STOCK.getValue());
-//            }
-//            productsRepository.save(products);
-//        }
-//        order.setTotalAmount(totalOrderPrice);
-//        ordersRepository.save(order);
-//
-//        order.setStatus(OrderEnums.PENDING.getOrder_status());
-//        ordersRepository.save(order);
-//
-//
-//        CheckOutResponseDTO response = new CheckOutResponseDTO();
-//        response.setTotal(totalOrderPrice);
-//        response.setOrderId(order.getOrderId());
-////        response.setCartItems(checkoutRequestDTO.getCartItemDTO().stream()
-////                .map(detail ->{
-////                    CartItemDTO temp = new CartItemDTO();
-////                    temp.setProductName(detail.getProductName());
-////                    temp.setQuantity(detail.getQuantity());
-////                    temp.setPrice(detail.getPrice());
-////                    return temp;
-////                }).collect(Collectors.toList()));
-//        response.setCartItems(checkoutRequestDTO.getCartItemDTO().stream().map(detail -> {
-//            Products productsCartItem = productsRepository.findByProductName(detail.getProductName());
-//            CartItemResponseDTO temp = new CartItemResponseDTO();
-//            temp.setProductName(detail.getProductName());
-//            temp.setQuantity(detail.getQuantity());
-////            temp.setPrice(detail.getPrice());
-//            temp.setDiscountPrice(productsCartItem.getDiscountPrice());
 
-    /// /            temp.setImageUrl(productCart.getProductImages());
-//            if (productsCartItem != null && productsCartItem.getProductImages() != null && !productsCartItem.getProductImages().isEmpty()) {
-//                // chọn ảnh đầu tiên cho fe
-//                String image = productsCartItem.getProductImages().get(0).getImageURL();
-//                temp.setImageUrl(image);
-//            } else {
-//                temp.setImageUrl(null);
-//            }
-//
-//            return temp;
-//        }).collect(Collectors.toList()));
-//        sendOrderConfirmationEmail(checkoutRequestDTO.getEmail(), order.getOrderId(), order.getTotalAmount(), order.getOrderTime(), (List<CartItemResponseDTO>) response.getCartItems());
-//        return response;
-//    }
-
-    //    private void sendOrderConfirmationEmail(String to, String orderId, double totalAmount, Date orderDate, List<CartItemResponseDTO> cartItems) {
-//        // Tạo nội dung email
-//        String subject = "Haven Skin Xác nhận đơn hàng #" + orderId;
-//
-//        // Tạo danh sách sản phẩm
-//        StringBuilder productDetails = new StringBuilder();
-//        for (CartItemResponseDTO item : cartItems) {
-//            Products product = productsRepository.findByProductName(item.getProductName());
-//            if (product != null) {
-//                productDetails.append("- ")
-//                        .append(item.getProductName())
-//                        .append(" (Số lượng: ")
-//                        .append(item.getQuantity())
-//                        .append(", Giá: ")
-//                        .append(product.getDiscountPrice())
-//                        .append(")\n");
-//            }
-//        }
-//
-//        String text = "Cảm ơn bạn đã đặt hàng! Đơn hàng của bạn đã được xác nhận.\n\n"
-//                + "Chi tiết đơn hàng:\n"
-//                + "Mã đơn hàng: " + orderId + "\n"
-//                + "Ngày đặt hàng: " + orderDate + "\n\n"
-//                + "Danh sách sản phẩm:\n"
-//                + productDetails.toString() + "\n"
-//                + "Tổng tiền: " + totalAmount + "\n\n"
-//                + "Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ với chúng tôi:\n"
-//                + "Số điện thoại: 0966340303\n"
-//                + "Email:" +
-//                "havenskin032025@gmail.com\n\n"
-//
-//
-//                + "Trân trọng,\n"
-//                + "Đội ngũ hỗ trợ.";
-//
-//        // Tạo và gửi email
-//        SimpleMailMessage message = new SimpleMailMessage();
-//        message.setTo(to); // Địa chỉ email người nhận
-//        message.setSubject(subject); // Tiêu đề email
-//        message.setText(text); // Nội dung email
-//        emailService.sendEmail(to, subject, text);
-//    }
     public CheckOutResponseDTO checkout(CheckoutRequestDTO checkoutRequestDTO) {
-//        if (checkoutRequestDTO.getCartItemDTO() == null || checkoutRequestDTO.getCartItemDTO().isEmpty()) {
-//            throw new RuntimeException("Cart is empty. Cannot create order.");
-//        }
-//    Users x = userRepository.findByEmail(checkoutRequestDTO.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
 
         Users users = null;
         if (!checkoutRequestDTO.isGuest()) {
@@ -195,11 +65,6 @@ public class OrderService {
         } else {
             order.setUserId(null);
         }
-//    order.setUserId(x.getUserId());
-//        order.setStatus(OrderEnums.PENDING.getOrder_status());
-//        order.setOrderTime(new Date());
-//        ordersRepository.save(order);
-//    Products productCart = null;
         double totalOrderPrice = 0;
         for (CartItemDTO cartItemDTO : checkoutRequestDTO.getCartItemDTO()) {
             Products products = productsRepository.findByProductName(cartItemDTO.getProductName());
@@ -243,14 +108,6 @@ public class OrderService {
         CheckOutResponseDTO response = new CheckOutResponseDTO();
         response.setTotal(totalOrderPrice);
         response.setOrderId(order.getOrderId());
-//        response.setCartItems(checkoutRequestDTO.getCartItemDTO().stream()
-//                .map(detail ->{
-//                    CartItemDTO temp = new CartItemDTO();
-//                    temp.setProductName(detail.getProductName());
-//                    temp.setQuantity(detail.getQuantity());
-//                    temp.setPrice(detail.getPrice());
-//                    return temp;
-//                }).collect(Collectors.toList()));
         response.setCartItems(checkoutRequestDTO.getCartItemDTO().stream().map(detail -> {
             Products productsCartItem = productsRepository.findByProductName(detail.getProductName());
             CartItemResponseDTO temp = new CartItemResponseDTO();
@@ -497,6 +354,30 @@ public class OrderService {
         return validTransitions.getOrDefault(currentStatus, List.of()).contains(newStatus);
     }
 
+    public List<MonthlyRevenueDTO> getMonthlyRevenue() {
+        List<Orders> deliveredOrders = ordersRepository.findByStatus(OrderEnums.DELIVERED.getOrder_status());
+
+        // Nhóm theo tháng và tính tổng doanh thu
+        Map<String, Double> revenueMap = deliveredOrders.stream()
+                .collect(Collectors.groupingBy(
+                        order -> order.getOrderTime().toInstant().atZone(ZoneId.systemDefault()).getYear() + "-" +
+                                order.getOrderTime().toInstant().atZone(ZoneId.systemDefault()).getMonthValue(),
+                        Collectors.summingDouble(Orders::getTotalAmount)
+                ));
+
+        // Chuyển Map thành danh sách DTO
+        return revenueMap.entrySet().stream()
+                .map(entry -> {
+                    String[] parts = entry.getKey().split("-");
+                    int year = Integer.parseInt(parts[0]);
+                    int month = Integer.parseInt(parts[1]);
+                    return new MonthlyRevenueDTO(month, year, entry.getValue());
+                })
+                .sorted(Comparator.comparing(MonthlyRevenueDTO::getYear)
+                        .thenComparing(MonthlyRevenueDTO::getMonth))
+                .collect(Collectors.toList());
+    }
+
     public List<HistoryOrderDTO> getHistoryOrder(String email) {
         Optional<Users> userOpt = userRepository.findByEmail(email);
         if (!userOpt.isPresent()) {
@@ -531,10 +412,6 @@ public class OrderService {
 
                 return productDetail;
             }).collect(Collectors.toList());
-//            List<String> productName = orderDetails.stream().map(details->details.getProducts().getProductName()).collect(Collectors.toList());
-//            historyOrder.setProductName(productName);
-//            historyOrder.setTotalAmount(x.getTotalAmount());
-//            historyOrder.setQuantity(orderDetails.getQuantity());
             historyOrder.setProductName(productDetails);
             return historyOrder;
         }).collect(Collectors.toList());

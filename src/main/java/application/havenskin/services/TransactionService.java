@@ -24,29 +24,35 @@ public class TransactionService {
     private OrderService orderService;
     @Autowired
     private Mapper mapper;
+
     public List<Transactions> getAllTransactions() {
         return transactionsRepository.findAll();
     }
+
     public Transactions getTransactionById(String id) {
-        if(!transactionsRepository.existsById(id)) {
+        if (!transactionsRepository.existsById(id)) {
             throw new RuntimeException("Transaction not found");
         }
         return transactionsRepository.findById(id).get();
     }
+
     public Transactions addTransaction(Transactions transaction) {
         return transactionsRepository.save(transaction);
     }
+
     public Transactions updateTransaction(String id, TransactionDTO transaction) {
         Transactions x = transactionsRepository.findById(id).orElseThrow(() -> new RuntimeException("Transaction not found"));
         mapper.updateTransactions(x, transaction);
         return transactionsRepository.save(x);
     }
+
     public void deleteTransaction(String id) {
-        if(!transactionsRepository.existsById(id)) {
+        if (!transactionsRepository.existsById(id)) {
             throw new RuntimeException("Transaction not found");
         }
         transactionsRepository.deleteById(id);
     }
+
     public List<Transactions> addListOfTransactions(List<Transactions> transactions) {
         return transactionsRepository.saveAll(transactions);
     }
@@ -64,7 +70,7 @@ public class TransactionService {
         return transactionsRepository.save(transaction);
     }
 
-    public void successTransactions(String orderId){
+    public void successTransactions(String orderId) {
 //        Orders orders = ordersRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Order not found"));
         Orders order = orderService.getOrderById(orderId);
         Transactions transaction = transactionsRepository.findByOrderId(orderId);
@@ -74,3 +80,4 @@ public class TransactionService {
         transaction.setTransactionTime(LocalDateTime.now());
         transactionsRepository.save(transaction);
     }
+}

@@ -1,5 +1,6 @@
 package application.havenskin.controllers;
 
+import application.havenskin.dataAccess.MonthlyRevenueDTO;
 import application.havenskin.dataAccess.OrderDTO;
 import application.havenskin.enums.OrderEnums;
 import application.havenskin.models.Orders;
@@ -50,6 +51,11 @@ public class OrderController {
     @PostMapping("/add-list-orders")
     public List<Orders> addListOrder(@RequestBody List<Orders> orders){
         return orderService.addListOfOrders(orders);
+    }
+
+    @GetMapping("/revenue/monthly")
+    public List<MonthlyRevenueDTO> getMonthlyRevenue() {
+        return orderService.getMonthlyRevenue();
     }
 
     @PutMapping("/{id}/status")

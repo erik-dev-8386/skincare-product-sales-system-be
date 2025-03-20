@@ -22,4 +22,6 @@ public interface OrdersRepository extends JpaRepository<Orders, String> {
 
     @Query("SELECT o FROM Orders o where o.orderId LIKE %:orderId%")
     List<Orders> findByOrderIdContaining(@Param("orderId") String orderId);
+
+    List<Orders> findByStatus(byte status);
 }
