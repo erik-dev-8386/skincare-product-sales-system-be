@@ -1,5 +1,6 @@
 package application.havenskin.dataAccess;
 
+import application.havenskin.enums.FeedBackEnum;
 import application.havenskin.models.Products;
 import application.havenskin.models.Users;
 import lombok.Data;
@@ -13,7 +14,7 @@ public class FeedbackDTO {
     @Nationalized
     private String feedbackContent;
 
-    private Date feedbackDate;
+    private Date feedbackDate = new Date();
 
     private String productId;
 
@@ -23,5 +24,8 @@ public class FeedbackDTO {
 
     private Users users;
 
-    private byte status;
+    private byte status = FeedBackEnum.ACTIVE.getFeedBack_status();
+
+    private byte rating;
+
 }

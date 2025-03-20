@@ -1,6 +1,7 @@
 package application.havenskin.config;
 
 import application.havenskin.enums.Role;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -31,12 +32,17 @@ import java.util.List;
 public class SecurityConfig {
     private static final String SIGN_KEY = "U0Ec+zdBMdxc7lSoSXfeXCKphSZkUT2GIqhHQBxgirb0Psm2uneOCeuV4/K7X46s";
 
+    @Autowired
     private final ClientRegistrationRepository clientRegistrationRepository;
 
     public SecurityConfig(ClientRegistrationRepository clientRegistrationRepository) {
         this.clientRegistrationRepository = clientRegistrationRepository;
     }
-    private final String[] PUBLIC_ENDPOINTS = {"/haven-skin/brands","/haven-skin/categories", "/haven-skin/discounts", "/haven-skin/products", "/haven-skin/skin-types", "/haven-skin/products/{id}", "/haven-skin/categories/name/","/haven-skin/products/category/{categoryname}","/haven-skin/products/best-seller"};
+
+    //    public SecurityConfig(ClientRegistrationRepository clientRegistrationRepository) {
+//        this.clientRegistrationRepository = clientRegistrationRepository;
+//    }
+    private final String[] PUBLIC_ENDPOINTS = {"/haven-skin/brands","/haven-skin/categories", "/haven-skin/discounts", "/haven-skin/products", "/haven-skin/skin-types", "/haven-skin/products/{id}", "/haven-skin/categories/name/{categoryName}","/haven-skin/products/category/{categoryname}","/haven-skin/products/best-seller", "/haven-skin/blogs", "/haven-skin/blogCategory", "/haven-skin/blog-hashtag","/haven-skin/skin-tests/questions-answers/{skintestId}", "/haven-skin/products/{id}", "/haven-skin/products", "/haven-skin/brands", "/haven-skin/categories", "/haven-skin/discounts", "/haven-skin/skin-types", "/haven-skin/reviews/product/{id}"};
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.
