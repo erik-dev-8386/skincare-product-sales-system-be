@@ -11,8 +11,13 @@ import org.springframework.web.bind.annotation.*;
 public class FeebackController {
     @Autowired
     private FeedbackService feedbackService;
-    @GetMapping("/{email}/{productName}")
+    @PostMapping("/{email}/{productName}")
     public Feedbacks getFeedbacks(@PathVariable String email, @PathVariable String productName,@RequestBody FeedbackDTO feedbacks) {
         return feedbackService.createFeedbackByUserIdAndProductId(email, productName, feedbacks);
     }
+    @GetMapping("/{email}/{productName}")
+    public Feedbacks getFeedbacksByEmail(@PathVariable String email, @PathVariable String productName) {
+        return feedbackService.searchFeedbackById(email, productName);
+    }
+
 } 

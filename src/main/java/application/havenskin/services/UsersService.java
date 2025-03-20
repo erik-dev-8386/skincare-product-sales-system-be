@@ -3,13 +3,17 @@ package application.havenskin.services;
 import application.havenskin.dataAccess.UserDTO;
 import application.havenskin.dataAccess.UserServiceResponseDto;
 import application.havenskin.enums.Role;
+import application.havenskin.models.Orders;
 import application.havenskin.models.Users;
+import application.havenskin.repositories.OrdersRepository;
 import application.havenskin.repositories.UserRepository;
+import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -22,6 +26,9 @@ public class UsersService {
 
     @Autowired
     private FirebaseService firebaseService;
+    @Autowired
+    private OrdersRepository ordersRepository;
+
     public UsersService(UserRepository usersRepository) {
         this.usersRepository = usersRepository;
     }
@@ -40,11 +47,59 @@ public class UsersService {
 
     public Users getUserByEmailCheckOut(String email) {
         Users user = usersRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
-
-        validateUserProfileForCheckout(user.getEmail());
+//
+//        validateUserProfileForCheckout(user.getEmail());
         return user;
     }
 
+
+    public Users checkOutUser(String email, String orderId, UserDTO userDTO) {
+        Users x = getUserByEmail(email);
+        Orders orders = ordersRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Order not found"));
+        if (x.getFirstName() == null || userDTO.getFirstName() != null) {
+            if (userDTO.getFirstName() != null) {
+//                x.setFirstName(userDTO.getFirstName());
+                orders.setCustomerFirstName(userDTO.getFirstName());
+            } else {
+                throw new RuntimeException("First name is missing for user with email: " + email);
+            }
+        }
+        if (x.getLastName() == null || userDTO.getLastName() != null) {
+            if (userDTO.getLastName() != null) {
+                //        x.setLastName(userDTO.getLastName());
+                orders.setCustomerLastName(userDTO.getLastName());
+            } else {
+                throw new RuntimeException("Last name is missing for user with email: " + email);
+            }
+        }
+        if (x.getEmail() == null || userDTO.getEmail() != null) {
+            if (userDTO.getEmail() != null) {
+                 x.setEmail(userDTO.getEmail());
+            } else {
+                throw new RuntimeException("Email is missing for user with email: " + email);
+            }
+        }
+        if (x.getPhone() == null || userDTO.getPhone() != null) {
+            if (userDTO.getPhone() != null) {
+            //    x.setPhone(userDTO.getPhone());
+                orders.setCustomerPhone(userDTO.getPhone());
+            } else {
+                throw new RuntimeException("Phone number is missing for user with email: " + email);
+            }
+        }
+        if (x.getAddress() == null || userDTO.getAddress() != null) {
+            if (userDTO.getAddress() != null) {
+            //    x.setAddress(userDTO.getAddress());
+                orders.setAddress(userDTO.getAddress());
+            } else {
+                throw new RuntimeException("Address is missing for user with email: " + email);
+            }
+        }
+//        System.out.println("Saved user: " +x);
+//        usersRepository.save(x);
+        ordersRepository.save(orders);
+        return x;
+    }
 
     public Map<String, String> validateUserProfileForCheckout(String email) {
         Users user = getUserByEmail(email);
@@ -65,6 +120,7 @@ public class UsersService {
 
         return validationErrors;
     }
+
     public Users saveUser(Users user) {
         return usersRepository.save(user);
     }
@@ -129,37 +185,35 @@ public class UsersService {
         return usersRepository.findByRole((byte) 3);
     }
 
-    public Users updateUser(String email,  UserDTO user, MultipartFile file) throws IOException {
+    public Users updateUser(String email, UserDTO user, MultipartFile file) throws IOException {
         String userId = usersRepository.findByEmail(email).get().getUserId();
-        if(userId == null) {
+        if (userId == null) {
             throw new RuntimeException("User not found");
-        }
-        else{
-          Users existingUser = usersRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found!"));
+        } else {
+            Users existingUser = usersRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found!"));
 
-          existingUser.setFirstName(user.getFirstName());
-          existingUser.setLastName(user.getLastName());
-          existingUser.setEmail(user.getEmail());
-          existingUser.setPhone(user.getPhone());
-          existingUser.setGender(user.getGender());
-          existingUser.setAddress(user.getAddress());
-          existingUser.setBirthDate(user.getBirthDate());
+            existingUser.setFirstName(user.getFirstName());
+            existingUser.setLastName(user.getLastName());
+            existingUser.setEmail(user.getEmail());
+            existingUser.setPhone(user.getPhone());
+            existingUser.setGender(user.getGender());
+            existingUser.setAddress(user.getAddress());
+            existingUser.setBirthDate(user.getBirthDate());
 
-          if(file != null && !file.isEmpty()) {
-              String avatar = firebaseService.uploadImage(file);
-              existingUser.setImage(avatar);
-          }
+            if (file != null && !file.isEmpty()) {
+                String avatar = firebaseService.uploadImage(file);
+                existingUser.setImage(avatar);
+            }
 //          else {
 //              existingUser.setImage(null);
 //          }
-          return usersRepository.save(existingUser);
+            return usersRepository.save(existingUser);
         }
     }
 
 //    public Users updateUserByOrder(UserDTO user){
 //
 //    }
-
 
 
 }

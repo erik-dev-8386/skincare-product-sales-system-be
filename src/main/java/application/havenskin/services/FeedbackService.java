@@ -59,6 +59,22 @@ public class FeedbackService {
         feedbacks.setUsers(x);
         return feedbacksRepository.save(feedbacks);
     }
+
+    public Feedbacks searchFeedbackById(String email, String productName) {
+        Users users = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+        Products products = productService.getProductByName(productName);
+        if (products == null) {
+            throw new RuntimeException("Product not found");
+        }
+        String productId = products.getProductId();
+        String userId = users.getUserId();
+        Feedbacks feedbacks = feedbacksRepository.findByProductIdAndUserId(productId, userId);
+        if (feedbacks == null) {
+            throw new RuntimeException("Feedback not found");
+        }
+        return feedbacks;
+    }
+
 //    public Feedbacks updateFeedbackById(String email,String productName,String, FeedbackDTO feedback) {
 //        Users x = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
 //        String userId = x.getUserId();

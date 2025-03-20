@@ -5,6 +5,7 @@ import com.google.firebase.database.DatabaseError;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.checkerframework.checker.units.qual.N;
 import org.checkerframework.common.aliasing.qual.Unique;
 import org.checkerframework.common.aliasing.qual.Unique;
 import org.hibernate.annotations.Nationalized;
@@ -26,6 +27,7 @@ public class Transactions {
     private String transactionCode;
 
     @Column(name = "content", length = 255)
+    @Nationalized
     private String content;
 
     @Column(name = "bank_name", length = 50)
@@ -41,12 +43,14 @@ public class Transactions {
     @Column(name = "amount")
     private double amount;
 
+    @JsonIgnore
     @NotNull
     @Column(name = "order_id", length = 50)
     private String orderId;
 
     @Column(name="transaction_type")
     private byte transactionType;
+
 
     @JsonIgnore
     @OneToOne
