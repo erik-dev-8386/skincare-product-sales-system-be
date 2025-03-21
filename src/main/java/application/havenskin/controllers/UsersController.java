@@ -189,4 +189,9 @@ public class UsersController {
         return usersService.updateUser(email, userDTO, images);
     }
 
+
+    @PostMapping("/check-out/{email}/{orderId}")
+    public Users checkOutUser(@PathVariable String email,@PathVariable String orderId, @RequestBody UserDTO userDTO){
+        return usersService.checkOutUser(email,orderId, userDTO);
+    }
 }

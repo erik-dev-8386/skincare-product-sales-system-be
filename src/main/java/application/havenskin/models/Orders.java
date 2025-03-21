@@ -51,7 +51,8 @@ public class Orders {
     @OneToMany(mappedBy = "orders")
     private List<Shipments> shipments;
 
-//    @JsonIgnore
+    @ToString.Exclude
+    @JsonIgnore
     @OneToOne(mappedBy = "orders", cascade = CascadeType.ALL)
     private Transactions transactions;
 
@@ -66,9 +67,13 @@ public class Orders {
     @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
     private List<OrderDetails> orderDetails;
 
-    @Column(name = "customer_name", length = 100)
+    @Column(name = "customer_LastName", length = 100)
     @Nationalized
-    private String customerName;
+    private String customerLastName;
+
+    @Column(name = "customer_FirstName", length = 100)
+    @Nationalized
+    private String customerFirstName;
 
     @Column(name = "customer_phone", length = 15)
     private String customerPhone;

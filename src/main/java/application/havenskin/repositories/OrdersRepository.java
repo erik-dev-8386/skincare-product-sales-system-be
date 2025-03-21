@@ -24,4 +24,8 @@ public interface OrdersRepository extends JpaRepository<Orders, String> {
     List<Orders> findByOrderIdContaining(@Param("orderId") String orderId);
 
     List<Orders> findByStatus(byte status);
+
+    List<Orders> findAllByOrderByOrderTimeDesc();
+
+    List<Orders> findAllByOrderByOrderTimeAsc();
 }

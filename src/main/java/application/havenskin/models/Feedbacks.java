@@ -43,4 +43,7 @@ public class Feedbacks {
 
     @Column(name = "status", length = 20)
     private byte status;
+
+    @Column(name = "rating")
+    private byte rating;
 }

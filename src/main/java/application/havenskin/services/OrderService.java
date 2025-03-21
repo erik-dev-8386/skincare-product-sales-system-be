@@ -57,7 +57,9 @@ public class OrderService {
         if (users != null) {
             order.setUserId(users.getUserId());
             order.setAddress(users.getAddress());
-            order.setCustomerName(users.getFirstName() +" "+ users.getLastName());
+            //order.setCustomerName(users.getFirstName() +" "+ users.getLastName());
+            order.setCustomerFirstName(users.getFirstName());
+            order.setCustomerLastName(users.getLastName());
             order.setCustomerPhone(users.getPhone());
             order.setStatus(OrderEnums.PENDING.getOrder_status());
             order.setOrderTime(new Date());
@@ -487,6 +489,15 @@ public class OrderService {
 
         ordersRepository.delete(order);
 
+    }
+
+
+    public List<Orders> sortOrdersByOrderTimeDESC(){
+        return ordersRepository.findAllByOrderByOrderTimeDesc();
+    }
+
+    public List<Orders> sortOrdersByOrderTimeASC(){
+        return ordersRepository.findAllByOrderByOrderTimeAsc();
     }
 
 }
