@@ -491,4 +491,13 @@ public class OrderService {
 
     }
 
+
+    public List<Orders> sortOrdersByOrderTimeDESC(){
+        return ordersRepository.findAllByOrderByOrderTimeDesc();
+    }
+
+    public List<Orders> sortOrdersByOrderTimeASC(){
+        return ordersRepository.findAllByOrderByOrderTimeAsc();
+    }
+
 }

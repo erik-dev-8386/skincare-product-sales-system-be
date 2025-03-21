@@ -70,4 +70,13 @@ public class OrderController {
     public void cancelOrder(@PathVariable String email, @PathVariable String orderId) {
         orderService.cancelOrder(email, orderId);
     }
+
+    @GetMapping("/sort-desc")
+    public List<Orders> sortDesc(){
+        return orderService.sortOrdersByOrderTimeDESC();
+    }
+    @GetMapping("/sort-asc")
+    public List<Orders> sortAsc(){
+        return orderService.sortOrdersByOrderTimeASC();
+    }
 }

@@ -6,6 +6,8 @@ import application.havenskin.services.FeedbackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/haven-skin/feedbacks")
 public class FeebackController {
@@ -27,4 +29,9 @@ public class FeebackController {
         return feedbackService.calculateAverageRating(productName);
     }
 
+    // lấy số lượng sao của tất cả khách hàng
+    @GetMapping("/get-star/by-customer/{productName}")
+    public Map<Byte, Integer> getStarsByCustomer(@PathVariable String productName) {
+        return feedbackService.getRatingByAllUsers(productName);
+    }
 } 

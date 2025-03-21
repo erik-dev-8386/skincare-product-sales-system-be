@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class FeedbackService {
@@ -109,4 +111,22 @@ public class FeedbackService {
 //        }
 //
 //    }
+
+    public Map<Byte, Integer> getRatingByAllUsers(String productName) {
+        String productId = productsRepository.findProductIDByName(productName);
+        if(productId == null) {
+            throw new RuntimeException("Product not found");
+        }
+        List<Feedbacks> feedbacks = feedbacksRepository.findByProductId(productId);
+
+        Map<Byte, Integer> rating = new HashMap<>();
+        for (byte i = 1; i <= 5; i++){
+            rating.put(i, 0);
+        }
+        for (Feedbacks feedback : feedbacks) {
+            byte ratingFeedBack = feedback.getRating();
+            rating.put(ratingFeedBack, rating.get(ratingFeedBack) + 1);
+        }
+        return rating;
+    }
 }
