@@ -380,6 +380,10 @@ public class OrderService {
                 .collect(Collectors.toList());
     }
 
+    public List<Orders> getOrdersByEmailAndStatus(String email, byte status) {
+        return ordersRepository.findByEmailAndStatus(email, status);
+    }
+
     public List<HistoryOrderDTO> getHistoryOrder(String email) {
         Optional<Users> userOpt = userRepository.findByEmail(email);
         if (!userOpt.isPresent()) {

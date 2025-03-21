@@ -25,6 +25,8 @@ public interface OrdersRepository extends JpaRepository<Orders, String> {
 
     List<Orders> findByStatus(byte status);
 
+    List<Orders> findByEmailAndStatus(String email, byte status);
+
     List<Orders> findAllByOrderByOrderTimeDesc();
 
     List<Orders> findAllByOrderByOrderTimeAsc();

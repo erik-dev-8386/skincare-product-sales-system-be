@@ -81,4 +81,9 @@ public class OrderController {
     public List<Orders> sortAsc(){
         return orderService.sortOrdersByOrderTimeASC();
     }
+
+    @GetMapping("/status")
+    public List<Orders> getOrdersByStatus(String email, byte status) {
+        return orderService.getOrdersByEmailAndStatus(email, status);
+    }
 }
