@@ -380,9 +380,9 @@ public class OrderService {
                 .collect(Collectors.toList());
     }
 
-    public List<Orders> getOrdersByEmailAndStatus(String email, byte status) {
-        return ordersRepository.findByEmailAndStatus(email, status);
-    }
+//    public List<Orders> getOrdersByEmailAndStatus(String email, byte status) {
+//        return ordersRepository.findByEmailAndStatus(email, status);
+//    }
 
     public List<HistoryOrderDTO> getHistoryOrder(String email) {
         Optional<Users> userOpt = userRepository.findByEmail(email);
@@ -504,4 +504,19 @@ public class OrderService {
         return ordersRepository.findAllByOrderByOrderTimeAsc();
     }
 
+    public List<Orders> sortOrdersByEmailOrderTimeDESC(String email){
+        String userId = userRepository.findByEmail(email).get().getUserId();
+        if(userId == null) {
+            throw new RuntimeException("User not found");
+        }
+        return ordersRepository.sortOrdersByUserIdAndOrderTimeDesc(userId);
+    }
+
+    public List<Orders> sortOrdersByEmailOrderTimeASC(String email){
+        String userId = userRepository.findByEmail(email).get().getUserId();
+        if(userId == null) {
+            throw new RuntimeException("User not found");
+        }
+        return ordersRepository.sortOrdersByUserIdAndOrderTimeAsc(userId);
+    }
 }

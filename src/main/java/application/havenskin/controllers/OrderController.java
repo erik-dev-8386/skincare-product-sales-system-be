@@ -82,8 +82,18 @@ public class OrderController {
         return orderService.sortOrdersByOrderTimeASC();
     }
 
-    @GetMapping("/status")
-    public List<Orders> getOrdersByStatus(String email, byte status) {
-        return orderService.getOrdersByEmailAndStatus(email, status);
+//    @GetMapping("/status")
+//    public List<Orders> getOrdersByStatus(String email, byte status) {
+//        return orderService.getOrdersByEmailAndStatus(email, status);
+//    }
+
+    @GetMapping("/sort-desc/{email}")
+    public List<Orders> sortDesc(@PathVariable String email){
+        return orderService.sortOrdersByEmailOrderTimeDESC(email);
+    }
+
+    @GetMapping("/sort-asc/{email}")
+    public List<Orders> sortAsc(@PathVariable String email){
+        return orderService.sortOrdersByEmailOrderTimeASC(email);
     }
 }

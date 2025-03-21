@@ -12,6 +12,9 @@ import application.havenskin.repositories.ProductsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -233,4 +236,8 @@ public class ProductService {
 //    public Products byProduct(String productName) {
 //        Products x = productsRepository.findByProductName()
 //    }
+//public Page<Products> getProducts(int page, int size) {
+//    Pageable pageable = PageRequest.of(page, size);
+//    return productsRepository.findAll(pageable);
+//}
 }
