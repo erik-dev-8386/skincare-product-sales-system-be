@@ -33,10 +33,12 @@ public class OrderController {
     public List<Orders> searchOrderById(@PathVariable String id){
         return orderService.getOrdersList(id);
     }
+
     @GetMapping("/{id}")
     public Orders getOrderById(@PathVariable String id){
         return orderService.getOrderById(id);
     }
+
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @PutMapping("/{id}")
     public Orders updateOrder(@PathVariable  String id,@RequestBody OrderDTO order){
