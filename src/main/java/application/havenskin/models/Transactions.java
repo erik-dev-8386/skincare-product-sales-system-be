@@ -45,7 +45,7 @@ public class Transactions {
 
     @JsonIgnore
     @NotNull
-    @Column(name = "order_id", length = 50)
+    @Column(name = "order_id", length = 50, unique = true)
     private String orderId;
 
     @Column(name="transaction_type")

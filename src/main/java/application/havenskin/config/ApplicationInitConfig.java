@@ -38,7 +38,7 @@ public class ApplicationInitConfig {
                 x.setLastName("Staff");
                 userRepository.save(x);
             }
-            if(skinTestsRepository.findById("1").isPresent()){
+            if(skinTestsRepository.findById("1").isEmpty()){
                 SkinTests x = new SkinTests();
                 x.setSkinTestId("1");
                 x.setTestName("Bài kiểm tra xác định loại da");

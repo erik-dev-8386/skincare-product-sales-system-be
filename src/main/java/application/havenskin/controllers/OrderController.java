@@ -1,5 +1,6 @@
 package application.havenskin.controllers;
 
+import application.havenskin.dataAccess.HistoryOrderDTO;
 import application.havenskin.dataAccess.MonthlyRevenueDTO;
 import application.havenskin.dataAccess.OrderDTO;
 import application.havenskin.enums.OrderEnums;
@@ -75,25 +76,25 @@ public class OrderController {
 
     @GetMapping("/sort-desc")
     public List<Orders> sortDesc(){
-        return orderService.sortOrdersByOrderTimeDESC();
+        return orderService.sortOrdersByOrderTimeASC();
     }
     @GetMapping("/sort-asc")
     public List<Orders> sortAsc(){
         return orderService.sortOrdersByOrderTimeASC();
     }
-
+//
 //    @GetMapping("/status")
 //    public List<Orders> getOrdersByStatus(String email, byte status) {
 //        return orderService.getOrdersByEmailAndStatus(email, status);
 //    }
 
     @GetMapping("/sort-desc/{email}")
-    public List<Orders> sortDesc(@PathVariable String email){
-        return orderService.sortOrdersByEmailOrderTimeDESC(email);
+    public List<HistoryOrderDTO> sortDesc(@PathVariable String email){
+        return orderService.sortOrdersByOrderTimeDESC(email);
     }
 
     @GetMapping("/sort-asc/{email}")
-    public List<Orders> sortAsc(@PathVariable String email){
-        return orderService.sortOrdersByEmailOrderTimeASC(email);
+    public List<HistoryOrderDTO> sortAsc(@PathVariable String email){
+        return orderService.sortOrdersByOrderTimeASC(email);
     }
 }

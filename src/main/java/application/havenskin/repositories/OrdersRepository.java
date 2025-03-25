@@ -16,6 +16,8 @@ import java.util.Optional;
 @Repository
 public interface OrdersRepository extends JpaRepository<Orders, String> {
 
+    List<Orders> findByOrderId(String orderID);
+
     Optional<Orders> findByUserIdAndStatus(@NotNull String userId, @NotNull byte status);
 
     Optional<Orders> findByOrderIdAndUserId(@NotNull String orderId, @NotNull String userId);
@@ -28,7 +30,6 @@ public interface OrdersRepository extends JpaRepository<Orders, String> {
     List<Orders> findByStatus(byte status);
 
 
-
     List<Orders> findAllByOrderByOrderTimeDesc();
 
     List<Orders> findAllByOrderByOrderTimeAsc();
@@ -38,4 +39,16 @@ public interface OrdersRepository extends JpaRepository<Orders, String> {
 
     @Query("SELECT o FROM Orders o where o.userId = :userId ORDER BY o.orderTime ASC")
     List<Orders> sortOrdersByUserIdAndOrderTimeAsc(@Param("userId") String userId);
+
+    @Query("SELECT " +
+            "YEAR(o.orders.orderTime) as year, " +
+            "MONTH(o.orders.orderTime) as month, " +
+            "o.products.productName as productName, " +
+            "SUM(o.quantity) as totalQuantity " +
+            "FROM OrderDetails o " +
+            "GROUP BY YEAR(o.orders.orderTime), MONTH(o.orders.orderTime), o.products.productName " +
+            "ORDER BY YEAR(o.orders.orderTime),MONTH(o.orders.orderTime)")
+    List<Object[]> findMonthlySales();
+
+
 }

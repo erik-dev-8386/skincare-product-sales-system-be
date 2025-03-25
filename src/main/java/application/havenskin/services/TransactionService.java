@@ -74,10 +74,15 @@ public class TransactionService {
 //        Orders orders = ordersRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Order not found"));
         Orders order = orderService.getOrderById(orderId);
         Transactions transaction = transactionsRepository.findByOrderId(orderId);
-        transaction.setTransactionStatus(TransactionsEnums.PROCESSING.getValue());
-        transaction.setTransactionType(TransactionsEnums.Type.COD.getValue());
-        transaction.setAmount(order.getTotalAmount());
-        transaction.setTransactionTime(LocalDateTime.now());
-        transactionsRepository.save(transaction);
+        if (transaction == null) {
+            Transactions newTransaction = new Transactions();
+            newTransaction.setOrderId(orderId);
+            newTransaction.setTransactionStatus(TransactionsEnums.PROCESSING.getValue());
+            transaction.setTransactionType(TransactionsEnums.Type.COD.getValue());
+            transactionsRepository.save(newTransaction);
+            transaction.setAmount(order.getTotalAmount());
+            transaction.setTransactionTime(LocalDateTime.now());
+            transactionsRepository.save(transaction);
+        }
     }
 }
