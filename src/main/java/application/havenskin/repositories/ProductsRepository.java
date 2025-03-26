@@ -5,7 +5,9 @@ import application.havenskin.models.Products;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
+import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 
@@ -55,4 +57,5 @@ public interface ProductsRepository extends JpaRepository<Products, String> {
     @Query("SELECT p FROM Products p WHERE p.discountPrice BETWEEN :startPrice AND :endPrice")
     List<Products> findByDiscountPriceBetween(@Param("startPrice") Double startPrice, @Param("endPrice") Double endPrice);
 
+    Page<Products> findAll(Pageable pageable);
 }

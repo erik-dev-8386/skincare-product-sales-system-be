@@ -6,12 +6,17 @@ import application.havenskin.services.BrandService;
 import application.havenskin.services.CategoryService;
 import application.havenskin.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.data.domain.Page;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/haven-skin/products")
@@ -118,4 +123,12 @@ public class ProductController {
     public List<Products> sortProductsByPrice(@PathVariable double startPrice, @PathVariable double endPrice) {
         return productService.sortDiscountPrice(startPrice, endPrice);
     }
+//    @GetMapping("/pagingProducts")
+//    public Page<Products> getProducts(@RequestParam(defaultValue = "0") int page,
+//                                      @RequestParam(defaultValue = "5") int size) {
+//        return productService.getProducts(page, size);
+//    }
+
+
+
 }

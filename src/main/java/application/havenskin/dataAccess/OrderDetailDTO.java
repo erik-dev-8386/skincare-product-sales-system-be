@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class OrderDetailDTO {
+public class    OrderDetailDTO {
 
     private int quantity;
 

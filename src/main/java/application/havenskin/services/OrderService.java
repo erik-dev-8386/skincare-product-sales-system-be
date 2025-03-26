@@ -46,6 +46,7 @@ public class OrderService {
     @Autowired
     private TransactionsRepository transactionsRepository;
 
+    // hàm này khi khách hàng bấm nút đặt hàng!
     public CheckOutResponseDTO checkout(CheckoutRequestDTO checkoutRequestDTO) {
 
         Users users = null;
@@ -61,7 +62,7 @@ public class OrderService {
             order.setCustomerFirstName(users.getFirstName());
             order.setCustomerLastName(users.getLastName());
             order.setCustomerPhone(users.getPhone());
-            order.setStatus(OrderEnums.PENDING.getOrder_status());
+                order.setStatus(OrderEnums.UNORDERED.getOrder_status());
             order.setOrderTime(new Date());
             ordersRepository.save(order);
         } else {
@@ -87,7 +88,7 @@ public class OrderService {
             orderDetails.setProductId(products.getProductId());
             orderDetails.setQuantity(cartItemDTO.getQuantity());
             orderDetails.setDiscountPrice(products.getDiscountPrice());
-            orderDetails.setStatus(OrderEnums.PENDING.getOrder_status());
+            orderDetails.setStatus(OrderEnums.UNORDERED.getOrder_status());
 
             orderDetailsRepository.save(orderDetails);
 
@@ -102,9 +103,8 @@ public class OrderService {
         order.setTotalAmount(totalOrderPrice);
         ordersRepository.save(order);
 
-        order.setStatus(OrderEnums.PENDING.getOrder_status());
+        order.setStatus(OrderEnums.UNORDERED.getOrder_status());
         ordersRepository.save(order);
-
 
 
         CheckOutResponseDTO response = new CheckOutResponseDTO();
@@ -126,22 +126,24 @@ public class OrderService {
                 temp.setImageUrl(null);
             }
 
-            Transactions transactions = new Transactions();
-            transactions.setOrderId(order.getOrderId());
-            transactions.setTransactionTime(LocalDateTime.now());
-            transactionsRepository.save(transactions);
+//            Transactions transactions = new Transactions();
+//            transactions.setOrderId(order.getOrderId());
+//            transactions.setTransactionTime(LocalDateTime.now());
+////            transactions.setAmount(detail.getQuantity());
+//            transactionsRepository.save(transactions);
             return temp;
         }).collect(Collectors.toList()));
         if (checkoutRequestDTO.getEmail() != null && !checkoutRequestDTO.getEmail().isEmpty()) {
             sendOrderConfirmationEmail(checkoutRequestDTO.getEmail(), order.getOrderId(), order.getTotalAmount(), order.getOrderTime(), (List<CartItemResponseDTO>) response.getCartItems());
-        }
-        else {
+        } else {
             log.warn("Không có email để gửi xác nhận đơn hàng.");
         }
 //    sendOrderConfirmationEmail(checkoutRequestDTO.getEmail(), order.getOrderId(), order.getTotalAmount(), order.getOrderTime(), (List<CartItemResponseDTO>) response.getCartItems());
         return response;
     }
 
+
+    // gửi email xác nhận
     private void sendOrderConfirmationEmail(String to, String orderId, double totalAmount, Date orderDate, List<CartItemResponseDTO> cartItems) {
         // Tạo tiêu đề email
         String subject = "Haven Skin - Xác nhận đơn hàng #" + orderId;
@@ -241,6 +243,21 @@ public class OrderService {
 
     public Orders createOrder(Orders order) {  return ordersRepository.save(order);}
 
+//    public Orders updateOrder(String id, OrderDTO order) {
+
+    /// /        Orders x = ordersRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
+    /// /        mapper.updateOrders(x, order);
+    /// /        return ordersRepository.save(x);
+//        Orders x = ordersRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
+//        x.setOrderId(x.getOrderId());
+//        x.setOrderTime(x.getOrderTime());
+//        x.setTotalAmount(x.getTotalAmount());
+//        x.setAddress(x.getAddress());
+//        x.setUserId(x.getUserId());
+//        x.setStatus(order.getStatus());
+//        x.setCancelTime(x.getCancelTime());
+//        return ordersRepository.save(x);
+//    }
     public Orders updateOrder(String id, OrderDTO order) {
 //        Orders x = ordersRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
 //        mapper.updateOrders(x, order);
@@ -251,9 +268,16 @@ public class OrderService {
         x.setTotalAmount(x.getTotalAmount());
         x.setAddress(x.getAddress());
         x.setUserId(x.getUserId());
-        x.setStatus(order.getStatus());
         x.setCancelTime(x.getCancelTime());
-        return ordersRepository.save(x);
+
+
+        if(isValidStatusOrder(OrderEnums.fromOrderStatus(x.getStatus()),OrderEnums.fromOrderStatus(order.getStatus()))){
+            x.setStatus(order.getStatus());
+            return ordersRepository.save(x);
+        }
+        else{
+            throw new RuntimeException("Chuyển trạng thái không hợp lệ");
+        }
     }
 
     public Orders deleteOrder(String id) {
@@ -271,7 +295,7 @@ public class OrderService {
         return ordersRepository.saveAll(orders);
     }
 
-    //@Transactional
+    @Transactional
     public boolean updateOrderStatus(String orderId, byte newStatusByte) {
         Optional<Orders> orderOpt = ordersRepository.findById(orderId);
         if (orderOpt.isEmpty()) {
@@ -341,8 +365,27 @@ public class OrderService {
         return validTransitions.getOrDefault(currentStatus, List.of()).contains(newStatus);
     }
 
+    public boolean isValidStatusOrder(OrderEnums currentStatus, OrderEnums newStatus) {
+        Map<OrderEnums, List<OrderEnums>> validTransitions = new HashMap<>();
+
+        validTransitions.put(OrderEnums.UNORDERED, List.of(OrderEnums.PENDING, OrderEnums.CANCELLED));
+        validTransitions.put(OrderEnums.PENDING, List.of(OrderEnums.PROCESSING, OrderEnums.CANCELLED));
+        validTransitions.put(OrderEnums.PROCESSING, List.of(OrderEnums.SHIPPING, OrderEnums.CANCELLED));
+        validTransitions.put(OrderEnums.SHIPPING, List.of(OrderEnums.DELIVERED, OrderEnums.RETURNED));
+        validTransitions.put(OrderEnums.DELIVERED, List.of());
+        validTransitions.put(OrderEnums.CANCELLED, List.of());
+        validTransitions.put(OrderEnums.RETURNED, List.of());
+
+        if (newStatus.getOrder_status() < currentStatus.getOrder_status()) {
+            return false;
+        }
+
+        return validTransitions.getOrDefault(currentStatus, List.of()).contains(newStatus);
+    }
+
     public List<MonthlyRevenueDTO> getMonthlyRevenue() {
-        List<Orders> deliveredOrders = ordersRepository.findByStatus(OrderEnums.DELIVERED.getOrder_status());
+        List<Orders> deliveredOrders = ordersRepository.
+                findByStatus(OrderEnums.DELIVERED.getOrder_status());
 
         // Nhóm theo tháng và tính tổng doanh thu
         Map<String, Double> revenueMap = deliveredOrders.stream()
@@ -365,14 +408,14 @@ public class OrderService {
                 .collect(Collectors.toList());
     }
 
-    public List<Orders> getOrdersByEmailAndStatus(String email, byte status) {
-        return ordersRepository.findByEmailAndStatus(email, status);
-    }
+//    public List<Orders> getOrdersByEmailAndStatus(String email, byte status) {
+//        return ordersRepository.findByEmailAndStatus(email, status);
+//    }
 
     public List<HistoryOrderDTO> getHistoryOrder(String email) {
         Optional<Users> userOpt = userRepository.findByEmail(email);
         if (!userOpt.isPresent()) {
-            throw new RuntimeException("User not found");
+            throw new RuntimeException("íUser not found");
         }
         Users user = userOpt.get();
         String userId = user.getUserId();
@@ -450,6 +493,7 @@ public class OrderService {
         historyOrder.setProductName(productDetails);
         return historyOrder;
     }
+
     public void deleteOrder(String email, String orderId) {
         Optional<Users> userOpt = userRepository.findByEmail(email);
         if (!userOpt.isPresent()) {
@@ -466,7 +510,7 @@ public class OrderService {
         List<OrderDetails> orderDetails = orderDetailsRepository.findByOrderId(order.getOrderId());
 //        Optional<OrderDetails> orderDetails = orderDetailsRepository.findByOrderIdAndUserId()
         Transactions transactions = transactionsRepository.findByOrderId(order.getOrderId());
-        for(OrderDetails orderDetail : orderDetails) {
+        for (OrderDetails orderDetail : orderDetails) {
             Products products = productsRepository.findById(orderDetail.getProductId()).orElseThrow(() -> new RuntimeException("Product not found"));
             products.setQuantity(products.getQuantity() + orderDetail.getQuantity());
             products.setSoldQuantity(products.getSoldQuantity() - orderDetail.getQuantity());
@@ -481,12 +525,117 @@ public class OrderService {
     }
 
 
-    public List<Orders> sortOrdersByOrderTimeDESC(){
+    public List<Orders> sortOrdersByOrderTimeDESC() {
         return ordersRepository.findAllByOrderByOrderTimeDesc();
     }
 
-    public List<Orders> sortOrdersByOrderTimeASC(){
+    public List<Orders> sortOrdersByOrderTimeASC() {
         return ordersRepository.findAllByOrderByOrderTimeAsc();
     }
 
+    public List<Orders> sortOrdersByEmailOrderTimeDESC(String email) {
+        String userId = userRepository.findByEmail(email).get().getUserId();
+        if (userId == null) {
+            throw new RuntimeException("User not found");
+        }
+        return ordersRepository.sortOrdersByUserIdAndOrderTimeDesc(userId);
+    }
+
+    public List<Orders> sortOrdersByEmailOrderTimeASC(String email) {
+        String userId = userRepository.findByEmail(email).get().getUserId();
+        if (userId == null) {
+            throw new RuntimeException("User not found");
+        }
+        return ordersRepository.sortOrdersByUserIdAndOrderTimeAsc(userId);
+    }
+
+    public List<HistoryOrderDTO> sortOrdersByOrderTimeDESC(String email) {
+        Optional<Users> userOpt = userRepository.findByEmail(email);
+        if (!userOpt.isPresent()) {
+            throw new RuntimeException("User not found");
+        }
+        Users user = userOpt.get();
+        String userId = user.getUserId();
+
+        // Lấy danh sách đơn hàng đã sắp xếp
+        List<Orders> sortedOrders = ordersRepository.sortOrdersByUserIdAndOrderTimeDesc(userId);
+
+        // Chuyển đổi sang DTO với thông tin sản phẩm
+        return sortedOrders.stream().map(order -> {
+            HistoryOrderDTO dto = new HistoryOrderDTO();
+            dto.setOrderId(order.getOrderId());
+            dto.setOrderTime(order.getOrderTime());
+            dto.setTotalAmount(order.getTotalAmount());
+            dto.setStatus(order.getStatus());
+
+            List<OrderDetails> orderDetails = orderDetailsRepository.findByOrderId(order.getOrderId());
+            dto.setQuantity(orderDetails.size());
+
+            List<ProductDetailsDTO> productDetails = orderDetails.stream().map(detail -> {
+                ProductDetailsDTO productDetail = new ProductDetailsDTO();
+                Products product = productsRepository.findById(detail.getProductId())
+                        .orElseThrow(() -> new RuntimeException("Product not found"));
+
+                productDetail.setProductName(product.getProductName());
+                productDetail.setQuantity(detail.getQuantity());
+                productDetail.setDiscountPrice(detail.getDiscountPrice());
+
+                if (product.getProductImages() != null && !product.getProductImages().isEmpty()) {
+                    productDetail.setImageUrl(product.getProductImages().get(0).getImageURL());
+                } else {
+                    productDetail.setImageUrl(null);
+                }
+
+                return productDetail;
+            }).collect(Collectors.toList());
+
+            dto.setProductName(productDetails);
+            return dto;
+        }).collect(Collectors.toList());
+    }
+
+    public List<HistoryOrderDTO> sortOrdersByOrderTimeASC(String email) {
+        Optional<Users> userOpt = userRepository.findByEmail(email);
+        if (!userOpt.isPresent()) {
+            throw new RuntimeException("User not found");
+        }
+        Users user = userOpt.get();
+        String userId = user.getUserId();
+
+        // Lấy danh sách đơn hàng đã sắp xếp
+        List<Orders> sortedOrders = ordersRepository.sortOrdersByUserIdAndOrderTimeAsc(userId);
+
+        // Chuyển đổi sang DTO với thông tin sản phẩm
+        return sortedOrders.stream().map(order -> {
+            HistoryOrderDTO dto = new HistoryOrderDTO();
+            dto.setOrderId(order.getOrderId());
+            dto.setOrderTime(order.getOrderTime());
+            dto.setTotalAmount(order.getTotalAmount());
+            dto.setStatus(order.getStatus());
+
+            List<OrderDetails> orderDetails = orderDetailsRepository.findByOrderId(order.getOrderId());
+            dto.setQuantity(orderDetails.size());
+
+            List<ProductDetailsDTO> productDetails = orderDetails.stream().map(detail -> {
+                ProductDetailsDTO productDetail = new ProductDetailsDTO();
+                Products product = productsRepository.findById(detail.getProductId())
+                        .orElseThrow(() -> new RuntimeException("Product not found"));
+
+                productDetail.setProductName(product.getProductName());
+                productDetail.setQuantity(detail.getQuantity());
+                productDetail.setDiscountPrice(detail.getDiscountPrice());
+
+                if (product.getProductImages() != null && !product.getProductImages().isEmpty()) {
+                    productDetail.setImageUrl(product.getProductImages().get(0).getImageURL());
+                } else {
+                    productDetail.setImageUrl(null);
+                }
+
+                return productDetail;
+            }).collect(Collectors.toList());
+
+            dto.setProductName(productDetails);
+            return dto;
+        }).collect(Collectors.toList());
+    }
 }
