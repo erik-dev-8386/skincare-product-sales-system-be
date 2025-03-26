@@ -53,4 +53,14 @@ public class CoinWalletController {
         return coinWalletService.deleteCoinWallet(id);
     }
 
+    @PostMapping("/apply-discount")
+    public ResponseEntity<String> applyCoinWalletDiscount(@RequestParam String orderId, @RequestParam boolean useCoinWallet) {
+        try {
+            coinWalletService.applyCoinWalletDiscount(orderId, useCoinWallet);
+            return ResponseEntity.ok("Discount applied successfully.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 }

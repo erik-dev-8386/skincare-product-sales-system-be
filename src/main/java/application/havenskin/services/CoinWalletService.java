@@ -4,7 +4,9 @@ import application.havenskin.dataAccess.CoinWalletDTO;
 import application.havenskin.enums.CoinWalletEnums;
 import application.havenskin.mapper.Mapper;
 import application.havenskin.models.CoinWallets;
+import application.havenskin.models.Orders;
 import application.havenskin.repositories.CoinWalletsRepository;
+import application.havenskin.repositories.OrdersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,8 @@ public class CoinWalletService {
     private CoinWalletsRepository coinWalletsRepository;
     @Autowired
     private Mapper mapper;
+    @Autowired
+    private OrdersRepository ordersRepository;
 
     public List<CoinWallets> getAllCoinWallets() {
         return coinWalletsRepository.findAll();
@@ -55,5 +59,27 @@ public class CoinWalletService {
             return coinWalletsRepository.save(coinWallet);
         }
         return null;
+    }
+
+    public void applyCoinWalletDiscount(String orderId, boolean useCoinWallet) {
+        if (!useCoinWallet) {
+            return;
+        }
+
+        Optional<Orders> orderOpt = ordersRepository.findById(orderId);
+        if (orderOpt.isEmpty()) {
+            throw new IllegalArgumentException("Order not found");
+        }
+
+        Orders order = orderOpt.get();
+        Optional<CoinWallets> coinWalletOpt = coinWalletsRepository.findByUserId(order.getUserId());
+        if (coinWalletOpt.isPresent()) {
+            CoinWallets coinWallet = coinWalletOpt.get();
+            double maxDiscount = order.getTotalAmount() * 0.1; // 10% của totalAmount
+            double discountApplied = Math.min(coinWallet.getBalance(), maxDiscount); // Trừ được tối đa 10% hoặc số xu có trong ví
+
+            coinWallet.setBalance(coinWallet.getBalance() - discountApplied);
+            coinWalletsRepository.save(coinWallet); // Lưu số dư mới của ví
+        }
     }
 }

@@ -26,8 +26,8 @@ public class OrderController {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @PostMapping
-    public Orders createOrder(@RequestBody Orders order, @RequestParam(defaultValue = "false") boolean useCoinWallet) {
-        return orderService.createOrder(order, useCoinWallet);
+    public Orders createOrder(@RequestBody Orders order) {
+        return orderService.createOrder(order);
     }
     @GetMapping("/search/{id}")
     public List<Orders> searchOrderById(@PathVariable String id){

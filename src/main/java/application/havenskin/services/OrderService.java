@@ -239,22 +239,7 @@ public class OrderService {
         return ordersRepository.getById(id);
     }
 
-    public Orders createOrder(Orders order, boolean useCoinWallet) {
-        if (useCoinWallet) {
-            Optional<CoinWallets> coinWalletOpt = coinWalletsRepository.findByUserId(order.getUserId());
-            if (coinWalletOpt.isPresent()) {
-                CoinWallets coinWallet = coinWalletOpt.get();
-                double maxDiscount = order.getTotalAmount() * 0.1; // 10% của totalAmount
-                double discountApplied = Math.min(coinWallet.getBalance(), maxDiscount); // Trừ được tối đa 10% hoặc số xu có trong ví
-
-                order.setTotalAmount(order.getTotalAmount() - discountApplied);
-                coinWallet.setBalance(coinWallet.getBalance() - discountApplied);
-
-                coinWalletsRepository.save(coinWallet); // Lưu số dư mới của ví
-            }
-        }
-        return ordersRepository.save(order);
-    }
+    public Orders createOrder(Orders order) {  return ordersRepository.save(order);}
 
     public Orders updateOrder(String id, OrderDTO order) {
 //        Orders x = ordersRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
