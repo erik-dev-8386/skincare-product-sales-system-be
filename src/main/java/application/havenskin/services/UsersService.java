@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.*;
 
 @Service
-public class UsersService {
+public class    UsersService {
     private final UserRepository usersRepository;
     private static final Logger logger = LoggerFactory.getLogger(UsersService.class);
 

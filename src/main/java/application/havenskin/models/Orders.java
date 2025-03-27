@@ -78,3 +78,5 @@ public class Orders {
     @Column(name = "customer_phone", length = 15)
     private String customerPhone;
 }
+// CODE BE ĐỂ IM T CHỈNH GÌ ĐÂU :v
+// À NẾU KO CẤU HÌNH LẠI CÁI PROPERTIES NÓ ĐÉO LƯU THOY :))))
