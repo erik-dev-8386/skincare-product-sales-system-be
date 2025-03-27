@@ -190,8 +190,8 @@ public class UsersController {
     }
 
 
-    @PostMapping("/check-out/{email}/{orderId}")
-    public Users checkOutUser(@PathVariable String email,@PathVariable String orderId, @RequestBody UserDTO userDTO){
-        return usersService.checkOutUser(email,orderId, userDTO);
-    }
+//    @PostMapping("/check-out/{email}/{orderId}")
+//    public Users checkOutUser(@PathVariable String email,@PathVariable String orderId, @RequestBody UserDTO userDTO){
+//        return usersService.checkOutUser(email,orderId, userDTO);
+//    }
 }

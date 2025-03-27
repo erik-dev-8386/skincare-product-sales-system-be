@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.*;
 
 @Service
-public class    UsersService {
+public class UsersService {
     private final UserRepository usersRepository;
     private static final Logger logger = LoggerFactory.getLogger(UsersService.class);
 
@@ -56,8 +56,9 @@ public class    UsersService {
         return user;
     }
 
-
-    public Users checkOutUser(String email, String orderId, UserDTO userDTO) {
+    //  **********************************************
+    // hàm này để khách hàng xác nhận thông tin
+    public Orders checkOutUser(String email, String orderId, UserDTO userDTO) {
         Users x = getUserByEmail(email);
 //        Orders orders = ordersRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Order not found"));
         Orders orders = ordersRepository.findByOrderIdAndUserId(orderId, x.getUserId()).orElseThrow(() -> new RuntimeException("Order not found"));
@@ -103,7 +104,7 @@ public class    UsersService {
 //        System.out.println("Saved user: " +x);
 //        usersRepository.save(x);
         ordersRepository.save(orders);
-        return x;
+        return orders;
     }
 
     public Map<String, String> validateUserProfileForCheckout(String email) {

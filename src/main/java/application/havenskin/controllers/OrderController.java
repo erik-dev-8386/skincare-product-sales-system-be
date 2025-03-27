@@ -3,9 +3,12 @@ package application.havenskin.controllers;
 import application.havenskin.dataAccess.HistoryOrderDTO;
 import application.havenskin.dataAccess.MonthlyRevenueDTO;
 import application.havenskin.dataAccess.OrderDTO;
+import application.havenskin.dataAccess.UserDTO;
 import application.havenskin.enums.OrderEnums;
 import application.havenskin.models.Orders;
+import application.havenskin.models.Users;
 import application.havenskin.services.OrderService;
+import application.havenskin.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +23,9 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 //    @PreAuthorize("hasAnyRole('ADMIN','STAFF', 'CUSTOMER')")
+
+    @Autowired
+    private UsersService usersService;
     @GetMapping
     public List<Orders> getAllOrder(){
         return orderService.getAllOrders();
@@ -96,5 +102,11 @@ public class OrderController {
     @GetMapping("/sort-asc/{email}")
     public List<HistoryOrderDTO> sortAsc(@PathVariable String email){
         return orderService.sortOrdersByOrderTimeASC(email);
+    }
+
+    // hàm này cập nhập thông tin khách hàng!!!
+    @PostMapping("/check-out/{email}/{orderId}")
+    public Orders checkOutUser(@PathVariable String email, @PathVariable String orderId, @RequestBody UserDTO userDTO){
+        return usersService.checkOutUser(email,orderId, userDTO);
     }
 }
