@@ -203,9 +203,10 @@ public Blogs updateBlogByTitle(String blogTitle, Blogs blog,List<MultipartFile> 
     if (blog.getDeletedTime() != null) {
         existingBlog.setDeletedTime(blog.getDeletedTime());
     }
-    if (blog.getStatus() != 0) {
+//    if (blog.getStatus() != 0) {
+//        existingBlog.setStatus(blog.getStatus());
+//    }
         existingBlog.setStatus(blog.getStatus());
-    }
 
     if(images != null && !images.isEmpty()) {
         List<BlogImages> list = new ArrayList<>();

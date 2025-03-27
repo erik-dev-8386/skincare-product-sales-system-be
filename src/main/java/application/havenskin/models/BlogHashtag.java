@@ -3,6 +3,7 @@ package application.havenskin.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.Nationalized;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class BlogHashtag {
     @Column(name = "description")
     private String description;
 
+    @ToString.Exclude
     @Nationalized
     @ManyToMany(mappedBy = "hashtags")
     @JsonIgnore

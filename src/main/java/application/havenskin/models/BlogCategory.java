@@ -3,6 +3,7 @@ package application.havenskin.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.Nationalized;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class BlogCategory {
     private String description;
 
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "blogCategory")
     @JsonIgnore
     private List<Blogs> blogs;

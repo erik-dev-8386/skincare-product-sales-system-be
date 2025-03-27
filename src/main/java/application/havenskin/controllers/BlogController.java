@@ -58,7 +58,7 @@ public class BlogController {
 
     // Cập nhật blog theo title
     @PutMapping("/{blogTitle}")
-    public Blogs updateBlogById(@PathVariable String blogTitle, @RequestBody Blogs blog,@RequestParam("images") List<MultipartFile> images ) throws IOException {
+    public Blogs updateBlogById(@PathVariable String blogTitle, @RequestBody Blogs blog,@RequestParam(value = "images",required = false) List<MultipartFile> images ) throws IOException {
         return blogService.updateBlogByTitle(blogTitle, blog, images);
     }
 

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.Nationalized;
 
 import java.util.Date;
@@ -72,18 +73,22 @@ public class Users {
     @OneToMany(mappedBy = "user")
     private List<ResultTests> resultTests;
 
+    @ToString.Exclude
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Blogs> blogs;
 
+    @ToString.Exclude
     @JsonIgnore
     @OneToMany(mappedBy = "users")
     private List<Feedbacks> feedbacks;
 
+    @ToString.Exclude
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<SkinCaresPlan> skinCaresPlan;
 
+    @ToString.Exclude
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<CoinWallets> coinWallets;
