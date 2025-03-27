@@ -3,7 +3,10 @@ package application.havenskin.models;
 import application.havenskin.enums.BrandEnums;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.hibernate.annotations.Nationalized;
 
@@ -18,7 +21,13 @@ public class Brands {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String brandId;
 
-    @Column(name = "brand_name", length = 50)
+    @NotBlank(message = "Tên thương hiệu không được để trống!")
+    @Pattern(
+            regexp = "^[^0-9\\W][\\w\\s]+$",
+            message = "Tên thương hiệu không được bắt đầu bằng số hoặc chứa ký tự đặc biệt"
+    )
+    @Size(max = 255, message = "Tên thương hiệu không được vượt quá 255 ký tự!")
+    @Column(name = "brand_name", length = 255)
     @Nationalized
     private String brandName;
 
@@ -26,6 +35,8 @@ public class Brands {
     @Nationalized
     private String description;
 
+    @NotBlank(message = "Quốc gia không được để trống")
+    @Pattern(regexp = "^[A-Za-z\\s]+$", message = "Quốc gia chỉ được chứa chữ cái và khoảng trắng")
     @Column(name = "country", length = 50)
     @Nationalized
     private String country;

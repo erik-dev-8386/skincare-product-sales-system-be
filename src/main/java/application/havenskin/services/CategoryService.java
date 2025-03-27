@@ -6,9 +6,13 @@ import application.havenskin.mapper.Mapper;
 import application.havenskin.models.Categories;
 import application.havenskin.repositories.CategoriesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -25,6 +29,10 @@ public class CategoryService {
         return categoriesRepository.getById(id);
     }
     public Categories addCategories(CategoryDTO categories) {
+        // Kiểm tra tên danh mục sản phẩm có bị trùng không
+        if (categoriesRepository.existsByCategoryName(categories.getCategoryName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tên danh mục sản phẩm đã tồn tại!");
+        }
         Categories x = mapper.toCategories(categories);
         return categoriesRepository.save(x);
     }

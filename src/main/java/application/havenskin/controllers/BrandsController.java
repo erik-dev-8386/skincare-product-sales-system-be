@@ -4,6 +4,7 @@ package application.havenskin.controllers;
 import application.havenskin.dataAccess.BrandDTO;
 import application.havenskin.models.Brands;
 import application.havenskin.services.BrandService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class BrandsController {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @PostMapping
-    public Brands createBrand(@RequestBody BrandDTO brand) {
+    public Brands createBrand(@Valid @RequestBody BrandDTO brand) {
         return brandService.createBrand(brand);
     }
 

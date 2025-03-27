@@ -8,8 +8,10 @@ import application.havenskin.models.SkinTypes;
 import application.havenskin.repositories.SkinTypeImagesRepository;
 import application.havenskin.repositories.SkinTypesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,6 +40,9 @@ public class SkinTypeService {
     }
 
     public SkinTypes createSkinType(SkinTypeDTO skinType, List<MultipartFile> images) throws IOException {
+        if(skinTypeRepository.existsBySkinName(skinType.getSkinName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Loại da này đã tồn tại!");
+        }
         SkinTypes x = mapper.toSkinTypes(skinType);
         SkinTypes saved = skinTypeRepository.save(x);
         if (images != null && !images.isEmpty()) {

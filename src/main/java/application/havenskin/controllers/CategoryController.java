@@ -3,6 +3,7 @@ package application.havenskin.controllers;
 import application.havenskin.dataAccess.CategoryDTO;
 import application.havenskin.models.Categories;
 import application.havenskin.services.CategoryService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class CategoryController {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @PostMapping
-    public Categories addCategory(@RequestBody CategoryDTO categories) {
+    public Categories addCategory(@Valid @RequestBody CategoryDTO categories) {
         return categoryService.addCategories(categories);
     }
 

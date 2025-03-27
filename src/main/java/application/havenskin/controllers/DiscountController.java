@@ -3,6 +3,7 @@ package application.havenskin.controllers;
 import application.havenskin.dataAccess.DiscountDTO;
 import application.havenskin.models.Discounts;
 import application.havenskin.services.DiscountService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class DiscountController {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @PostMapping
-    public Discounts addDiscount(@RequestBody DiscountDTO discounts) {
+    public Discounts addDiscount(@Valid @RequestBody DiscountDTO discounts) {
         return discountService.createDiscount(discounts);
     }
 

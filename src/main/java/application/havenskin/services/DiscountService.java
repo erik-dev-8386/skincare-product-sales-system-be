@@ -6,7 +6,9 @@ import application.havenskin.mapper.Mapper;
 import application.havenskin.models.Discounts;
 import application.havenskin.repositories.DiscountsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +27,9 @@ public class DiscountService {
         return discountsRepository.findByDiscountId(id);
     }
     public Discounts createDiscount(DiscountDTO discount) {
+        if (discountsRepository.existsByDiscountName(discount.getDiscountName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tên khuyến mãi đã tồn tại!");
+        }
         Discounts x = mapper.toDiscounts(discount);
         return discountsRepository.save(x);
     }

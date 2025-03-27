@@ -21,4 +21,6 @@ public interface DiscountsRepository extends JpaRepository<Discounts, String> {
 
     @Query("SELECT d FROM Discounts d WHERE d.discountName LIKE %:discountsName%")
     List<Discounts> findByDiscountsNameContaining(@Param("discountsName") String discountsName);
+
+    boolean existsByDiscountName(String discountName);
 }

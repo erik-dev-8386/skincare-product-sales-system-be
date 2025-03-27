@@ -3,7 +3,7 @@ package application.havenskin.models;
 import application.havenskin.enums.ProductEnums;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import org.hibernate.annotations.Nationalized;
 
@@ -21,44 +21,62 @@ public class  Products {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String productId;
 
+    @NotBlank(message = "Tên sản phẩm không được để trống!")
+    @Pattern(
+            regexp = "^(?![0-9])[a-zA-ZÀ-ỹ0-9 ]+$",
+            message = "Tên sản phẩm không hợp lệ. Không được bắt đầu bằng số hoặc chứa ký tự đặc biệt"
+    )
     @Column(name = "product_name", length = 10000)
     @Nationalized
     private String productName;
 
+    @NotBlank(message = "Hướng dẫn sử dụng không được để trống!")
     @Column(name = "usage_instruction", length = 10000)
     @Nationalized
     private String usageInstruction;
 
+    @Positive(message = "Giá của sản phẩm phải là số dương!")
     @Column(name = "unit_price")
     private double unitPrice;
 
+    @PositiveOrZero(message = "Giá giảm phải là số dương!")
     @Column(name = "discount_price")
     private Double discountPrice;
 
+    @NotBlank(message = "Mô tả không được để trống!")
     @Column(name = "description", length = 10000)
     @Nationalized
     private String description;
 
+    @NotBlank(message = "Thành phần không được để trống!")
     @Column(name = "ingredients", length = 10000)
     @Nationalized
     private String ingredients;
 
+    @Min(value = 0, message = "Số lượng không được nhỏ hơn 0!")
     @Column(name = "quantity")
     private int quantity;
 
+    @PastOrPresent(message = "Ngày tạo không được ở tương lai!")
     @NotNull
     @Column(name = "created_time")
     private Date createdTime;
 
+    @FutureOrPresent(message = "Thời gian xóa không thể ở quá khứ!")
     @Column(name = "deleted_time")
     private Date deletedTime;
 
+    @NotNull(message = "Ngày sản xuất không được để trống!")
+    @PastOrPresent(message = "Ngày sản xuất phải là ngày trong quá khứ hoặc hiện tại!")
     @Column(name = "mfg")
     private Date mfg;
 
+    @NotNull(message = "Ngày hết hạn không được để trống!")
+    @Future(message = "Ngày hết hạn phải là ngày trong tương lai!")
     @Column(name = "exp")
     private Date exp;
 
+    @Positive(message = "Khối lượng tịnh phải là số dương!")
     @Column(name = "net_weight")
     private double netWeight;
 

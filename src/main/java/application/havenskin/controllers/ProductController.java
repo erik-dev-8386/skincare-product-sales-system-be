@@ -5,6 +5,7 @@ import application.havenskin.models.Products;
 import application.havenskin.services.BrandService;
 import application.havenskin.services.CategoryService;
 import application.havenskin.services.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -40,7 +41,7 @@ public class ProductController {
 //    public Products addProduct(@RequestBody ProductDTO product) {
 //        return productService.addProduct(product);
 //    }
-    public Products createProduct(@RequestPart("products") ProductDTO productDTO, @RequestParam("images") List<MultipartFile> images) throws IOException {
+    public Products createProduct(@Valid @RequestPart("products") ProductDTO productDTO, @RequestParam("images") List<MultipartFile> images) throws IOException {
         return productService.addProduct(productDTO, images);
     }
 
@@ -69,7 +70,7 @@ public class ProductController {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @PostMapping("/add-list-products")
-    public List<Products> addListProducts(@RequestBody List<Products> x) {
+    public List<Products> addListProducts(@Valid @RequestBody List<Products> x) {
         return productService.addListOfProducts(x);
     }
 

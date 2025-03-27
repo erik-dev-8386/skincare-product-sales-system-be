@@ -10,11 +10,13 @@ import application.havenskin.repositories.DiscountsRepository;
 import application.havenskin.repositories.ProductImagesRepository;
 import application.havenskin.repositories.ProductsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -49,6 +51,10 @@ public class ProductService {
 //        return productsRepository.save(x);
 //    }
     public Products addProduct(ProductDTO product, List<MultipartFile> images) throws IOException {
+        // Kiểm tra xem tên sản phẩm đã tồn tại chưa
+        if (productsRepository.existsByProductName(product.getProductName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Tên sản phẩm đã tồn tại");
+        }
         Products x = mapper.toProducts(product);
         if (product.getDiscountId() == null || product.getDiscountId().isEmpty()) {
             x.setDiscountId(null);

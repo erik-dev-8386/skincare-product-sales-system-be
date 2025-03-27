@@ -5,6 +5,7 @@ import application.havenskin.dataAccess.SkinTypeDTO;
 import application.havenskin.models.Products;
 import application.havenskin.models.SkinTypes;
 import application.havenskin.services.SkinTypeService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +36,7 @@ public class SkinTypeController {
 //        return skinTypeService.createSkinType(skinTypeDTO,images);
 //    }
     @PostMapping
-    public SkinTypes createSkinType(@RequestPart("skinTypeDTO") SkinTypeDTO skinTypeDTO,@RequestParam("images") List<MultipartFile> images) throws IOException {
+    public SkinTypes createSkinType(@Valid @RequestPart("skinTypeDTO") SkinTypeDTO skinTypeDTO, @RequestParam("images") List<MultipartFile> images) throws IOException {
         SkinTypes x = skinTypeService.createSkinType(skinTypeDTO, images);
         return x;
     }

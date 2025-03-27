@@ -2,7 +2,10 @@ package application.havenskin.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import org.hibernate.annotations.Nationalized;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +21,8 @@ public class SkinTypes {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String skinTypeId;
 
+    @NotBlank(message = "Tên loại da không được để trống")
+    @Pattern(regexp = "^[^\\d\\W][\\p{L} ]*$", message = "Tên loại da không được bắt đầu bằng số hoặc chứa ký tự đặc biệt")
     @NotNull
     @Column(name = "skin_name", length = 50)
     @Nationalized
@@ -27,9 +32,11 @@ public class SkinTypes {
     @Nationalized
     private String description;
 
+    @Min(value = 0, message = "Giá trị minMark không được nhỏ hơn 0")
     @Column(name = "min_mark")
     private double minMark;
 
+    @Min(value = 0, message = "Giá trị maxMark không được nhỏ hơn 0")
     @Column(name = "max_mark")
     private double maxMark;
 

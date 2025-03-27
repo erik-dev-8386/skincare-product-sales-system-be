@@ -7,7 +7,9 @@ import application.havenskin.models.Brands;
 import application.havenskin.models.Categories;
 import application.havenskin.repositories.BrandsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +30,9 @@ public class BrandService {
         return brand;
     }
     public Brands createBrand(BrandDTO brands){
+        if (brandsRepository.existsByBrandName(brands.getBrandName())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tên thương hiệu đã tồn tại!");
+        }
         Brands x = mapper.toBrands(brands);
         return brandsRepository.save(x);
     }

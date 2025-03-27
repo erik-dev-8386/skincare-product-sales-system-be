@@ -58,4 +58,6 @@ public interface ProductsRepository extends JpaRepository<Products, String> {
     List<Products> findByDiscountPriceBetween(@Param("startPrice") Double startPrice, @Param("endPrice") Double endPrice);
 
     Page<Products> findAll(Pageable pageable);
+
+    boolean existsByProductName(String productName);
 }

@@ -21,4 +21,6 @@ public interface BrandsRepository extends JpaRepository<Brands, String> {
 
     @Query("SELECT b FROM Brands b WHERE b.brandName LIKE %:brandName%")
     List<Brands> findByBrandsNameContaining(@Param("brandName") String brandName);
+
+    boolean existsByBrandName(String brandName);
 }

@@ -2,6 +2,7 @@ package application.havenskin.dataAccess;
 
 import application.havenskin.enums.ProductEnums;
 import application.havenskin.models.*;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import org.hibernate.annotations.Nationalized;
 
@@ -10,29 +11,46 @@ import java.util.List;
 @Data
 public class ProductDTO {
 
+    @NotBlank(message = "Tên sản phẩm không được để trống!")
+    @Pattern(
+            regexp = "^(?![0-9])[a-zA-ZÀ-ỹ0-9 ]+$",
+            message = "Tên sản phẩm không hợp lệ. Không được bắt đầu bằng số hoặc chứa ký tự đặc biệt"
+    )
     @Nationalized
     private String productName;
 
+    @Positive(message = "Giá của sản phẩm phải là số dương!")
     private double unitPrice;
 
+    @PositiveOrZero(message = "Giá giảm phải là số dương!")
     private Double discountPrice;
 
+    @NotBlank(message = "Mô tả không được để trống!")
     @Nationalized
     private String description;
 
+    @NotBlank(message = "Thành phần không được để trống!")
     @Nationalized
     private String ingredients;
 
+    @Min(value = 0, message = "Số lượng không được nhỏ hơn 0!")
     private int quantity;
 
+    @PastOrPresent(message = "Ngày tạo không được ở tương lai!")
     private Date createdTime = new Date();
 
+    @FutureOrPresent(message = "Thời gian xóa không thể ở quá khứ!")
     private Date deletedTime;
 
+    @NotNull(message = "Ngày sản xuất không được để trống!")
+    @PastOrPresent(message = "Ngày sản xuất phải là ngày trong quá khứ hoặc hiện tại!")
     private Date mfg;
 
+    @NotNull(message = "Ngày hết hạn không được để trống!")
+    @Future(message = "Ngày hết hạn phải là ngày trong tương lai!")
     private Date exp;
 
+    @Positive(message = "Khối lượng tịnh phải là số dương!")
     private double netWeight;
 
     private Byte status = ProductEnums.AVAILABLE.getValue();
@@ -41,6 +59,7 @@ public class ProductDTO {
 
     private Discounts discounts;
 
+    @NotBlank(message = "Hướng dẫn sử dụng không được để trống!")
     private String usageInstruction;
 
     private String categoryId;

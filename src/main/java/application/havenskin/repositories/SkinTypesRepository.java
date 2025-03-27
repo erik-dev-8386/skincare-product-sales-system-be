@@ -22,4 +22,6 @@ public interface SkinTypesRepository extends JpaRepository<SkinTypes, String> {
 
     @Query("SELECT s FROM SkinTypes  s WHERE s.skinName LIKE %:skinName%")
     List<SkinTypes> findBySkinNameContaining(@Param("skinName") String skinName);
+
+    boolean existsBySkinName(String skinName);
 }

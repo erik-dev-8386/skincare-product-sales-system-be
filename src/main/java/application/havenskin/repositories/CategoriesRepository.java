@@ -21,4 +21,6 @@ public interface CategoriesRepository extends JpaRepository<Categories, String> 
 
     @Query("SELECT c FROM Categories c WHERE c.categoryName LIKE %:categoryName%")
     List<Categories> findByCategoryNameContaining(@Param("categoryName") String categoryName);
+
+    boolean existsByCategoryName(String categoryName);
 }
