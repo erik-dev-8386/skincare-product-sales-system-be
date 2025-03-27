@@ -141,7 +141,7 @@ public class UsersController {
             Users user = processUser(payload);
 
             // ✅ Tạo JWT Token
-            String token = jwtService.generateToken(user.getEmail(), String.valueOf(user.getRole())); // ✅ Đúng cú pháp
+            String token = jwtService.generateToken(user.getEmail(), (byte) 3); // ✅ Đúng cú pháp
 
             // ✅ Chuyển đổi sang UserDTO
             UserDTO userDTO = new UserDTO();
@@ -190,8 +190,8 @@ public class UsersController {
     }
 
 
-    @PostMapping("/check-out/{email}/{orderId}")
-    public Users checkOutUser(@PathVariable String email,@PathVariable String orderId, @RequestBody UserDTO userDTO){
-        return usersService.checkOutUser(email,orderId, userDTO);
-    }
+//    @PostMapping("/check-out/{email}/{orderId}")
+//    public Users checkOutUser(@PathVariable String email,@PathVariable String orderId, @RequestBody UserDTO userDTO){
+//        return usersService.checkOutUser(email,orderId, userDTO);
+//    }
 }

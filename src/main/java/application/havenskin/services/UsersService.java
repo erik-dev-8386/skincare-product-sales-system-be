@@ -5,6 +5,7 @@ import application.havenskin.dataAccess.UserServiceResponseDto;
 import application.havenskin.enums.Role;
 import application.havenskin.models.Orders;
 import application.havenskin.models.Users;
+import application.havenskin.repositories.OrderDetailsRepository;
 import application.havenskin.repositories.OrdersRepository;
 import application.havenskin.repositories.UserRepository;
 import org.checkerframework.checker.units.qual.A;
@@ -26,9 +27,12 @@ public class UsersService {
 
     @Autowired
     private FirebaseService firebaseService;
+
     @Autowired
     private OrdersRepository ordersRepository;
 
+    @Autowired
+    private OrderDetailsRepository orderDetailsRepository;
     public UsersService(UserRepository usersRepository) {
         this.usersRepository = usersRepository;
     }
@@ -52,16 +56,18 @@ public class UsersService {
         return user;
     }
 
-
-    public Users checkOutUser(String email, String orderId, UserDTO userDTO) {
+    //  **********************************************
+    // hàm này để khách hàng xác nhận thông tin
+    public Orders checkOutUser(String email, String orderId, UserDTO userDTO) {
         Users x = getUserByEmail(email);
-        Orders orders = ordersRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Order not found"));
+//        Orders orders = ordersRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Order not found"));
+        Orders orders = ordersRepository.findByOrderIdAndUserId(orderId, x.getUserId()).orElseThrow(() -> new RuntimeException("Order not found"));
         if (x.getFirstName() == null || userDTO.getFirstName() != null) {
             if (userDTO.getFirstName() != null) {
 //                x.setFirstName(userDTO.getFirstName());
                 orders.setCustomerFirstName(userDTO.getFirstName());
             } else {
-                throw new RuntimeException("First name is missing for user with email: " + email);
+                throw  new RuntimeException("First name is missing for user with email: " + email);
             }
         }
         if (x.getLastName() == null || userDTO.getLastName() != null) {
@@ -98,7 +104,7 @@ public class UsersService {
 //        System.out.println("Saved user: " +x);
 //        usersRepository.save(x);
         ordersRepository.save(orders);
-        return x;
+        return orders;
     }
 
     public Map<String, String> validateUserProfileForCheckout(String email) {
