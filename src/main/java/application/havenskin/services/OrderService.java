@@ -265,12 +265,13 @@ public class OrderService {
         Orders x = ordersRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
         x.setOrderId(x.getOrderId());
         x.setOrderTime(x.getOrderTime());
-        if(x.getTotalAmount() == 0) {
-            x.setTotalAmount(x.getTotalAmount());
-        }
-        else {
-            x.setTotalAmount(order.getTotalAmount());
-        }
+//        if(x.getTotalAmount() == 0) {
+//            x.setTotalAmount(x.getTotalAmount());
+//        }
+//        else {
+//            x.setTotalAmount(order.getTotalAmount());
+//        }
+        x.setTotalAmount(x.getTotalAmount());
         x.setAddress(x.getAddress());
         x.setUserId(x.getUserId());
         x.setCancelTime(x.getCancelTime());
