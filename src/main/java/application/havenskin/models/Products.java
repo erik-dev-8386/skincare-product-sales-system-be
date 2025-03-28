@@ -57,22 +57,22 @@ public class  Products {
     @Column(name = "quantity")
     private int quantity;
 
-    @PastOrPresent(message = "Ngày tạo không được ở tương lai!")
+//    @PastOrPresent(message = "Ngày tạo không được ở tương lai!")
     @NotNull
     @Column(name = "created_time")
     private Date createdTime;
 
-    @FutureOrPresent(message = "Thời gian xóa không thể ở quá khứ!")
+//    @FutureOrPresent(message = "Thời gian xóa không thể ở quá khứ!")
     @Column(name = "deleted_time")
     private Date deletedTime;
 
-    @NotNull(message = "Ngày sản xuất không được để trống!")
-    @PastOrPresent(message = "Ngày sản xuất phải là ngày trong quá khứ hoặc hiện tại!")
+//    @NotNull(message = "Ngày sản xuất không được để trống!")
+//    @PastOrPresent(message = "Ngày sản xuất phải là ngày trong quá khứ hoặc hiện tại!")
     @Column(name = "mfg")
     private Date mfg;
 
-    @NotNull(message = "Ngày hết hạn không được để trống!")
-    @Future(message = "Ngày hết hạn phải là ngày trong tương lai!")
+//    @NotNull(message = "Ngày hết hạn không được để trống!")
+//    @Future(message = "Ngày hết hạn phải là ngày trong tương lai!")
     @Column(name = "exp")
     private Date exp;
 

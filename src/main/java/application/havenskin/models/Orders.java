@@ -35,7 +35,7 @@ public class Orders {
 
     @NotNull
     @Column(name = "status")
-    private byte status;
+    private Byte status;
 
     @Column(name = "cancel_time")
     private Date cancelTime;

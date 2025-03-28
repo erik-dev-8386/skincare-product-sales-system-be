@@ -62,7 +62,7 @@ public class OrderService {
             order.setCustomerFirstName(users.getFirstName());
             order.setCustomerLastName(users.getLastName());
             order.setCustomerPhone(users.getPhone());
-                order.setStatus(OrderEnums.UNORDERED.getOrder_status());
+                order.setStatus(OrderEnums.PENDING.getOrder_status());
             order.setOrderTime(new Date());
             ordersRepository.save(order);
         } else {
@@ -88,7 +88,7 @@ public class OrderService {
             orderDetails.setProductId(products.getProductId());
             orderDetails.setQuantity(cartItemDTO.getQuantity());
             orderDetails.setDiscountPrice(products.getDiscountPrice());
-            orderDetails.setStatus(OrderEnums.UNORDERED.getOrder_status());
+            orderDetails.setStatus(OrderEnums.PENDING.getOrder_status());
 
             orderDetailsRepository.save(orderDetails);
 
@@ -103,7 +103,7 @@ public class OrderService {
         order.setTotalAmount(totalOrderPrice);
         ordersRepository.save(order);
 
-        order.setStatus(OrderEnums.UNORDERED.getOrder_status());
+        order.setStatus(OrderEnums.PENDING.getOrder_status());
         ordersRepository.save(order);
 
 
@@ -265,11 +265,15 @@ public class OrderService {
         Orders x = ordersRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
         x.setOrderId(x.getOrderId());
         x.setOrderTime(x.getOrderTime());
-        x.setTotalAmount(x.getTotalAmount());
+        if(x.getTotalAmount() == 0) {
+            x.setTotalAmount(x.getTotalAmount());
+        }
+        else {
+            x.setTotalAmount(order.getTotalAmount());
+        }
         x.setAddress(x.getAddress());
         x.setUserId(x.getUserId());
         x.setCancelTime(x.getCancelTime());
-
 
         if(isValidStatusOrder(OrderEnums.fromOrderStatus(x.getStatus()),OrderEnums.fromOrderStatus(order.getStatus()))){
             x.setStatus(order.getStatus());
@@ -278,6 +282,28 @@ public class OrderService {
         else{
             throw new RuntimeException("Chuyển trạng thái không hợp lệ");
         }
+    }
+
+
+    public Orders updateOrderAmount(String id, OrderDTO order) {
+//        Orders x = ordersRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
+//        mapper.updateOrders(x, order);
+//        return ordersRepository.save(x);
+        Orders x = ordersRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
+        x.setOrderId(x.getOrderId());
+        x.setOrderTime(x.getOrderTime());
+        if(x.getTotalAmount() == 0) {
+            x.setTotalAmount(x.getTotalAmount());
+        }
+        else {
+            x.setTotalAmount(order.getTotalAmount());
+        }
+        x.setAddress(x.getAddress());
+        x.setUserId(x.getUserId());
+        x.setCancelTime(x.getCancelTime());
+        x.setStatus(x.getStatus());
+        return ordersRepository.save(x);
+
     }
 
     public Orders deleteOrder(String id) {

@@ -52,6 +52,11 @@ public class OrderController {
         return orderService.updateOrder(id, order);
     }
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
+    @PutMapping("/order-amount/{id}")
+    public Orders updateAmount(@PathVariable  String id,@RequestBody OrderDTO order){
+        return orderService.updateOrderAmount(id, order);
+    }
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @DeleteMapping("/{id}")
     public Orders deleteOrder(@PathVariable String id){
         return orderService.deleteOrder(id);
