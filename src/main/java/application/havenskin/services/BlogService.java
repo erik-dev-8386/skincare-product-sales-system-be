@@ -1,5 +1,6 @@
 package application.havenskin.services;
 
+import application.havenskin.enums.BlogEnums;
 import application.havenskin.models.*;
 import application.havenskin.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,6 +96,7 @@ public class BlogService {
         blog.setUser(user);
         blog.setBlogCategory(category);
         blog.setHashtags(hashtags);
+        blog.setStatus(BlogEnums.ACTIVE.getBlog_status());
         Blogs savedBlog = blogRepository.save(blog);
 
         if(images != null && !images.isEmpty()) {

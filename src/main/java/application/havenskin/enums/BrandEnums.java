@@ -13,4 +13,13 @@ public enum BrandEnums {
     public byte getValue() {
         return value;
     }
+
+    public static BrandEnums getByValue(byte value) {
+        for (BrandEnums b : BrandEnums.values()) {
+            if (b.getValue() == value) {
+                return b;
+            }
+        }
+        throw new IllegalArgumentException("Invalid!");
+    }
 }
