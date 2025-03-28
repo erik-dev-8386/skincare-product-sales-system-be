@@ -69,7 +69,7 @@ public class SkinTypeController {
     }
 
     @GetMapping("/list-name-skin-types")
-    public List<String> listSkinTypeNames() {
+    public List<SkinTypes> listSkinTypeNames() {
         return skinTypeService.getAllSkinTypeNames();
     }
 

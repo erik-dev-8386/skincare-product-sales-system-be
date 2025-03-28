@@ -120,7 +120,7 @@ public class SkinTypeService {
         return skinTypeRepository.saveAll(x);
     }
 
-    public List<String> getAllSkinTypeNames() {
+    public List<SkinTypes> getAllSkinTypeNames() {
         return skinTypeRepository.findAllBySkinTypeByName();
     }
 

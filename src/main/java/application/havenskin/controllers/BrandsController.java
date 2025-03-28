@@ -71,7 +71,7 @@ public class BrandsController {
     }
 
     @GetMapping("/list-name-brands")
-    public List<String> getBrandsByListName() {
+    public List<Brands> getBrandsByListName() {
         return brandService.getAllBrandByName();
     }
 

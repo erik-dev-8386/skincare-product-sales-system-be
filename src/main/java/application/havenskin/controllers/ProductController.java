@@ -130,6 +130,11 @@ public class ProductController {
 //        return productService.getProducts(page, size);
 //    }
 
+    @GetMapping("/list-name-products")
+    public List<Products> getListProducts() {
+        return productService.findByAllProducts();
+    }
+
 
 
 }

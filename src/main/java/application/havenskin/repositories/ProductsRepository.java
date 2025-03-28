@@ -60,4 +60,7 @@ public interface ProductsRepository extends JpaRepository<Products, String> {
     Page<Products> findAll(Pageable pageable);
 
     boolean existsByProductName(String productName);
+
+    @Query("SELECT p FROM Products p where p.status= 1")
+    List<Products> findByStatusProduct();
 }

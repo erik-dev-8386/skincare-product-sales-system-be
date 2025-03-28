@@ -7,6 +7,7 @@ import application.havenskin.mapper.Mapper;
 import application.havenskin.models.Orders;
 import application.havenskin.models.Transactions;
 import application.havenskin.repositories.TransactionsRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-
+import java.util.Optional;
+@Slf4j
 @Service
 public class TransactionService {
     @Autowired
@@ -58,6 +60,14 @@ public class TransactionService {
     }
 
     public Transactions createTransaction(String orderId, double amount, byte status, String code) {
+        // Kiểm tra transaction đã tồn tại chưa
+        Optional<Transactions> existingTransaction = transactionsRepository.findByTransactionCode(code);
+
+        if (existingTransaction.isPresent()) {
+            log.info("Transaction với code {} đã tồn tại, không tạo mới", code);
+            return existingTransaction.get();
+        }
+
         Transactions transaction = new Transactions();
         transaction.setOrderId(orderId);
         transaction.setBankName("Momo");
@@ -67,6 +77,7 @@ public class TransactionService {
         transaction.setTransactionType(TransactionsEnums.Type.MOMO.getValue());
         transaction.setTransactionStatus(status);
         transaction.setTransactionTime(LocalDateTime.now());
+
         return transactionsRepository.save(transaction);
     }
 

@@ -14,8 +14,8 @@ import java.util.Optional;
 public interface SkinTypesRepository extends JpaRepository<SkinTypes, String> {
     SkinTypes findBySkinTypeId(String id);
     Optional<SkinTypes> findBySkinName(String skinName);
-    @Query("SELECT skinName FROM SkinTypes ")
-    List<String> findAllBySkinTypeByName();
+    @Query("SELECT s FROM SkinTypes s where s.status = 1 ")
+    List<SkinTypes> findAllBySkinTypeByName();
     @Query("SELECT s FROM SkinTypes s WHERE s.status = 1 ORDER BY s.skinName ASC")
     List<SkinTypes> findActiveSkinTypesSortedByName();
 

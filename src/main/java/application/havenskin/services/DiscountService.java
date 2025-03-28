@@ -62,7 +62,7 @@ public class DiscountService {
         return discountsRepository.findByDiscountName(name).getDiscountId();
     }
 
-    public List<String> getDiscountsByName() {
+    public List<Discounts> getDiscountsByName() {
         return discountsRepository.findAllDiscountByName();
     }
 

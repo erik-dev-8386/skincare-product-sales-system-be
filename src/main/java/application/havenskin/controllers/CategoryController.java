@@ -59,7 +59,7 @@ public class CategoryController {
     }
 
     @GetMapping("/list-name-categories")
-    public List<String> listCategoryName() {
+    public List<Categories> listCategoryName() {
         return categoryService.getAllCategoriesNames();
     }
 

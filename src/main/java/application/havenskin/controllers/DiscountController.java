@@ -59,7 +59,7 @@ public class DiscountController {
     }
 
     @GetMapping("/list-name-discounts")
-    public List<String> getListDiscountByName() {
+    public List<Discounts> getListDiscountByName() {
         return discountService.getDiscountsByName();
     }
 

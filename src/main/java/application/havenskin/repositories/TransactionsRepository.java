@@ -4,6 +4,8 @@ import application.havenskin.models.Transactions;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface TransactionsRepository extends JpaRepository<Transactions, String> {
     Transactions findByOrderId(String orderId);
@@ -12,7 +14,8 @@ public interface TransactionsRepository extends JpaRepository<Transactions, Stri
 
 
     boolean existsByTransactionCode(String transactionCode);
-    Transactions findByTransactionCode(String transactionCode);
+//    Transactions findByTransactionCode(String transactionCode);
 
+    Optional<Transactions> findByTransactionCode(String transactionCode);
 
 }

@@ -59,7 +59,7 @@ public class CategoryService {
         }
         return categoriesRepository.findByCategoryName(name).getCategoryId();
     }
-    public List<String> getAllCategoriesNames() {
+    public List<Categories> getAllCategoriesNames() {
         return categoriesRepository.findAllByCategoryName();
     }
 

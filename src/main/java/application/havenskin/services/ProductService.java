@@ -246,4 +246,8 @@ public class ProductService {
 //    Pageable pageable = PageRequest.of(page, size);
 //    return productsRepository.findAll(pageable);
 //}
+
+    public List<Products> findByAllProducts() {
+        return productsRepository.findByStatusProduct();
+    }
 }
