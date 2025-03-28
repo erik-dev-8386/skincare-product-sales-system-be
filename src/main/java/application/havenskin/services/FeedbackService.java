@@ -129,4 +129,8 @@ public class FeedbackService {
         }
         return rating;
     }
+
+    public List<Feedbacks> getFeedbacks() {
+        return feedbacksRepository.findAll();
+    }
 }

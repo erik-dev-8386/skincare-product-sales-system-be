@@ -42,7 +42,7 @@ public class SecurityConfig {
     //    public SecurityConfig(ClientRegistrationRepository clientRegistrationRepository) {
 //        this.clientRegistrationRepository = clientRegistrationRepository;
 //    }
-    private final String[] PUBLIC_ENDPOINTS = {"/haven-skin/brands","/haven-skin/categories", "/haven-skin/discounts", "/haven-skin/products", "/haven-skin/skin-types", "/haven-skin/products/{id}", "/haven-skin/categories/name/{categoryName}","/haven-skin/products/category/{categoryname}","/haven-skin/products/best-seller", "/haven-skin/blogs", "/haven-skin/blogCategory", "/haven-skin/blog-hashtag","/haven-skin/skin-tests/questions-answers/{skintestId}", "/haven-skin/products/{id}", "/haven-skin/products", "/haven-skin/brands", "/haven-skin/categories", "/haven-skin/discounts", "/haven-skin/skin-types", "/haven-skin/reviews/product/{id}","/haven-skin/web-socket/monthly","/haven-skin/ws","/haven-skin/get/salesData","/haven-skin/send/data"};
+    private final String[] PUBLIC_ENDPOINTS = {"/haven-skin/brands","/haven-skin/categories", "/haven-skin/discounts", "/haven-skin/products", "/haven-skin/skin-types", "/haven-skin/products/{id}", "/haven-skin/categories/name/{categoryName}","/haven-skin/products/category/{categoryname}","/haven-skin/products/best-seller", "/haven-skin/blogs", "/haven-skin/blogCategory", "/haven-skin/blog-hashtag","/haven-skin/skin-tests/questions-answers/{skintestId}", "/haven-skin/products/{id}", "/haven-skin/products", "/haven-skin/brands", "/haven-skin/categories", "/haven-skin/discounts", "/haven-skin/skin-types", "/haven-skin/reviews/product/{id}","/haven-skin/web-socket/monthly","/haven-skin/ws","/haven-skin/get/salesData","/haven-skin/send/data",  "/haven-skin/feedbacks/{email}/{productName}", "/haven-skin/feedbacks/average-rating/{productName}", "/haven-skin/feedbacks/get-star/by-customer/{productName}"};
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.
@@ -55,6 +55,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.POST, "/haven-skin/momo/ipn-handler-new").permitAll()
                                 .requestMatchers("/haven-skin/momo/**").permitAll() // Bỏ xác thực cho API MoMo
                                 .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS).permitAll()
+                                .requestMatchers(HttpMethod.POST, "/haven-skin/feedbacks//{email}/{productName}").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/haven-skin/cart/checkout").permitAll()
                                 .anyRequest().authenticated())
                 .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable())
