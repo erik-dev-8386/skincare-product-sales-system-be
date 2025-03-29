@@ -40,21 +40,21 @@ public class Discounts {
     @Nationalized
     private String description;
 
-    @PastOrPresent(message = "Ngày tạo phải là ngày hiện tại hoặc trong quá khứ")
+    //@PastOrPresent(message = "Ngày tạo phải là ngày hiện tại hoặc trong quá khứ")
     @NotNull
     @Column(name = "created_time")
     private Date createdTime;
 
-    @FutureOrPresent(message = "Ngày xóa phải lớn hơn hoặc bằng ngày hiện tại")
+    //@FutureOrPresent(message = "Ngày xóa phải lớn hơn hoặc bằng ngày hiện tại")
     @Column(name = "closed_time")
     private Date deletedTime;
 
-    @FutureOrPresent(message = "Thời gian bắt đầu phải từ hiện tại trở đi")
-    @NotNull
+    //@FutureOrPresent(message = "Thời gian bắt đầu phải từ hiện tại trở đi")
+   // @NotNull
     @Column(name = "actual_start_time")
     private Date actualStartTime;
 
-    @Future(message = "Thời gian kết thúc phải lớn hơn thời gian bắt đầu")
+   // @Future(message = "Thời gian kết thúc phải lớn hơn thời gian bắt đầu")
     @Column(name = "actual_end_time")
     private Date actualEndTime;
 

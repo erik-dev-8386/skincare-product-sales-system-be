@@ -36,7 +36,7 @@ public class SkinTypeController {
 //        return skinTypeService.createSkinType(skinTypeDTO,images);
 //    }
     @PostMapping
-    public SkinTypes createSkinType(@Valid @RequestPart("skinTypeDTO") SkinTypeDTO skinTypeDTO, @RequestParam("images") List<MultipartFile> images) throws IOException {
+    public SkinTypes createSkinType(@Valid @RequestPart("skinTypeDTO") SkinTypeDTO skinTypeDTO, @RequestParam(value = "images", required = false) List<MultipartFile> images) throws IOException {
         SkinTypes x = skinTypeService.createSkinType(skinTypeDTO, images);
         return x;
     }

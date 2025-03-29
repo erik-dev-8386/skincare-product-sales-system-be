@@ -36,7 +36,7 @@ public class ResultTests {
     @Column(name = "status")
     private byte status;
 
-    @NotNull
+//    @NotNull
     @Column(name = "skin_type_id", length = 50)
     private String skinTypeId;
 

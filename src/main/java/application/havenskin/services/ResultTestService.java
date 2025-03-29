@@ -41,7 +41,7 @@ public class ResultTestService {
         ResultTests resultTest = new ResultTests();
         resultTest.setUserId(userId);
         resultTest.setCreatedTime(new Date());
-
+        resultTest.setSkinTestId("1");
         resultTest = resultTestsRepository.save(resultTest);
 
         double totalMark = 0;
@@ -65,7 +65,7 @@ public class ResultTestService {
         // 4) Tính loại da
         resultTest.setTotalMark(totalMark);
         // xac dinh theo loai da
-        resultTest.setSkinTestId("1");
+       // resultTest.setSkinTestId("1");
         String skinName = determineSkinType(totalMark);
         SkinTypes skinTypes = skinTypesRepository.findBySkinName(skinName).orElseThrow(()->new RuntimeException("Skin type not found"));
 

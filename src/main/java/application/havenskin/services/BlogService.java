@@ -182,6 +182,8 @@ public Blogs updateBlogByTitle(String blogTitle, Blogs blog,List<MultipartFile> 
 //        if (blog.getHashtags() != null) {
 //            existingBlog.setHashtags(blog.getHashtags());
 //        }
+
+        existingBlog.setStatus(blog.getStatus());
     if (blog.getHashtags() != null && !blog.getHashtags().isEmpty()) {
         List<BlogHashtag> savedHashtags = new ArrayList<>();
 

@@ -11,6 +11,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Date;
+
 @Configuration
 public class ApplicationInitConfig {
     @Autowired
@@ -42,6 +44,7 @@ public class ApplicationInitConfig {
                 SkinTests x = new SkinTests();
                 x.setSkinTestId("1");
                 x.setTestName("Bài kiểm tra xác định loại da");
+                x.setCreatedTime(new Date());
                 skinTestsRepository.save(x);
             }
         };

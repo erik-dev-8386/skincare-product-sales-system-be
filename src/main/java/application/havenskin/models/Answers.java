@@ -32,7 +32,7 @@ public class Answers {
     private Questions question;
 
 
-    @NotNull
+//    @NotNull
     @Column(name = "status")
     private Byte status;
 }

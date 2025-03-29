@@ -22,5 +22,4 @@ public class AnswersDto {
     private String questionContent;
 
     private Byte status = AnswerEnum.ACTIVE.getStatus();
-
 }

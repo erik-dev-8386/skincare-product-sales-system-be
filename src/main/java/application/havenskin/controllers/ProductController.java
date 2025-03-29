@@ -41,7 +41,7 @@ public class ProductController {
 //    public Products addProduct(@RequestBody ProductDTO product) {
 //        return productService.addProduct(product);
 //    }
-    public Products createProduct(@Valid @RequestPart("products") ProductDTO productDTO, @RequestParam("images") List<MultipartFile> images) throws IOException {
+    public Products createProduct(@Valid @RequestPart("products") ProductDTO productDTO, @RequestParam(value = "images", required = false) List<MultipartFile> images) throws IOException {
         return productService.addProduct(productDTO, images);
     }
 
