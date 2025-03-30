@@ -14,6 +14,7 @@ public class QuestionsResponseDto {
     private String questionContent;
     private double maxMark;
     private List<AnswersDto> answers;
+    private byte status;
 
 
 }

@@ -45,8 +45,8 @@ public class QuestionController {
         return questionService.getAllQuestionContent();
     }
     @DeleteMapping("/{id}")
-    public String deleteQuestion(@PathVariable String id) {
-        questionService.deleteQuestion(id);
-        return "Question has been deleted";
+    public Questions deleteQuestion(@PathVariable String id) {
+       return questionService.deleteQuestion(id);
+//        return "Question has been deleted";
     }
 }

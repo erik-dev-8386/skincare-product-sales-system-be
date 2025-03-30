@@ -44,7 +44,7 @@ public class Blogs {
 //    @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
 //    private Users user;
     @ToString.Exclude
-    @JsonIgnore
+//    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private Users user;

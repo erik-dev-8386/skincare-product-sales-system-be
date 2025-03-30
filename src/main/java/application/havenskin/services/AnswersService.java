@@ -61,6 +61,7 @@ public class AnswersService {
     public Answers updateAnswer(String id, Answers answer) {
         Optional<Answers> optionalAnswers = answerRepository.findById(id);
         Answers existingAnswer = optionalAnswers.orElseThrow(() -> new RuntimeException("No answer found with id: " + id));
+
         if (answer.getAnswerContent() != null) {
             existingAnswer.setAnswerContent(answer.getAnswerContent());
         }
@@ -71,12 +72,19 @@ public class AnswersService {
             existingAnswer.setQuestionId(answer.getQuestionId());
         }
 
+        existingAnswer.setStatus(answer.getStatus());
+
         return answerRepository.save(existingAnswer);
     }
 
-    public String deleteAnswer(String id) {
-        answerRepository.deleteById(id);
-        return "Answer has been deleted";
+    public Answers deleteAnswer(String id) {
+        Optional<Answers> optionalAnswers = answerRepository.findById(id);
+        if (optionalAnswers.isPresent()) {
+            Answers answer = optionalAnswers.get();
+            answer.setStatus(AnswerEnum.INACTIVE.getStatus());
+            return answerRepository.save(answer);
+        }
+        throw new RuntimeException("No answer found with id: " + id);
     }
 
     public List<Answers> searchAnswersByQuestionId(String questionId) {

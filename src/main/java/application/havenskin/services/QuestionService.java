@@ -30,7 +30,7 @@ public class QuestionService {
             qDto.setQuestionId(q.getQuestionId());
             qDto.setQuestionContent(q.getQuestionContent());
             qDto.setMaxMark(q.getMaxMark());
-
+            qDto.setStatus(q.getStatus());
             List<Answers> ansList = answerRepository.findByQuestionId(q.getQuestionId());
             List<AnswersDto> ansDtoList = ansList.stream().map(a -> {
                 AnswersDto ad = new AnswersDto();
@@ -97,11 +97,14 @@ public class QuestionService {
         }).collect(Collectors.toList());
     }
 
-    public String deleteQuestion(String id) {
+    public Questions deleteQuestion(String id) {
         Questions questions = questionsRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Question not found"));
-        questionsRepository.delete(questions);
-        return "Question has been deleted";
+//        questionsRepository.delete(questions);
+//        return "Question has been deleted";
+        questions.setStatus(QuestionEnum.INACTIVE.getStatus());
+        questionsRepository.save(questions);
+        return questions;
     }
 
     public List<String> getAllQuestionContent() {
@@ -119,13 +122,16 @@ public class QuestionService {
         // update logic
         q.setQuestionContent(dto.getQuestionContent());
         q.setMaxMark(dto.getMaxMark());
+        q.setStatus(dto.getStatus());
         questionsRepository.save(q);
+
 
         // Map entity -> DTO
         QuestionsResponseDto resultDto = new QuestionsResponseDto();
         resultDto.setQuestionId(q.getQuestionId());
         resultDto.setQuestionContent(q.getQuestionContent());
         resultDto.setMaxMark(q.getMaxMark());
+//        resultDto.setStatus(dto.getStatus());
         return resultDto;
     }
 }

@@ -62,7 +62,7 @@ public class OrderService {
             order.setCustomerFirstName(users.getFirstName());
             order.setCustomerLastName(users.getLastName());
             order.setCustomerPhone(users.getPhone());
-                order.setStatus(OrderEnums.PENDING.getOrder_status());
+            order.setStatus(OrderEnums.UNORDERED.getOrder_status());
             order.setOrderTime(new Date());
             ordersRepository.save(order);
         } else {
@@ -103,7 +103,7 @@ public class OrderService {
         order.setTotalAmount(totalOrderPrice);
         ordersRepository.save(order);
 
-        order.setStatus(OrderEnums.PENDING.getOrder_status());
+        order.setStatus(OrderEnums.UNORDERED.getOrder_status());
         ordersRepository.save(order);
 
 
@@ -442,12 +442,14 @@ public class OrderService {
     public List<HistoryOrderDTO> getHistoryOrder(String email) {
         Optional<Users> userOpt = userRepository.findByEmail(email);
         if (!userOpt.isPresent()) {
-            throw new RuntimeException("íUser not found");
+            throw new RuntimeException("User not found");
         }
         Users user = userOpt.get();
         String userId = user.getUserId();
-        List<Orders> orders = ordersRepository.findByUserId(userId);
-
+        List<Orders> orders = ordersRepository.findListOrderByStatus(userId, OrderEnums.UNORDERED.getOrder_status());
+        if(orders.isEmpty()) {
+            throw new RuntimeException("Order not found");
+        }
         List<HistoryOrderDTO> historyOrders = orders.stream().map(x -> {
             HistoryOrderDTO historyOrder = new HistoryOrderDTO();
             historyOrder.setOrderId(x.getOrderId());
@@ -665,4 +667,42 @@ public class OrderService {
             return dto;
         }).collect(Collectors.toList());
     }
+
+//    public List<HistoryOrderDTO> getOrdersByStatus(String email) {
+//        Users user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+//        List<Orders> orders = ordersRepository.findListOrderByStatus(user.getUserId(), OrderEnums.UNORDERED.getOrder_status());
+//        if(orders.isEmpty()) {
+//            throw new RuntimeException("Order not found");
+//        }
+//        return orders.stream().map(x ->{
+//            HistoryOrderDTO dto = new HistoryOrderDTO();
+//            dto.setOrderId(x.getOrderId());
+//            dto.setOrderTime(x.getOrderTime());
+//            dto.setTotalAmount(x.getTotalAmount());
+//            dto.setStatus(x.getStatus());
+//            List<OrderDetails> orderDetails = orderDetailsRepository.findByOrderId(x.getOrderId());
+//            dto.setQuantity(orderDetails.size());
+//            List<OrderDetails> orderDetailsList = orderDetailsRepository.findByOrderId(x.getOrderId());
+//            if(orderDetailsList.isEmpty()) {
+//                throw new RuntimeException("Order not found");
+//            }
+//            List<ProductDetailsDTO> productDetailsDTO = orderDetailsList.stream().map(orderDetail ->{
+//                ProductDetailsDTO productDetail = new ProductDetailsDTO();
+//                Products products = productsRepository.findById(orderDetail.getProductId()).orElseThrow(() -> new RuntimeException("Product not found"));
+//                productDetail.setProductName(products.getProductName());
+//                productDetail.setQuantity(orderDetail.getQuantity());
+//                productDetail.setDiscountPrice(orderDetail.getDiscountPrice());
+//                if (products.getProductImages() != null && !products.getProductImages().isEmpty()) {
+//                    productDetail.setImageUrl(products.getProductImages().get(0).getImageURL());
+//                }
+//                else {
+//                    productDetail.setImageUrl(null);
+//                }
+//                return productDetail;
+//            }).collect(Collectors.toList());
+//
+//            dto.setProductName(productDetailsDTO);
+//            return dto;
+//        }).collect(Collectors.toList());
+//    }
 }

@@ -68,24 +68,12 @@ public class ResultTestService {
        // resultTest.setSkinTestId("1");
         String skinName = determineSkinType(totalMark);
         SkinTypes skinTypes = skinTypesRepository.findBySkinName(skinName).orElseThrow(()->new RuntimeException("Skin type not found"));
-
+        resultTest.setSkinType(skinTypes);
         resultTest.setSkinTypeId(skinTypes.getSkinTypeId());
         return resultTestsRepository.save(resultTest);
     }
 
-//    private String determineSkinType(double totalMark) {
-//        String skinName;
-//        if (totalMark <= 15) skinName = "Dryer";
-//        else if (totalMark <= 25) skinName = "Normal";
-//        else if (totalMark <= 35) skinName = "Combination";
-//        else skinName = "Oily";
-//
-//        // Tìm skinType trong database bằng skinName
-//        SkinTypes skinType = skinTypesRepository.findBySkinName(skinName)
-//                .orElseThrow(() -> new RuntimeException("Skin Type not found: " + skinName));
-//
-//        return skinType.getSkinTypeId(); // Trả về ID hợp lệ thay vì chuỗi
-//    }
+
     private String determineSkinType(double totalMark) {
         List<SkinTypes> allSkinTypes = skinTypesRepository.findAll();
 

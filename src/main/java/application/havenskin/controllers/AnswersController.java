@@ -35,9 +35,8 @@ public class AnswersController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteAnswer(@PathVariable String id) {
-        answersService.deleteAnswer(id);
-        return "Answer has been deleted";
+    public Answers deleteAnswer(@PathVariable String id) {
+        return answersService.deleteAnswer(id);
     }
 
     @GetMapping("/questions/{questionsId}")

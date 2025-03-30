@@ -1,7 +1,6 @@
     package application.havenskin.enums;
 
     public enum OrderEnums {
-        THANH((byte) -1),
         UNORDERED((byte) 0),   // Đã thêm vào giỏ hàng nhưng chưa đặt hàng
         PENDING((byte) 1),     // Người dùng đã nhấn "Đặt hàng", chờ shop xác nhận
         PROCESSING((byte) 2),  // Shop đã xác nhận, đơn hàng đang được chuẩn bị

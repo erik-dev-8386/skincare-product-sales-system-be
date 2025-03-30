@@ -93,6 +93,7 @@
                 newTransaction.setAmount(order.getTotalAmount());
                 newTransaction.setTransactionTime(LocalDateTime.now());
                 newTransaction.setContent("Thanh toán COD cho đơn hàng: " + orderId);
+                order.setStatus(OrderEnums.PENDING.getOrder_status());
                 transactionsRepository.save(newTransaction);
             }
         }
