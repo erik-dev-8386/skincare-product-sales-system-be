@@ -24,8 +24,8 @@ public enum Role {
         throw new IllegalArgumentException("Unknown role value: " + value);
     }
     public enum Status {
-        INACTIVE((byte) 0),
-        ACTIVE((byte) 1);
+        INACTIVE((byte) 1),
+        ACTIVE((byte) 2);
 
         private final byte status;
 
