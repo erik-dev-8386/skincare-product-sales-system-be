@@ -562,21 +562,6 @@ public class OrderService {
         return ordersRepository.findAllByOrderByOrderTimeAsc();
     }
 
-    public List<Orders> sortOrdersByEmailOrderTimeDESC(String email) {
-        String userId = userRepository.findByEmail(email).get().getUserId();
-        if (userId == null) {
-            throw new RuntimeException("User not found");
-        }
-        return ordersRepository.sortOrdersByUserIdAndOrderTimeDesc(userId);
-    }
-
-    public List<Orders> sortOrdersByEmailOrderTimeASC(String email) {
-        String userId = userRepository.findByEmail(email).get().getUserId();
-        if (userId == null) {
-            throw new RuntimeException("User not found");
-        }
-        return ordersRepository.sortOrdersByUserIdAndOrderTimeAsc(userId);
-    }
 
     public List<HistoryOrderDTO> sortOrdersByOrderTimeDESC(String email) {
         Optional<Users> userOpt = userRepository.findByEmail(email);
@@ -588,6 +573,7 @@ public class OrderService {
 
         // Lấy danh sách đơn hàng đã sắp xếp
         List<Orders> sortedOrders = ordersRepository.sortOrdersByUserIdAndOrderTimeDesc(userId);
+//        List<Orders> sortedOrders = ordersRepository.findByUserIdAndStatusNotOrderByOrderTimeDesc(userId, OrderEnums.UNORDERED.getOrder_status());
 
         // Chuyển đổi sang DTO với thông tin sản phẩm
         return sortedOrders.stream().map(order -> {
@@ -668,41 +654,4 @@ public class OrderService {
         }).collect(Collectors.toList());
     }
 
-//    public List<HistoryOrderDTO> getOrdersByStatus(String email) {
-//        Users user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
-//        List<Orders> orders = ordersRepository.findListOrderByStatus(user.getUserId(), OrderEnums.UNORDERED.getOrder_status());
-//        if(orders.isEmpty()) {
-//            throw new RuntimeException("Order not found");
-//        }
-//        return orders.stream().map(x ->{
-//            HistoryOrderDTO dto = new HistoryOrderDTO();
-//            dto.setOrderId(x.getOrderId());
-//            dto.setOrderTime(x.getOrderTime());
-//            dto.setTotalAmount(x.getTotalAmount());
-//            dto.setStatus(x.getStatus());
-//            List<OrderDetails> orderDetails = orderDetailsRepository.findByOrderId(x.getOrderId());
-//            dto.setQuantity(orderDetails.size());
-//            List<OrderDetails> orderDetailsList = orderDetailsRepository.findByOrderId(x.getOrderId());
-//            if(orderDetailsList.isEmpty()) {
-//                throw new RuntimeException("Order not found");
-//            }
-//            List<ProductDetailsDTO> productDetailsDTO = orderDetailsList.stream().map(orderDetail ->{
-//                ProductDetailsDTO productDetail = new ProductDetailsDTO();
-//                Products products = productsRepository.findById(orderDetail.getProductId()).orElseThrow(() -> new RuntimeException("Product not found"));
-//                productDetail.setProductName(products.getProductName());
-//                productDetail.setQuantity(orderDetail.getQuantity());
-//                productDetail.setDiscountPrice(orderDetail.getDiscountPrice());
-//                if (products.getProductImages() != null && !products.getProductImages().isEmpty()) {
-//                    productDetail.setImageUrl(products.getProductImages().get(0).getImageURL());
-//                }
-//                else {
-//                    productDetail.setImageUrl(null);
-//                }
-//                return productDetail;
-//            }).collect(Collectors.toList());
-//
-//            dto.setProductName(productDetailsDTO);
-//            return dto;
-//        }).collect(Collectors.toList());
-//    }
 }

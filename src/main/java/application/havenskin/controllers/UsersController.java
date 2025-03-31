@@ -189,9 +189,8 @@ public class UsersController {
         return usersService.updateUser(email, userDTO, images);
     }
 
-
-//    @PostMapping("/check-out/{email}/{orderId}")
-//    public Users checkOutUser(@PathVariable String email,@PathVariable String orderId, @RequestBody UserDTO userDTO){
-//        return usersService.checkOutUser(email,orderId, userDTO);
-//    }
+    @PostMapping("/change-password/{email}/{passwordOld}/{passwordNew}")
+    public void changePassword(@PathVariable String email,@PathVariable String passwordOld, @PathVariable String passwordNew) {
+         usersService.ChangePassword(email,passwordOld,passwordNew);
+    }
 }
