@@ -13,10 +13,12 @@ import java.util.List;
 public class BrandDTO {
     @NotBlank(message = "Tên thương hiệu không được để trống")
     @Pattern(
-            regexp = "^[^0-9\\W][\\w\\s]+$",
+//            regexp = "^[^0-9\\W][\\w\\s]+$",
+            regexp = "^(?![0-9\\s])[\\p{L}0-9 ].*$",
             message = "Tên thương hiệu không được bắt đầu bằng số hoặc chứa ký tự đặc biệt"
     )
-    @Size(max = 255, message = "Tên thương hiệu không được vượt quá 255 ký tự")
+    @Size(min = 2, max = 255, message = "Tên thương hiệu phải từ 2-255 ký tự")
+//    @Size(max = 255, message = "Tên thương hiệu không được vượt quá 255 ký tự")
     @Nationalized
     private String brandName;
 
@@ -24,7 +26,7 @@ public class BrandDTO {
     private String description;
 
     @NotBlank(message = "Quốc gia không được để trống")
-    @Pattern(regexp = "^[A-Za-z\\s]+$", message = "Quốc gia chỉ được chứa chữ cái và khoảng trắng")
+//    @Pattern(regexp = "^\\p{L}[\\p{L}\\s]*$", message = "Quốc gia chỉ được chứa chữ cái và khoảng trắng")
     @Nationalized
     private String country;
     private List<Products> products;

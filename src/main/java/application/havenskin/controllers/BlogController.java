@@ -4,6 +4,7 @@ import application.havenskin.models.Blogs;
 import application.havenskin.services.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -62,6 +63,7 @@ public class BlogController {
         return blogService.updateBlogByTitle(blogTitle, blog, images);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     // Xóa mềm blog theo title
     @DeleteMapping("/{blogTitle}")
     public String deleteBlogById(@PathVariable String blogTitle) {

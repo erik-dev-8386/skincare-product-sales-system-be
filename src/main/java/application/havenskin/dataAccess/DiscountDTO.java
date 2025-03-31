@@ -13,7 +13,7 @@ public class DiscountDTO {
 
     @NotBlank(message = "Tên khuyến mãi không được để trống")
     @Pattern(
-            regexp = "^[^0-9\\W][\\w\\s]+$",
+            regexp = "^(?![0-9\\s])[\\p{L}0-9 ].*$",
             message = "Tên khuyến mãi không được bắt đầu bằng số hoặc chứa ký tự đặc biệt"
     )
     @Size(max = 255, message = "Tên khuyến mãi không được vượt quá 255 ký tự")
@@ -31,7 +31,7 @@ public class DiscountDTO {
     @Nationalized
     private String description;
 
-    @PastOrPresent(message = "Ngày tạo phải là ngày hiện tại hoặc trong quá khứ")
+//    @PastOrPresent(message = "Ngày tạo phải là ngày hiện tại hoặc trong quá khứ")
     private Date createdTime = new Date();
 
     @FutureOrPresent(message = "Ngày xóa phải lớn hơn hoặc bằng ngày hiện tại")

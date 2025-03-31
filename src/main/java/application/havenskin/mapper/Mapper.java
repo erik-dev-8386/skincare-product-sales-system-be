@@ -22,8 +22,6 @@ public interface Mapper {
     @Mapping(target = "discountPrice",ignore = true)
     Products toProducts(ProductDTO productDTO);
     void updateProducts(@MappingTarget Products products, ProductDTO productDTO);
-    Shipments toShipments(ShipmentDTO shipmentDTO);
-    void updateShipments(@MappingTarget Shipments shipments, ShipmentDTO shipmentDTO);
     SkinTypes toSkinTypes(SkinTypeDTO skinTypeDTO);
     void updateSkinType(@MappingTarget SkinTypes skinTypes, SkinTypeDTO skinTypeDTO);
     Transactions toTransactions(TransactionDTO transactionDTO);

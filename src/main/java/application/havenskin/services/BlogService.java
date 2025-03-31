@@ -224,6 +224,8 @@ public Blogs updateBlogByTitle(String blogTitle, Blogs blog,List<MultipartFile> 
 
             list.add(blogImages);
         }
+//        List<BlogImages> currentImages = existingBlog.getBlogImages() != null ? existingBlog.getBlogImages() : new ArrayList<>();
+//        currentImages.addAll(list);
         blogImagesRepository.saveAll(list);
         existingBlog.setBlogImages(list);
     }

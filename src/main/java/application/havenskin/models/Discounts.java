@@ -23,10 +23,11 @@ public class Discounts {
 
     @NotBlank(message = "Tên khuyến mãi không được để trống")
     @Pattern(
-            regexp = "^[^0-9\\W][\\w\\s]+$",
+            regexp = "^(?![0-9\\s])[\\p{L}0-9 ].*$",
             message = "Tên khuyến mãi không được bắt đầu bằng số hoặc chứa ký tự đặc biệt"
     )
-    @Size(max = 255, message = "Tên khuyến mãi không được vượt quá 255 ký tự")
+//    @Size(max = 255, message = "Tên khuyến mãi không được vượt quá 255 ký tự")
+    @Size(min = 2, max = 255, message = "Tên thương hiệu phải từ 2-255 ký tự")
     @Column(name = "discount_name", length = 255)
     @Nationalized
     private String discountName;

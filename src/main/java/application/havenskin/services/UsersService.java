@@ -128,6 +128,7 @@ public class UsersService {
     }
 
     public Users saveUser(Users user) {
+        user.setRole(user.getRole());
         return usersRepository.save(user);
     }
 
@@ -205,10 +206,15 @@ public class UsersService {
             existingUser.setGender(user.getGender());
             existingUser.setAddress(user.getAddress());
             existingUser.setBirthDate(user.getBirthDate());
+            existingUser.setRole(user.getRole());
+            existingUser.setStatus(user.getStatus());
 
             if (file != null && !file.isEmpty()) {
                 String avatar = firebaseService.uploadImage(file);
                 existingUser.setImage(avatar);
+            }
+            else{
+                existingUser.setImage(null);
             }
             return usersRepository.save(existingUser);
         }

@@ -1,5 +1,6 @@
 package application.havenskin.dataAccess;
 
+import application.havenskin.enums.Role;
 import application.havenskin.models.*;
 import lombok.Data;
 import org.hibernate.annotations.Nationalized;
@@ -33,7 +34,7 @@ public class UserDTO {
 
     private byte role;
 
-    private byte status;
+    private byte status = Role.Status.ACTIVE.getStatus();
 
     private List<Orders> orders;
 
