@@ -58,9 +58,24 @@ public class BlogController {
     }
 
     // Cập nhật blog theo title
+//    @PutMapping("/{blogTitle}")
+//    public Blogs updateBlogById(@PathVariable String blogTitle, @RequestBody Blogs blog,@RequestParam(value = "images",required = false) List<MultipartFile> images ) throws IOException {
+//        return blogService.updateBlogByTitle(blogTitle, blog, images);
+//    }
     @PutMapping("/{blogTitle}")
-    public Blogs updateBlogById(@PathVariable String blogTitle, @RequestBody Blogs blog,@RequestParam(value = "images",required = false) List<MultipartFile> images ) throws IOException {
-        return blogService.updateBlogByTitle(blogTitle, blog, images);
+    public Blogs updateBlogByTitle(
+            @PathVariable String blogTitle,
+            @RequestPart("blogs") Blogs blog,
+            @RequestPart("email") String email,
+            @RequestParam(value = "images", required = false) List<MultipartFile> images
+    ) throws IOException {
+        System.out.println("Received request to update blog: " + blogTitle);
+        System.out.println("Status in request: " + blog.getStatus());
+
+        Blogs updatedBlog = blogService.updateBlogByTitle(blogTitle, blog, email, images);
+        System.out.println("Updated blog status: " + updatedBlog.getStatus());
+
+        return updatedBlog;
     }
 
     @PreAuthorize("hasRole('ADMIN')")

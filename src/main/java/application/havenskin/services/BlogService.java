@@ -150,87 +150,161 @@ public class BlogService {
 //
 //        return blogRepository.save(existingBlog);
 //    }
-public Blogs updateBlogByTitle(String blogTitle, Blogs blog,List<MultipartFile> images) throws IOException {
-    Blogs existingBlog =  blogRepository.findByTitle(blogTitle);
+//public Blogs updateBlogByTitle(String blogTitle, Blogs blog,List<MultipartFile> images) throws IOException {
+//    Blogs existingBlog =  blogRepository.findByTitle(blogTitle);
+//    if (existingBlog == null) {
+//        throw new RuntimeException("Blog not found with title: " + blogTitle);
+//    }
+//
+////        if (blog.getBlogCategory() != null) {
+////            existingBlog.setBlogCategory(blog.getBlogCategory());
+////        }
+//
+//    if (blog.getBlogCategory() != null) {
+//        BlogCategory incomingCategory = blog.getBlogCategory();
+//
+//        // Kiểm tra xem BlogCategory đã tồn tại chưa
+//        BlogCategory existingCategory = blogCategoryRepository
+//                .findByBlogCategoryName(incomingCategory.getBlogCategoryName())
+//                .orElseGet(() -> blogCategoryRepository.save(incomingCategory));
+//
+//        existingBlog.setBlogCategory(existingCategory);
+//    }
+//    if (blog.getBlogTitle() != null) {
+//        existingBlog.setBlogTitle(blog.getBlogTitle());
+//    }
+//    if (blog.getBlogContent() != null) {
+//        existingBlog.setBlogContent(blog.getBlogContent());
+//    }
+//    if (blog.getBlogImages() != null) {
+//        existingBlog.setBlogImages(blog.getBlogImages());
+//    }
+////        if (blog.getHashtags() != null) {
+////            existingBlog.setHashtags(blog.getHashtags());
+////        }
+//
+//        existingBlog.setStatus(blog.getStatus());
+//    if (blog.getHashtags() != null && !blog.getHashtags().isEmpty()) {
+//        List<BlogHashtag> savedHashtags = new ArrayList<>();
+//
+//        for (BlogHashtag hashtag : blog.getHashtags()) {
+//            // Kiểm tra xem hashtag đã tồn tại chưa
+//            BlogHashtag existingHashtag = blogHashtagRepository
+//                    .findHashtagByName(hashtag.getBlogHashtagName()) // Đảm bảo tên phương thức trùng khớp
+//                    .orElseGet(() -> blogHashtagRepository.save(hashtag));
+//
+//            savedHashtags.add(existingHashtag);
+//        }
+//
+//        existingBlog.setHashtags(savedHashtags);
+//    }
+////        if (blog.getUserId() != null) {
+////            existingBlog.setUserId(blog.getUserId());
+////        }
+//    if (blog.getPostedTime() != null) {
+//        existingBlog.setPostedTime(blog.getPostedTime());
+//    }
+//    if (blog.getDeletedTime() != null) {
+//        existingBlog.setDeletedTime(blog.getDeletedTime());
+//    }
+////    if (blog.getStatus() != 0) {
+////        existingBlog.setStatus(blog.getStatus());
+////    }
+//        existingBlog.setStatus(blog.getStatus());
+//
+//    if(images != null && !images.isEmpty()) {
+//        List<BlogImages> list = new ArrayList<>();
+//        for (MultipartFile file : images) {
+//            String imageUrl = firebaseService.uploadImage(file);
+//
+//            BlogImages blogImages = new BlogImages();
+//            blogImages.setImageURL(imageUrl);
+//            blogImages.setBlogId(blog.getBlogId());
+//            blogImages.setBlog(existingBlog);
+//
+//            list.add(blogImages);
+//        }
+////        List<BlogImages> currentImages = existingBlog.getBlogImages() != null ? existingBlog.getBlogImages() : new ArrayList<>();
+////        currentImages.addAll(list);
+//        blogImagesRepository.saveAll(list);
+//        existingBlog.setBlogImages(list);
+//    }
+//
+//    return blogRepository.save(existingBlog);
+//}
+
+public Blogs updateBlogByTitle(String blogTitle, Blogs blog, String email, List<MultipartFile> images) throws IOException {
+    Blogs existingBlog = blogRepository.findByTitle(blogTitle);
     if (existingBlog == null) {
         throw new RuntimeException("Blog not found with title: " + blogTitle);
     }
 
-//        if (blog.getBlogCategory() != null) {
-//            existingBlog.setBlogCategory(blog.getBlogCategory());
-//        }
+    System.out.println("Existing blog status before update: " + existingBlog.getStatus());
+    System.out.println("New status value from request: " + blog.getStatus());
 
+    // Cập nhật thông tin user
+    if (email != null) {
+        Users user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+        existingBlog.setUser(user);
+    }
+
+    // Cập nhật danh mục
     if (blog.getBlogCategory() != null) {
         BlogCategory incomingCategory = blog.getBlogCategory();
-
-        // Kiểm tra xem BlogCategory đã tồn tại chưa
         BlogCategory existingCategory = blogCategoryRepository
                 .findByBlogCategoryName(incomingCategory.getBlogCategoryName())
                 .orElseGet(() -> blogCategoryRepository.save(incomingCategory));
-
         existingBlog.setBlogCategory(existingCategory);
     }
+
+    // Cập nhật các trường khác
     if (blog.getBlogTitle() != null) {
         existingBlog.setBlogTitle(blog.getBlogTitle());
     }
     if (blog.getBlogContent() != null) {
         existingBlog.setBlogContent(blog.getBlogContent());
     }
-    if (blog.getBlogImages() != null) {
-        existingBlog.setBlogImages(blog.getBlogImages());
-    }
-//        if (blog.getHashtags() != null) {
-//            existingBlog.setHashtags(blog.getHashtags());
-//        }
-
-        existingBlog.setStatus(blog.getStatus());
     if (blog.getHashtags() != null && !blog.getHashtags().isEmpty()) {
         List<BlogHashtag> savedHashtags = new ArrayList<>();
-
         for (BlogHashtag hashtag : blog.getHashtags()) {
-            // Kiểm tra xem hashtag đã tồn tại chưa
             BlogHashtag existingHashtag = blogHashtagRepository
-                    .findHashtagByName(hashtag.getBlogHashtagName()) // Đảm bảo tên phương thức trùng khớp
+                    .findHashtagByName(hashtag.getBlogHashtagName())
                     .orElseGet(() -> blogHashtagRepository.save(hashtag));
-
             savedHashtags.add(existingHashtag);
         }
-
         existingBlog.setHashtags(savedHashtags);
     }
-//        if (blog.getUserId() != null) {
-//            existingBlog.setUserId(blog.getUserId());
-//        }
     if (blog.getPostedTime() != null) {
         existingBlog.setPostedTime(blog.getPostedTime());
     }
     if (blog.getDeletedTime() != null) {
         existingBlog.setDeletedTime(blog.getDeletedTime());
     }
-//    if (blog.getStatus() != 0) {
-//        existingBlog.setStatus(blog.getStatus());
-//    }
-        existingBlog.setStatus(blog.getStatus());
+    existingBlog.setStatus(blog.getStatus());
 
-    if(images != null && !images.isEmpty()) {
-        List<BlogImages> list = new ArrayList<>();
+    // Xử lý ảnh mới
+    if (images != null && !images.isEmpty()) {
+        List<BlogImages> newImages = new ArrayList<>();
         for (MultipartFile file : images) {
             String imageUrl = firebaseService.uploadImage(file);
-
-            BlogImages blogImages = new BlogImages();
-            blogImages.setImageURL(imageUrl);
-            blogImages.setBlogId(blog.getBlogId());
-            blogImages.setBlog(existingBlog);
-
-            list.add(blogImages);
+            BlogImages blogImage = new BlogImages();
+            blogImage.setImageURL(imageUrl);
+            blogImage.setBlogId(existingBlog.getBlogId());
+            blogImage.setBlog(existingBlog);
+            newImages.add(blogImage);
         }
-//        List<BlogImages> currentImages = existingBlog.getBlogImages() != null ? existingBlog.getBlogImages() : new ArrayList<>();
-//        currentImages.addAll(list);
-        blogImagesRepository.saveAll(list);
-        existingBlog.setBlogImages(list);
+        // Thêm ảnh mới vào danh sách hiện tại (không ghi đè)
+        List<BlogImages> currentImages = existingBlog.getBlogImages() != null ? existingBlog.getBlogImages() : new ArrayList<>();
+        currentImages.addAll(newImages);
+        blogImagesRepository.saveAll(newImages);
+        existingBlog.setBlogImages(currentImages);
     }
 
-    return blogRepository.save(existingBlog);
+    Blogs savedBlog = blogRepository.save(existingBlog);
+    System.out.println("Blog status after save: " + savedBlog.getStatus());
+
+    return savedBlog;
 }
 
 
