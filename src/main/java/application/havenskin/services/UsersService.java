@@ -206,8 +206,9 @@ public class UsersService {
             existingUser.setGender(user.getGender());
             existingUser.setAddress(user.getAddress());
             existingUser.setBirthDate(user.getBirthDate());
-            existingUser.setRole(user.getRole());
-            existingUser.setStatus(user.getStatus());
+//
+            existingUser.setRole(user.getRole() == 0 ? existingUser.getRole() : user.getRole());
+            existingUser.setStatus(user.getStatus() == 0 ? existingUser.getStatus() : user.getStatus());
 
             if (file != null && !file.isEmpty()) {
                 String avatar = firebaseService.uploadImage(file);

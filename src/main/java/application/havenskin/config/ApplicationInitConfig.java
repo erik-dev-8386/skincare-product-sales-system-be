@@ -29,7 +29,7 @@ public class ApplicationInitConfig {
                 x.setRole(Role.ADMIN.getValue());
                 x.setFirstName("Admin");
                 x.setLastName("Admin");
-                x.setStatus((byte) 1);
+                x.setStatus((byte) 2);
                 userRepository.save(x);
             }
             if(userRepository.findByEmail("staff@gmail.com").isEmpty()){
