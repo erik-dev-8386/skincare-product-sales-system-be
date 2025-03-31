@@ -21,71 +21,32 @@ public class BlogCategoryService {
         return blogCategoryRepository.findByBlogCategoryName(blogCategoryName);
     }
 
-//    public BlogCategory getByBlogCategoryId(String blogCategoryId) {
-//        return blogCategoryRepository.findById(blogCategoryId).get();
-//    }
-
     public BlogCategory addBlogCategory(BlogCategory blogCategory) {
         return blogCategoryRepository.save(blogCategory);
     }
 
-//    public BlogCategory updateBlogCategoryById(String id,BlogCategory blogCategory) {
-//        BlogCategory existingBlogCategory = blogCategoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Blog not found"));
-//
-//        if(blogCategory.getBlogCategoryName() != null) {
-//            existingBlogCategory.setBlogCategoryName(blogCategory.getBlogCategoryName());
-//        }
-//
-//        if(blogCategory.getDescription() != null) {
-//            existingBlogCategory.setDescription(blogCategory.getDescription());
-//        }
-//
-//        if(blogCategory.getStatus() != 0){
-//            existingBlogCategory.setStatus(blogCategory.getStatus());
-//        }
-//
-//        return blogCategoryRepository.save(existingBlogCategory);
-//    }
-
-    public BlogCategory updateBlogCategoryByName(String blogCategoryName,BlogCategory blogCategory) {
+    public BlogCategory updateBlogCategoryByName(String blogCategoryName, BlogCategory blogCategory) {
         BlogCategory existingBlogCategory = blogCategoryRepository.findByBlogCategoryName(blogCategoryName)
                 .orElseThrow(() -> new RuntimeException("No blog category found with name " + blogCategoryName));
 
-        if(existingBlogCategory.getBlogCategoryName().isEmpty()) {
-            throw  new RuntimeException("No blog category found with name " + blogCategoryName);
-        }
-
-        if(blogCategory.getBlogCategoryName() != null) {
+        if (blogCategory.getBlogCategoryName() != null) {
             existingBlogCategory.setBlogCategoryName(blogCategory.getBlogCategoryName());
         }
-
-        if(blogCategory.getDescription() != null) {
+        if (blogCategory.getDescription() != null) {
             existingBlogCategory.setDescription(blogCategory.getDescription());
         }
-
-        if(blogCategory.getStatus() != 0){
-            existingBlogCategory.setStatus(blogCategory.getStatus());
-        }
+        // Không kiểm tra status != 0, cho phép cập nhật mọi giá trị status
+        existingBlogCategory.setStatus(blogCategory.getStatus());
 
         return blogCategoryRepository.save(existingBlogCategory);
     }
-
-//    public String deleteBlogCategoryById(String id) {
-//        BlogCategory blogCategory = blogCategoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Blog not found"));
-//        blogCategory.setStatus((byte) 0); // Xóa mềm
-//        blogCategoryRepository.save(blogCategory);
-//        return "Blog deleted successfully";
-//    }
 
     public String deleteBlogCategoryByName(String blogCategoryName) {
         BlogCategory existingBlogCategory = blogCategoryRepository.findByBlogCategoryName(blogCategoryName)
                 .orElseThrow(() -> new RuntimeException("No blog category found with name " + blogCategoryName));
 
-        if(existingBlogCategory.getBlogCategoryName().isEmpty()) {
-            throw  new RuntimeException("No blog category found with name " + blogCategoryName);
-        }
         existingBlogCategory.setStatus((byte) 0); // Xóa mềm
         blogCategoryRepository.save(existingBlogCategory);
-        return "Blog deleted successfully";
+        return "Blog category deleted successfully";
     }
 }
