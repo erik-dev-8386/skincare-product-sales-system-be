@@ -55,5 +55,4 @@ public interface OrdersRepository extends JpaRepository<Orders, String> {
 
     @Query("SELECT o FROM Orders o WHERE o.userId = :userId AND o.orderId NOT IN" + "(SELECT o1.orderId FROM Orders o1 where o1.status = :status)")
     List<Orders> findListOrderByStatus(String userId, byte status);
-
 }
