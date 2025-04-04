@@ -150,7 +150,6 @@ public class UsersController {
             userDTO.setEmail(user.getEmail());
             userDTO.setRole(user.getRole());
 
-
             return ResponseEntity.ok(Map.of(
                     "token", token,
                     "user", userDTO
@@ -189,9 +188,4 @@ public class UsersController {
         return usersService.updateUser(email, userDTO, images);
     }
 
-
-//    @PostMapping("/check-out/{email}/{orderId}")
-//    public Users checkOutUser(@PathVariable String email,@PathVariable String orderId, @RequestBody UserDTO userDTO){
-//        return usersService.checkOutUser(email,orderId, userDTO);
-//    }
 }
