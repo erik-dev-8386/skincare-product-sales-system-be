@@ -3,6 +3,7 @@ package application.havenskin.controllers;
 import application.havenskin.models.BlogHashtag;
 import application.havenskin.services.BlogHashtagService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,6 +46,7 @@ public class BlogHashtagController {
         return blogHashtagService.updateBlogHashtagByHashtagName(blogHashtagName, blogHashtag);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     // Xóa mềm hashtag theo tên
     @DeleteMapping("/{blogHashtagName}")
     public String deleteBlogHashtag(@PathVariable String blogHashtagName) {

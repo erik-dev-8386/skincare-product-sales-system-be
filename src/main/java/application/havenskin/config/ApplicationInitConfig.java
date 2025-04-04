@@ -29,6 +29,7 @@ public class ApplicationInitConfig {
                 x.setRole(Role.ADMIN.getValue());
                 x.setFirstName("Admin");
                 x.setLastName("Admin");
+                x.setStatus((byte) 2);
                 userRepository.save(x);
             }
             if(userRepository.findByEmail("staff@gmail.com").isEmpty()){
@@ -38,6 +39,7 @@ public class ApplicationInitConfig {
                 x.setRole(Role.STAFF.getValue());
                 x.setFirstName("Staff");
                 x.setLastName("Staff");
+                x.setStatus((byte) 2);
                 userRepository.save(x);
             }
             if(skinTestsRepository.findById("1").isEmpty()){

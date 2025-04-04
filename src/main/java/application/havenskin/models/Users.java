@@ -1,5 +1,6 @@
 package application.havenskin.models;
 
+import application.havenskin.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
@@ -36,6 +37,7 @@ public class Users {
     private String gender;
 
     @Column(name = "address", length = 50)
+    @Nationalized
     private String address;
 
     @Column(name = "birth_date")
@@ -62,7 +64,7 @@ public class Users {
     private byte role;
 
     @Column(name = "status")
-    private byte status;
+    private byte status = Role.Status.ACTIVE.getStatus();
 
     @JsonIgnore
     @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)

@@ -1,7 +1,6 @@
 package application.havenskin.dataAccess;
 
 import application.havenskin.models.OrderDetails;
-import application.havenskin.models.Shipments;
 import application.havenskin.models.Transactions;
 import application.havenskin.models.Users;
 import lombok.Data;
@@ -30,7 +29,6 @@ public class OrderDTO {
 
     private List<OrderDetails> orderDetails;
 
-    private List<Shipments> shipments;
 
     private Transactions transactions;
 

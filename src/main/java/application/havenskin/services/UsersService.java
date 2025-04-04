@@ -33,6 +33,7 @@ public class UsersService {
 
     @Autowired
     private OrderDetailsRepository orderDetailsRepository;
+
     public UsersService(UserRepository usersRepository) {
         this.usersRepository = usersRepository;
     }
@@ -67,7 +68,7 @@ public class UsersService {
 //                x.setFirstName(userDTO.getFirstName());
                 orders.setCustomerFirstName(userDTO.getFirstName());
             } else {
-                throw  new RuntimeException("First name is missing for user with email: " + email);
+                throw new RuntimeException("First name is missing for user with email: " + email);
             }
         }
         if (x.getLastName() == null || userDTO.getLastName() != null) {
@@ -80,14 +81,14 @@ public class UsersService {
         }
         if (x.getEmail() == null || userDTO.getEmail() != null) {
             if (userDTO.getEmail() != null) {
-                 x.setEmail(userDTO.getEmail());
+                x.setEmail(userDTO.getEmail());
             } else {
                 throw new RuntimeException("Email is missing for user with email: " + email);
             }
         }
         if (x.getPhone() == null || userDTO.getPhone() != null) {
             if (userDTO.getPhone() != null) {
-            //    x.setPhone(userDTO.getPhone());
+                //    x.setPhone(userDTO.getPhone());
                 orders.setCustomerPhone(userDTO.getPhone());
             } else {
                 throw new RuntimeException("Phone number is missing for user with email: " + email);
@@ -95,7 +96,7 @@ public class UsersService {
         }
         if (x.getAddress() == null || userDTO.getAddress() != null) {
             if (userDTO.getAddress() != null) {
-            //    x.setAddress(userDTO.getAddress());
+                //    x.setAddress(userDTO.getAddress());
                 orders.setAddress(userDTO.getAddress());
             } else {
                 throw new RuntimeException("Address is missing for user with email: " + email);
@@ -128,6 +129,7 @@ public class UsersService {
     }
 
     public Users saveUser(Users user) {
+        user.setRole(user.getRole());
         return usersRepository.save(user);
     }
 
@@ -169,7 +171,7 @@ public class UsersService {
 
             // Cập nhật trạng thái người dùng
             Users user = userOptional.get();
-            user.setStatus((byte) 0);
+            user.setStatus((byte) 1);
             usersRepository.save(user);
 
             response.setSucceed(true);
@@ -205,17 +207,31 @@ public class UsersService {
             existingUser.setGender(user.getGender());
             existingUser.setAddress(user.getAddress());
             existingUser.setBirthDate(user.getBirthDate());
+//
+            existingUser.setRole(user.getRole() == 0 ? existingUser.getRole() : user.getRole());
+            existingUser.setStatus(user.getStatus() == 0 ? existingUser.getStatus() : user.getStatus());
 
             if (file != null && !file.isEmpty()) {
                 String avatar = firebaseService.uploadImage(file);
                 existingUser.setImage(avatar);
+            } else {
+                existingUser.setImage(null);
             }
             return usersRepository.save(existingUser);
         }
     }
 
-
-
+    public void ChangePassword(String email, String passwordOld, String passwordNew) {
+        Users x = getUserByEmail(email);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        boolean matches = encoder.matches(passwordOld, x.getPassword());
+        if (matches) {
+            x.setPassword(encoder.encode(passwordNew));
+            usersRepository.save(x);
+        } else {
+            throw new RuntimeException("Wrong password!");
+        }
+    }
 
 
 }

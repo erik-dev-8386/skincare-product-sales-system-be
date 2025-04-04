@@ -4,6 +4,7 @@ import application.havenskin.dataAccess.QuestionsResponseDto;
 import application.havenskin.models.Questions;
 import application.havenskin.services.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,6 +45,8 @@ public class QuestionController {
     public List<String> findByContent(){
         return questionService.getAllQuestionContent();
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public Questions deleteQuestion(@PathVariable String id) {
        return questionService.deleteQuestion(id);

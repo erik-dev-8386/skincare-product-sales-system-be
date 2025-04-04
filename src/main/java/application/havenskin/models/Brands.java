@@ -23,10 +23,13 @@ public class Brands {
 
     @NotBlank(message = "Tên thương hiệu không được để trống!")
     @Pattern(
-            regexp = "^[^0-9\\W][\\w\\s]+$",
-            message = "Tên thương hiệu không được bắt đầu bằng số hoặc chứa ký tự đặc biệt"
+            regexp = "^(?![0-9\\s])[\\p{L}0-9 ].*$",
+//            regexp = "^[a-zA-ZÀ-ỹ][a-zA-ZÀ-ỹ0-9 ]*$",
+            message = "Tên sản phẩm không hợp lệ. Không được bắt đầu bằng số hoặc chứa ký tự đặc biệt"
     )
-    @Size(max = 255, message = "Tên thương hiệu không được vượt quá 255 ký tự!")
+
+    //@Size(max = 255, message = "Tên thương hiệu không được vượt quá 255 ký tự!")
+    @Size(min = 3, max = 255, message = "Tên thương hiệu phải từ 2-255 ký tự")
     @Column(name = "brand_name", length = 255)
     @Nationalized
     private String brandName;
@@ -36,7 +39,7 @@ public class Brands {
     private String description;
 
     @NotBlank(message = "Quốc gia không được để trống")
-    @Pattern(regexp = "^[A-Za-z\\s]+$", message = "Quốc gia chỉ được chứa chữ cái và khoảng trắng")
+//    @Pattern(regexp = "^\\p{L}[\\p{L}\\s]*$", message = "Quốc gia chỉ được chứa chữ cái và khoảng trắng")
     @Column(name = "country", length = 50)
     @Nationalized
     private String country;

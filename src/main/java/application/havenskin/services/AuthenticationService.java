@@ -34,7 +34,7 @@ public class AuthenticationService {
         AuthencationResponse response = new AuthencationResponse();
         {
             Optional<Users> user = userRepository.findByEmail(x.getEmail());
-            if (user.isPresent()) {
+            if (user.isPresent() && user.get().getStatus() == 2) {
                 PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
                 boolean check = passwordEncoder.matches(x.getPassword(), user.get().getPassword());
                 if(!check) {

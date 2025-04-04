@@ -47,9 +47,6 @@ public class Orders {
     @Column(name = "shipment_free")
     private double shipmentFree;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "orders")
-    private List<Shipments> shipments;
 
     @ToString.Exclude
     @JsonIgnore

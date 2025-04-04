@@ -34,10 +34,13 @@ public interface OrdersRepository extends JpaRepository<Orders, String> {
 
     List<Orders> findAllByOrderByOrderTimeAsc();
 
-    @Query("SELECT o FROM Orders o where o.userId = :userId ORDER BY o.orderTime DESC")
+    @Query("SELECT o FROM Orders o where o.userId = :userId and o.status <> 0 ORDER BY o.orderTime DESC ")
     List<Orders> sortOrdersByUserIdAndOrderTimeDesc(@Param("userId") String userId);
 
-    @Query("SELECT o FROM Orders o where o.userId = :userId ORDER BY o.orderTime ASC")
+//    List<Orders> findByUserIdAndStatusNotOrderByOrderTimeDesc(String userId, byte status);
+
+
+    @Query("SELECT o FROM Orders o where o.userId = :userId and o.status <> 0 ORDER BY o.orderTime ASC")
     List<Orders> sortOrdersByUserIdAndOrderTimeAsc(@Param("userId") String userId);
 
     @Query("SELECT " +
@@ -52,5 +55,4 @@ public interface OrdersRepository extends JpaRepository<Orders, String> {
 
     @Query("SELECT o FROM Orders o WHERE o.userId = :userId AND o.orderId NOT IN" + "(SELECT o1.orderId FROM Orders o1 where o1.status = :status)")
     List<Orders> findListOrderByStatus(String userId, byte status);
-
 }

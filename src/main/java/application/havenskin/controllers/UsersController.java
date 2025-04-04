@@ -150,6 +150,7 @@ public class UsersController {
             userDTO.setEmail(user.getEmail());
             userDTO.setRole(user.getRole());
 
+
             return ResponseEntity.ok(Map.of(
                     "token", token,
                     "user", userDTO
@@ -188,4 +189,8 @@ public class UsersController {
         return usersService.updateUser(email, userDTO, images);
     }
 
+    @PostMapping("/change-password/{email}/{passwordOld}/{passwordNew}")
+    public void changePassword(@PathVariable String email,@PathVariable String passwordOld, @PathVariable String passwordNew) {
+         usersService.ChangePassword(email,passwordOld,passwordNew);
+    }
 }

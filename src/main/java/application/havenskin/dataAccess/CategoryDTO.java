@@ -13,7 +13,7 @@ import java.util.List;
 public class CategoryDTO {
 
     @NotBlank(message = "Tên danh mục sản phẩm không được để trống!")
-    @Pattern(regexp = "^[^0-9][a-zA-Z0-9\\s]+$",
+    @Pattern(regexp = "^(?![0-9\\s])[\\p{L}0-9 ].*$",
             message = "Tên danh mục sản phẩm không được bắt đầu bằng số hoặc chứa ký tự đặc biệt")
     @Nationalized
     private String categoryName;
@@ -21,8 +21,6 @@ public class CategoryDTO {
     @Nationalized
     private String description;
 
-    @Nationalized
-    private String usageInstruction;
 
     private List<Products> products;
 

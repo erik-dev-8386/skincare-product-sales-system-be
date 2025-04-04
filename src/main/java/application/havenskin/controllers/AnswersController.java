@@ -4,6 +4,7 @@ import application.havenskin.dataAccess.AnswersDto;
 import application.havenskin.models.Answers;
 import application.havenskin.services.AnswersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,6 +35,7 @@ public class AnswersController {
         return answersService.updateAnswer(id, answers);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public Answers deleteAnswer(@PathVariable String id) {
         return answersService.deleteAnswer(id);

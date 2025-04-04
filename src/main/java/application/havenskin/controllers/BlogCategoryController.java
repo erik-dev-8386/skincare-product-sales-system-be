@@ -3,6 +3,7 @@ package application.havenskin.controllers;
 import application.havenskin.models.BlogCategory;
 import application.havenskin.services.BlogCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,6 +44,7 @@ public class BlogCategoryController {
         return blogCategoryService.updateBlogCategoryByName(blogCategoryName, blogCategory);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     // Xóa mềm Blog Category theo tên
     @DeleteMapping("/{blogCategoryName}")
     public String deleteBlogCategory(@PathVariable String blogCategoryName) {

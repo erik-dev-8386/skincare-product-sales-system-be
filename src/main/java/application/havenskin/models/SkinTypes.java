@@ -22,7 +22,7 @@ public class SkinTypes {
     private String skinTypeId;
 
     @NotBlank(message = "Tên loại da không được để trống")
-    @Pattern(regexp = "^[^\\d\\W][\\p{L} ]*$", message = "Tên loại da không được bắt đầu bằng số hoặc chứa ký tự đặc biệt")
+    @Pattern(regexp = "^(?![0-9\\s])[\\p{L}0-9 ].*$", message = "Tên loại da không được bắt đầu bằng số hoặc chứa ký tự đặc biệt")
     @NotNull
     @Column(name = "skin_name", length = 50)
     @Nationalized
