@@ -8,6 +8,7 @@ import org.hibernate.annotations.Nationalized;
 import java.util.Date;
 
 @Entity
+@Table(name = "MiniSkinCarePlan")
 @Data
 public class MiniSkinCarePlan {
     @Id
@@ -28,10 +29,6 @@ public class MiniSkinCarePlan {
     @Column(name = "action", length = 250)
     @Nationalized
     private String Action;
-
-//    @NotNull
-//    @Column(name = "action_date")
-//    private Date actionDate;
 
     @Column(name = "status", length = 50)
     private byte status;

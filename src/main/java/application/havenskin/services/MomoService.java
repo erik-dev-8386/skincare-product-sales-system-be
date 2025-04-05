@@ -36,24 +36,19 @@ public class MomoService {
     private OrderService orderService;
     @Autowired
     private TransactionService transactionService;
-
     @Autowired
     private EmailService emailService;
-
     @Autowired
     private OrdersRepository ordersRepository;
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private OrderDetailsRepository orderDetailsRepository;
-
     @Autowired
     private ProductsRepository productsRepository;
     public void testConfig() {
         log.info("SECRET_KEY: {}", momoConfig.getSecretKey());
     }
-
     public CreateMomoResponse createQR(String orderId) {
         // Lấy thông tin đơn hàng từ orderId
         Orders order = orderService.getOrderById(orderId);
@@ -104,21 +99,6 @@ public class MomoService {
         return momoRepository.createMomoQR(request);
     }
 
-    private String signHmacSHA256(String data, String key) throws Exception {
-        Mac hmacSHA256 = Mac.getInstance("HmacSHA256");
-        SecretKeySpec secretkey = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
-        hmacSHA256.init(secretkey);
-        byte[] hash = hmacSHA256.doFinal(data.getBytes(StandardCharsets.UTF_8));
-        StringBuilder hexString = new StringBuilder();
-        for (byte b : hash) {
-            String hex = Integer.toHexString(0xff & b);
-            if (hex.length() == 1)
-                hexString.append('0');
-            hexString.append(hex);
-        }
-        return hexString.toString();
-    }
-
     public boolean handleMomoIPN(MomoIPNResponse ipnResponse) {
         log.info("Nhận IPN từ MoMo: {}", ipnResponse);
 
@@ -164,7 +144,6 @@ public class MomoService {
                 log.warn("Cập nhật trạng thái đơn hàng thất bại cho orderId: {}", orderId);
             }
         }
-
         return true;
     }
 
@@ -198,5 +177,20 @@ private void sendOrderConfirmationEmail(String to, String orderId, double totalA
     // Gửi email
     emailService.sendEmail(to, subject, emailContent);
 }
+
+    private String signHmacSHA256(String data, String key) throws Exception {
+        Mac hmacSHA256 = Mac.getInstance("HmacSHA256");
+        SecretKeySpec secretkey = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+        hmacSHA256.init(secretkey);
+        byte[] hash = hmacSHA256.doFinal(data.getBytes(StandardCharsets.UTF_8));
+        StringBuilder hexString = new StringBuilder();
+        for (byte b : hash) {
+            String hex = Integer.toHexString(0xff & b);
+            if (hex.length() == 1)
+                hexString.append('0');
+            hexString.append(hex);
+        }
+        return hexString.toString();
+    }
 
 }
