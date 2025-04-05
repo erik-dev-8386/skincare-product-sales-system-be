@@ -33,24 +33,36 @@ public class SkinCarePlanService {
         return planSkinCareRepository.findAllSkinCarePlanByStatus();
     }
 
-    public PlanSkinCareDTO createPlanSkinCare(String skinCareName,PlanSkinCareDTO x) {
+    public SkinCaresPlan createPlanSkinCare(String skinCareName,PlanSkinCareDTO x) {
+        if (x.getDescription() == null || x.getDescription().trim().isEmpty()) {
+            throw new IllegalArgumentException("Description không được để trống");
+        }
+
         SkinTypes skinTypes = skinTypesRepository.findBySkinName(skinCareName).orElseThrow(()-> new RuntimeException("Skin Type Not Found"));
+
+        boolean planExists = planSkinCareRepository.existsByDescriptionAndSkinType_SkinTypeId(
+                x.getDescription(),
+                skinTypes.getSkinTypeId()
+        );
+        if (planExists) {
+            throw new RuntimeException("Loại da này đã có lộ trình với description tương tự");
+        }
+
         SkinCaresPlan skinCaresPlan = mapper.toSkinCaresPlan(x);
         skinCaresPlan.setSkinType(skinTypes);
 
-        planSkinCareRepository.save(skinCaresPlan);
-
-        skinTypes.setPlanSkinCare(skinCaresPlan);
-        skinTypesRepository.save(skinTypes);
-        return x;
+       SkinCaresPlan saved =  planSkinCareRepository.save(skinCaresPlan);
+       skinTypes.getPlanSkinCare().add(saved);
+       skinTypesRepository.save(skinTypes);
+//        skinTypes.setPlanSkinCare(skinCaresPlan);
+        return skinCaresPlan;
     }
 
-    public SkinCaresPlan getPlanSkinCare(String skinCareName) {
-        SkinTypes x = skinTypesRepository.findBySkinName(skinCareName).orElseThrow(()-> new RuntimeException("Skin Type Not Found"));
+    public List<SkinCaresPlan> getPlanSkinCare(String skinName) {
+        SkinTypes x = skinTypesRepository.findBySkinName(skinName).orElseThrow(()-> new RuntimeException("Skin Type Not Found"));
 
-        SkinCaresPlan skinCaresPlan = x.getPlanSkinCare();
-
-        if(skinCaresPlan == null) {
+        List<SkinCaresPlan> skinCaresPlan = x.getPlanSkinCare();
+        if(skinCaresPlan == null || skinCaresPlan.isEmpty()) {
             throw new RuntimeException("Không tìm thấy lộ trình chăm sóc da cho 1 loại da này");
         }
         return skinCaresPlan;
@@ -58,7 +70,7 @@ public class SkinCarePlanService {
     public SkinCaresPlan updatePlanSkinCares(String skinCareName,String description, PlanSkinCareDTO x) {
         SkinTypes skinTypes = skinTypesRepository.findBySkinName(skinCareName).orElseThrow(()-> new RuntimeException("Skin Type Not Found"));
 
-        SkinCaresPlan skinCaresPlan = planSkinCareRepository.findByDescriptionAndSkinTypeId(description, skinTypes.getSkinTypeId());
+        SkinCaresPlan skinCaresPlan = planSkinCareRepository.findByDescriptionAndSkinType_SkinTypeId(description, skinTypes.getSkinTypeId());
         if(skinCaresPlan == null) {
             throw new RuntimeException("Không tìm thấy lộ trình chăm sóc da cho loại da này");
         }
@@ -73,7 +85,7 @@ public class SkinCarePlanService {
         SkinTypes skinTypes = skinTypesRepository.findBySkinName(skinName).orElseThrow(()-> new RuntimeException("Skin Type Not Found"));
 //
 //        SkinCaresPlan skinCaresPlan = skinTypes.getPlanSkinCare();
-        SkinCaresPlan skinCaresPlan = planSkinCareRepository.findByDescriptionAndSkinTypeId(description, skinTypes.getSkinTypeId());
+        SkinCaresPlan skinCaresPlan = planSkinCareRepository.findByDescriptionAndSkinType_SkinTypeId(description, skinTypes.getSkinTypeId());
         if(skinCaresPlan == null) {
             throw new RuntimeException("Không tìm thấy lộ trình chăm sóc da cho loại da này");
         }
@@ -84,6 +96,10 @@ public class SkinCarePlanService {
 
     public List<SkinCaresPlan> searchSkinCarePlan(String description) {
         return planSkinCareRepository.findAllSkinCarePlanByDescription(description);
+    }
+
+    public List<SkinCaresPlan> getAllSkinCarePlanDescriptions() {
+        return planSkinCareRepository.findAllSkinCarePlanByStatus();
     }
 
 }

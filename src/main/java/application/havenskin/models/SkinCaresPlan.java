@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.Nationalized;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class SkinCaresPlan {
     @Column(name = "skin_care_plan_id", length = 50)
     @GeneratedValue(strategy = GenerationType.UUID)
     private String SkinCarePlanId;
-
+//
 //    @NotNull
 //    @Column(name = "skin_type_id", length = 50)
 //    private String skinTypeId;
@@ -26,12 +27,12 @@ public class SkinCaresPlan {
     @Nationalized
     private String description;
 
-    @JsonIgnore
-    @OneToOne
+//    @JsonIgnore
+    @ManyToOne
     @JoinColumn(name = "skin_type_id", referencedColumnName = "skin_type_id")
     private SkinTypes skinType;
 
-
+    @ToString.Exclude
     @OneToMany(mappedBy = "skinCarePlan", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MiniSkinCarePlan> miniSkinCarePlans;
 

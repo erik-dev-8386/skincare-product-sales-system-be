@@ -51,8 +51,8 @@ public class SkinTypes {
     private List<ResultTests> resultTests;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "skinType")
-    private SkinCaresPlan planSkinCare;
+    @OneToMany(mappedBy = "skinType")
+    private List<SkinCaresPlan> planSkinCare;
 
     @JsonIgnore
     @OneToMany(mappedBy = "skinTypes")

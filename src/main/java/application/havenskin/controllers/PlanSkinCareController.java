@@ -26,12 +26,12 @@ public class PlanSkinCareController {
     // hàm này tạo mới tên lộ trình loại da nhá
     //  gọi hàm show ra các loại da rồi cho người dùng chọn r gửi loại da về cho BE là xong!
     @PostMapping("/{skinCareName}")
-    public PlanSkinCareDTO createSkinCare(@PathVariable String skinCareName, @RequestBody PlanSkinCareDTO planSkinCareDTO) {
+    public SkinCaresPlan createSkinCare(@PathVariable String skinCareName, @RequestBody PlanSkinCareDTO planSkinCareDTO) {
         return skinCarePlanService.createPlanSkinCare(skinCareName, planSkinCareDTO);
     }
 
     @GetMapping("/{skinTypes}")
-    public SkinCaresPlan getSkinCarePlan(@PathVariable String skinTypes) {
+    public List<SkinCaresPlan> getSkinCarePlan(@PathVariable String skinTypes) {
         return skinCarePlanService.getPlanSkinCare(skinTypes);
     }
 
