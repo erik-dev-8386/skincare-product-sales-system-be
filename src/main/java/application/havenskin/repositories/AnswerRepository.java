@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface AnswerRepository extends JpaRepository<Answers, String> {
 
-    @Query("SELECT a FROM Answers a WHERE a.questionId = :questionId")
+    @Query("SELECT a FROM Answers a WHERE a.questionId = :questionId and a.status = 1")
     List<Answers> findByQuestionId(@Param("questionId") String questionId);
 
     // Tìm danh sách Answers có answerContent chứa từ khoá

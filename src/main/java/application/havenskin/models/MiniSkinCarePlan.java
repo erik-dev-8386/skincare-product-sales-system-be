@@ -29,12 +29,12 @@ public class MiniSkinCarePlan {
     @Nationalized
     private String Action;
 
-    @NotNull
-    @Column(name = "action_date")
-    private Date actionDate;
+//    @NotNull
+//    @Column(name = "action_date")
+//    private Date actionDate;
 
     @Column(name = "status", length = 50)
-    private String status;
+    private byte status;
 
 }
 

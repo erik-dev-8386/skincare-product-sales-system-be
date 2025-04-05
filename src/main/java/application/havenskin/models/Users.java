@@ -85,10 +85,10 @@ public class Users {
     @OneToMany(mappedBy = "users")
     private List<Feedbacks> feedbacks;
 
-    @ToString.Exclude
-    @JsonIgnore
-    @OneToMany(mappedBy = "user")
-    private List<SkinCaresPlan> skinCaresPlan;
+//    @ToString.Exclude
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "user")
+//    private List<SkinCaresPlan> skinCaresPlan;
 
     @ToString.Exclude
     @JsonIgnore

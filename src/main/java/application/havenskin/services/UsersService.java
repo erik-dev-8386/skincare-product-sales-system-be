@@ -65,6 +65,10 @@ public class UsersService {
         Orders orders = ordersRepository.findByOrderIdAndUserId(orderId, x.getUserId()).orElseThrow(() -> new RuntimeException("Order not found"));
         if (x.getFirstName() == null || userDTO.getFirstName() != null) {
             if (userDTO.getFirstName() != null) {
+                String firstNameRegrex = "^[a-zA-ZÀ-ỹ][a-zA-ZÀ-ỹ0-9 '\\-.,&+/()]*$";
+                if(!userDTO.getFirstName().matches(firstNameRegrex)) {
+                    throw new RuntimeException("Chữ cái đầu trong tên của bạn không được là ký tự đặc biệt! Bạn vui lòng thử lại:");
+                }
 //                x.setFirstName(userDTO.getFirstName());
                 orders.setCustomerFirstName(userDTO.getFirstName());
             } else {
@@ -73,7 +77,10 @@ public class UsersService {
         }
         if (x.getLastName() == null || userDTO.getLastName() != null) {
             if (userDTO.getLastName() != null) {
-                //        x.setLastName(userDTO.getLastName());
+                String lastNameRegrex = "^[a-zA-ZÀ-ỹ][a-zA-ZÀ-ỹ0-9 '\\-.,&+/()]*$";
+                if(!userDTO.getLastName().matches(lastNameRegrex)) {
+                    throw new RuntimeException("Chữ cái đầu trong tên của bạn không được là ký tự đặc biệt! Bạn vui lòng thử lại:");
+                }
                 orders.setCustomerLastName(userDTO.getLastName());
             } else {
                 throw new RuntimeException("Last name is missing for user with email: " + email);
@@ -88,7 +95,10 @@ public class UsersService {
         }
         if (x.getPhone() == null || userDTO.getPhone() != null) {
             if (userDTO.getPhone() != null) {
-                //    x.setPhone(userDTO.getPhone());
+                String phoneRegex = "^[0-9]{10}$";
+                if(!userDTO.getPhone().matches(phoneRegex)) {
+                    throw new RuntimeException("Phone number must be 10 digits with no special character or letters");
+                }
                 orders.setCustomerPhone(userDTO.getPhone());
             } else {
                 throw new RuntimeException("Phone number is missing for user with email: " + email);
@@ -96,14 +106,14 @@ public class UsersService {
         }
         if (x.getAddress() == null || userDTO.getAddress() != null) {
             if (userDTO.getAddress() != null) {
-                //    x.setAddress(userDTO.getAddress());
+                if(userDTO.getAddress().length() <= 5){
+                    throw new RuntimeException("Address must be at least 5 characters long");
+                }
                 orders.setAddress(userDTO.getAddress());
             } else {
                 throw new RuntimeException("Address is missing for user with email: " + email);
             }
         }
-//        System.out.println("Saved user: " +x);
-//        usersRepository.save(x);
         ordersRepository.save(orders);
         return orders;
     }
@@ -134,10 +144,6 @@ public class UsersService {
     }
 
     public Users createUser(UserDTO user) {
-//        Users x = mapper.toUsers(user);
-//        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-//        x.setPassword(passwordEncoder.encode(user.getPassword()));
-//        return userRepository.save(x);
         Users x = new Users();
         x.setFirstName(user.getFirstName());
         x.setLastName(user.getLastName());

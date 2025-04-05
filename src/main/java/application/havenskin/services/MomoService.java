@@ -5,12 +5,13 @@ import application.havenskin.dataAccess.CreateMomoRequest;
 import application.havenskin.dataAccess.CreateMomoResponse;
 import application.havenskin.dataAccess.MomoIPNResponse;
 import application.havenskin.enums.OrderEnums;
+import application.havenskin.enums.ProductEnums;
 import application.havenskin.enums.TransactionsEnums;
+import application.havenskin.models.OrderDetails;
+import application.havenskin.models.Products;
 import application.havenskin.models.Users;
-import application.havenskin.repositories.MomoRepository;
+import application.havenskin.repositories.*;
 import application.havenskin.models.Orders;
-import application.havenskin.repositories.OrdersRepository;
-import application.havenskin.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,12 @@ public class MomoService {
     private OrdersRepository ordersRepository;
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private OrderDetailsRepository orderDetailsRepository;
+
+    @Autowired
+    private ProductsRepository productsRepository;
     public void testConfig() {
         log.info("SECRET_KEY: {}", momoConfig.getSecretKey());
     }
@@ -139,11 +146,20 @@ public class MomoService {
         List<Orders> orders = ordersRepository.findByOrderId(orderId);
         Optional<Users> users = userRepository.findById(orders.get(0).getUserId());
         String email = users.get().getEmail();
+        List<OrderDetails> orderDetails = orderDetailsRepository.findByOrderId(orderId);
 
         if (isPaid) {
             boolean updated = orderService.updateOrderStatus(orderId, OrderEnums.PROCESSING.getOrder_status());
             sendOrderConfirmationEmail(email, orderId, amount);
-
+            for (OrderDetails orderDetail : orderDetails) {
+                Products products = productsRepository.findById(orderDetail.getProductId()).orElseThrow(()->new RuntimeException("Product not found"));
+                products.setQuantity(products.getQuantity() - orderDetail.getQuantity());
+                products.setSoldQuantity(products.getSoldQuantity() + orderDetail.getQuantity());
+                if(products.getQuantity() <= 0) {
+                    products.setStatus(ProductEnums.OUT_OF_STOCK.getValue());
+                }
+                productsRepository.save(products);
+            }
             if (!updated) {
                 log.warn("Cập nhật trạng thái đơn hàng thất bại cho orderId: {}", orderId);
             }
