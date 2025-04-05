@@ -13,6 +13,7 @@ public interface QuestionsRepository extends JpaRepository<Questions, String> {
     @Query("SELECT q FROM Questions q WHERE LOWER(q.questionContent) LIKE LOWER(CONCAT('%', :content, '%'))")
     List<Questions> searchByContent(@Param("content") String content);
 
+    @Query("SELECT q  FROM Questions q WHERE q.skinTestId = :skinTestId and q.status = 1")
     List<Questions> findBySkinTestId(String skinTestId);
 
     List<Questions> findByQuestionContent(String questionContent);

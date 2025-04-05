@@ -15,7 +15,7 @@ public class Answers {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String answerId;
 
-    @Column(name = "answer_content", length = 50)
+    @Column(name = "answer_content", length = 1000)
     @Nationalized
     private String answerContent;
 

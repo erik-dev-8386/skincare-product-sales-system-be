@@ -108,7 +108,7 @@ public class AnswersService {
         answer.setMark(answerDto.getMark());
         answer.setQuestion(question);  // Gán câu hỏi vào đáp án
         answer.setQuestionId(question.getQuestionId());
-
+        answer.setStatus(AnswerEnum.ACTIVE.getStatus());
         // 3. Lưu đáp án vào database
         answer = answerRepository.save(answer);
 

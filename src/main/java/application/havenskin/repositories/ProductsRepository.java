@@ -50,7 +50,7 @@ public interface ProductsRepository extends JpaRepository<Products, String> {
     @Query("SELECT p FROM Products p ORDER BY p.soldQuantity DESC ")
     List<Products> findTop10ByOrderBySoldQuantityDesc();
 
-//    @Query("SELECT p FROM Products p WHERE p.productName LIKE %:productName%")
+    @Query("SELECT p FROM Products p WHERE p.productName LIKE %:productName%")
     List<Products> findByProductNameContaining(@Param("productName") String productName);
 
 

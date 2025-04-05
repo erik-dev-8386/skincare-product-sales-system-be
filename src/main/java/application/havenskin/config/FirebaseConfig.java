@@ -17,7 +17,7 @@ public class FirebaseConfig {
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(
                         new ClassPathResource("Skin-care.json").getInputStream()))
-                .setStorageBucket("haven-skin-03-2025-d1f5f.firebasestorage.app")
+                .setStorageBucket("swp391-2004.appspot.com")
                 .build();
 
         // Nếu chưa khởi tạo FirebaseApp nào, khởi tạo và trả về; nếu đã có, trả về instance hiện có.
