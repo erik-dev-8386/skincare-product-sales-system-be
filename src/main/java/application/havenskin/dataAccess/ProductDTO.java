@@ -21,7 +21,7 @@
         private String productName;
 
         @Positive(message = "Giá của sản phẩm phải là số dương!")
-        @Min(value = 1000, message = "Giá sản phẩm tối thiểu là 1000")
+        @Min(value = 1, message = "Giá sản phẩm tối thiểu là 1")
         private double unitPrice;
 
         @PositiveOrZero(message = "Giá giảm phải là số dương!")

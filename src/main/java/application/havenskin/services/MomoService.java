@@ -140,7 +140,6 @@ public class MomoService {
         Optional<Users> users = userRepository.findById(orders.get(0).getUserId());
         String email = users.get().getEmail();
 
-        // Nếu thanh toán thành công, cập nhật trạng thái đơn hàng
         if (isPaid) {
             boolean updated = orderService.updateOrderStatus(orderId, OrderEnums.PROCESSING.getOrder_status());
             sendOrderConfirmationEmail(email, orderId, amount);
@@ -152,47 +151,9 @@ public class MomoService {
 
         return true;
     }
-//    private void sendOrderConfirmationEmail(String to, String orderId, double totalAmount) {
-//        String subject = "Haven Skin - Xác nhận bạn đã thanh toán thành công cho đơn hàng #" + orderId;
-//
-//        String emailContent =
-//                "Cảm ơn bạn đã đặt hàng tại Haven Skin!\n\n" +
-//                        "Đơn hàng của bạn đã được thanh toán thành công.\n\n" +
-//                        "Thông tin đơn hàng:\n" +
-//                        "- Mã đơn hàng: #" + orderId + "\n" +
-//                        "- Tổng tiền: " + String.format("%,.0f VND", totalAmount) + "\n\n" +
-//                        "Nếu có bất kỳ thắc mắc nào, vui lòng liên hệ:\n" +
-//                        "- Hotline: 0966340303\n" +
-//                        "- Email: havenskin032025@gmail.com\n\n" +
-//                        "Trân trọng,\n" +
-//                        "Đội ngũ Haven Skin";
-//
-//        emailService.sendEmail(to, subject, emailContent);
-//    }
-private void sendOrderConfirmationEmail(String to, String orderId, double totalAmount) {
-    // Tiêu đề email
-    String subject = "Haven Skin - Xác nhận thanh toán thành công đơn hàng #" + orderId;
 
-    // Nội dung email được format đẹp
-//    String emailContent =
-//            "=============================================\n" +
-//                    "               HAVEN SKIN                    \n" +
-//                    "=============================================\n\n" +
-//                    "          XÁC NHẬN THANH TOÁN THÀNH CÔNG          \n\n" +
-//                    "Cảm ơn bạn đã đặt hàng tại Haven Skin!\n" +
-//                    "Đơn hàng của bạn đã được thanh toán thành công.\n\n" +
-//                    "---------------------------------------------\n" +
-//                    "THÔNG TIN ĐƠN HÀNG:\n" +
-//                    "---------------------------------------------\n" +
-//                    "• Mã đơn hàng: #" + orderId + "\n" +
-//                    "• Tổng tiền:   " + String.format("%,.0f VND", totalAmount) + "\n\n" +
-//                    "---------------------------------------------\n" +
-//                    "Nếu có bất kỳ thắc mắc nào, vui lòng liên hệ:\n" +
-//                    "• Hotline: 0966340303\n" +
-//                    "• Email: havenskin032025@gmail.com\n\n" +
-//                    "Trân trọng,\n" +
-//                    "Đội ngũ Haven Skin\n" +
-//                    "=============================================";
+private void sendOrderConfirmationEmail(String to, String orderId, double totalAmount) {
+    String subject = "Haven Skin - Xác nhận thanh toán thành công đơn hàng #" + orderId;
     String emailContent =
             "╔══════════════════════════════════════════╗\n" +
                     "║              HAVEN SKIN                                                                       ║\n" +
@@ -221,6 +182,5 @@ private void sendOrderConfirmationEmail(String to, String orderId, double totalA
     // Gửi email
     emailService.sendEmail(to, subject, emailContent);
 }
-
 
 }

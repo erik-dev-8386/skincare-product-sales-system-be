@@ -47,6 +47,8 @@ public class Orders {
     @Column(name = "shipment_free")
     private double shipmentFree;
 
+    @Column(name = "content", length = 250)
+    private String content;
 
     @ToString.Exclude
     @JsonIgnore
@@ -75,5 +77,3 @@ public class Orders {
     @Column(name = "customer_phone", length = 15)
     private String customerPhone;
 }
-// CODE BE ĐỂ IM T CHỈNH GÌ ĐÂU :v
-// À NẾU KO CẤU HÌNH LẠI CÁI PROPERTIES NÓ ĐÉO LƯU THOY :))))

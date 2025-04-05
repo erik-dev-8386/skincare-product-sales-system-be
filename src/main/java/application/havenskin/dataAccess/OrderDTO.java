@@ -25,10 +25,11 @@ public class OrderDTO {
 
     private double shipmentFree;
 
+    private String content;
+
     private Users user;
 
     private List<OrderDetails> orderDetails;
-
 
     private Transactions transactions;
 
