@@ -18,5 +18,6 @@ public interface PlanSkinCareRepository extends JpaRepository<SkinCaresPlan, Str
     @Query("SELECT m FROM SkinCaresPlan m where m.status = 1")
     List<SkinCaresPlan> findAllSkinCarePlanByStatus();
 
-    SkinCaresPlan findByDescriptionAndSkinTypeId(String description, String status);
+    //SkinCaresPlan findByDescriptionAndSkinTypeId(String description, String status);
+    SkinCaresPlan findByDescriptionAndSkinType_SkinTypeId(String description, String status);
 }

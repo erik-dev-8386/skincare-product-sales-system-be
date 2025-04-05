@@ -27,7 +27,7 @@ public class MiniSkinCarePlan {
     @NotNull
     @Column(name = "action", length = 250)
     @Nationalized
-    private String Action;
+    private String action;
 
 //    @NotNull
 //    @Column(name = "action_date")
