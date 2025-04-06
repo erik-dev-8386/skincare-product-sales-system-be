@@ -7,6 +7,7 @@ import application.havenskin.enums.TransactionsEnums;
 import application.havenskin.mapper.Mapper;
 import application.havenskin.models.*;
 import application.havenskin.repositories.*;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -70,6 +71,7 @@ public class TransactionService {
         return transactionsRepository.saveAll(transactions);
     }
 
+    @Transactional
     public Transactions createTransaction(String orderId, double amount, byte status, String code) {
         // Kiểm tra transaction đã tồn tại chưa
         Optional<Transactions> existingTransaction = transactionsRepository.findByTransactionCode(code);

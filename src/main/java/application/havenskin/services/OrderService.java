@@ -292,14 +292,14 @@ public class OrderService {
             lockOrderDetails(order.getOrderId());
         }
 
-        // Tạo transaction và cập nhật kho khi chuyển từ UNORDERED -> PROCESSING
+        // Tạo giao dịch và cập nhật kho khi chuyển từ UNORDERED -> PROCESSING
         if (currentStatus == OrderEnums.UNORDERED && newStatus == OrderEnums.PROCESSING) {
             // Tạo giao dịch
             String transactionCode = UUID.randomUUID().toString(); // hoặc lấy từ request nếu có
             transactionService.createTransaction(
                     orderId,
                     order.getTotalAmount(),
-                    (byte) TransactionsEnums.PAID.getValue(),
+                    TransactionsEnums.PAID.getValue(),
                     transactionCode
             );
 
@@ -320,6 +320,13 @@ public class OrderService {
 
                     product.setQuantity(product.getQuantity() - orderedQuantity);
                     product.setSoldQuantity(product.getSoldQuantity() + orderedQuantity);
+
+                    // Kiểm tra nếu số lượng bằng 0, cập nhật trạng thái OUT_OF_STOCK
+                    if (product.getQuantity() == 0) {
+                        product.setStatus(ProductEnums.OUT_OF_STOCK.getValue());
+                        log.info("Sản phẩm {} đã hết hàng và được cập nhật trạng thái là OUT_OF_STOCK.", product.getProductName());
+                    }
+
                     productsRepository.save(product);
                 } else {
                     log.warn("Không tìm thấy sản phẩm với ID: {}", detail.getProductId());
@@ -365,7 +372,7 @@ public class OrderService {
         Map<OrderEnums, List<OrderEnums>> validTransitions = new HashMap<>();
 
         validTransitions.put(OrderEnums.UNORDERED, List.of(OrderEnums.PENDING, OrderEnums.PROCESSING, OrderEnums.CANCELLED));
-        validTransitions.put(OrderEnums.PENDING, List.of(OrderEnums.PROCESSING, OrderEnums.CANCELLED));
+        validTransitions.put(OrderEnums.PENDING, List.of(OrderEnums.PROCESSING, OrderEnums.SHIPPING, OrderEnums.CANCELLED));
         validTransitions.put(OrderEnums.PROCESSING, List.of(OrderEnums.SHIPPING, OrderEnums.CANCELLED));
         validTransitions.put(OrderEnums.SHIPPING, List.of(OrderEnums.DELIVERED, OrderEnums.RETURNED));
         validTransitions.put(OrderEnums.DELIVERED, List.of());

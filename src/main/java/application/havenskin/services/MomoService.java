@@ -12,6 +12,7 @@ import application.havenskin.models.Products;
 import application.havenskin.models.Users;
 import application.havenskin.repositories.*;
 import application.havenskin.models.Orders;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,6 +102,7 @@ public class MomoService {
         return momoRepository.createMomoQR(request);
     }
 
+    @Transactional
     public boolean handleMomoIPN(MomoIPNResponse ipnResponse) {
         log.info("Nhận IPN từ MoMo: {}", ipnResponse);
 
@@ -116,39 +118,23 @@ public class MomoService {
         boolean isPaid = ipnResponse.getResultCode() == 0;
         byte status = isPaid ? TransactionsEnums.PAID.getValue() : TransactionsEnums.NOT_PAID.getValue();
 
-        // Tạo Transaction và cập nhật trạng thái đơn hàng
-        transactionService.createTransaction(orderId, amount, status, transactionCode);
+        List<Orders> orders = ordersRepository.findByOrderId(orderId);
+        Optional<Users> users = userRepository.findById(orders.get(0).getUserId());
+        String email = users.get().getEmail();
+        List<OrderDetails> orderDetails = orderDetailsRepository.findByOrderId(orderId);
 
         if (isPaid) {
             boolean updated = orderService.updateOrderStatus(orderId, OrderEnums.PROCESSING.getOrder_status());
+            sendOrderConfirmationEmail(email, orderId, amount);
             if (!updated) {
                 log.warn("Cập nhật trạng thái đơn hàng thất bại: {}", orderId);
             }
         } else {
-            // Nếu thanh toán thất bại, chuyển sang trạng thái PENDING và đếm ngược 24h
-            boolean updated = orderService.updateOrderStatus(orderId, OrderEnums.PENDING.getOrder_status());
-            if (updated) {
-                schedulePaymentTimeout(orderId);
-            }
+            log.warn("Cập nhật trạng thái đơn hàng thất bại: {}", orderId);
         }
 
         return true;
     }
-
-    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-
-    private void schedulePaymentTimeout(String orderId) {
-        scheduler.schedule(() -> {
-            Orders order = orderService.getOrderById(orderId);
-            if (order != null && order.getStatus() == OrderEnums.PENDING.getOrder_status()) {
-                log.info("Hết thời gian thanh toán cho đơn hàng {}, chuyển sang CANCELLED", orderId);
-                order.setStatus(OrderEnums.CANCELLED.getOrder_status());
-                order.setContent("Hết thời gian thanh toán");
-                orderService.saveOrder(order);
-            }
-        }, 24, TimeUnit.HOURS);
-    }
-
 
     private void sendOrderConfirmationEmail(String to, String orderId, double totalAmount) {
     String subject = "Haven Skin - Xác nhận thanh toán thành công đơn hàng #" + orderId;
