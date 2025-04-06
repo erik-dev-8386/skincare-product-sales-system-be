@@ -1,8 +1,10 @@
 package application.havenskin.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.Nationalized;
 
 import java.util.Date;
@@ -16,6 +18,8 @@ public class MiniSkinCarePlan {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String miniSkinCarePlanId;
 
+    @JsonIgnore
+    @ToString.Exclude
     @NotNull
     @ManyToOne
     @JoinColumn(name = "skin_care_plan_id", referencedColumnName = "skin_care_plan_id")
@@ -23,12 +27,12 @@ public class MiniSkinCarePlan {
 
     @NotNull
     @Column(name = "step_number")
-    private Integer stepNumber;
+    private int stepNumber;
 
     @NotNull
     @Column(name = "action", length = 250)
     @Nationalized
-    private String Action;
+    private String action;
 
     @Column(name = "status", length = 50)
     private byte status;

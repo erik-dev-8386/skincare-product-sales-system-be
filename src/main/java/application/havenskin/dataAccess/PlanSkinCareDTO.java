@@ -10,11 +10,12 @@ import lombok.Data;
 import java.util.List;
 @Data
 public class PlanSkinCareDTO {
-    private String skinTypeId;
+//    private String skinTypeId;
 
     private String description;
 
     private SkinTypes skinType;
+
 
     private List<MiniSkinCarePlan> miniSkinCarePlans;
 

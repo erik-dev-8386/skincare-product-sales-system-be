@@ -4,19 +4,24 @@ import application.havenskin.enums.MiniSkinCarePlanEnum;
 import application.havenskin.models.MiniSkinCarePlan;
 import application.havenskin.models.SkinCaresPlan;
 import application.havenskin.models.SkinTypes;
+import jakarta.persistence.Column;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+import org.hibernate.annotations.Nationalized;
 
 
 import java.util.List;
-
+@Data
 public class MiniSkinCarePlanDTO {
-
     private SkinCaresPlan skinCarePlan;
 
-    private String description;
+    private int stepNumber;
 
-    private SkinTypes skinType;
+    private String action;
 
-    private List<MiniSkinCarePlan> miniSkinCarePlans;
+    private byte status = MiniSkinCarePlanEnum.ACTIVE.getMini_skin_care_plan_status();
 
-    private Byte status = MiniSkinCarePlanEnum.ACTIVE.getMini_skin_care_plan_status();
+
 }

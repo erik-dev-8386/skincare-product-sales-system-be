@@ -26,8 +26,8 @@ public class MiniSkinCarePlanController {
         return miniSkinCareService.getAllMiniSkinCarePlansByStatus();
     }
 
-    @PostMapping("{/description}")
-    public MiniSkinCarePlanDTO createCarePlan(@PathVariable String description, @RequestBody MiniSkinCarePlanDTO miniSkinCarePlanDTO) {
+    @PostMapping("/{description}")
+    public MiniSkinCarePlan createCarePlan(@PathVariable String description, @RequestBody MiniSkinCarePlanDTO miniSkinCarePlanDTO) {
         return miniSkinCareService.addMiniSkinCarePlan(description, miniSkinCarePlanDTO);
     }
 
@@ -50,7 +50,7 @@ public class MiniSkinCarePlanController {
     public List<MiniSkinCarePlan> getCarePlanByDescription(@PathVariable String description) {
         return miniSkinCareService.getMiniPlansByDescription(description);
     }
-    @GetMapping("/{action}")
+    @GetMapping("/info/{action}")
     public List<MiniSkinCarePlan> getCarePlanByAction(@PathVariable String action) {
         return miniSkinCareService.searchMiniSkinCarePlan(action);
     }

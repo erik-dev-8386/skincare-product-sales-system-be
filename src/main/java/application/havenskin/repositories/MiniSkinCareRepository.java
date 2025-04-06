@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface MiniSkinCareRepository extends JpaRepository<MiniSkinCarePlan, String> {
     MiniSkinCarePlan findByAction(String action);
-    @Query("SELECT m FROM MiniSkinCarePlan  m where m.Action like %:action%")
+    @Query("SELECT m FROM MiniSkinCarePlan  m where m.action like %:action%")
     List<MiniSkinCarePlan> findAllMiniSkinCarePlanByAction(String aciton);
     @Query("SELECT m FROM MiniSkinCarePlan m where m.status = 1")
     List<MiniSkinCarePlan> findAllMiniSkinCarePlanByStatus();

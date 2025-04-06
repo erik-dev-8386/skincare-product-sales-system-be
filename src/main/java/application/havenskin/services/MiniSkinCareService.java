@@ -33,16 +33,21 @@ public class MiniSkinCareService {
     public List<MiniSkinCarePlan> getAllMiniSkinCarePlansByStatus() {
         return miniSkinCareRepository.findAllMiniSkinCarePlanByStatus();
     }
-    public MiniSkinCarePlanDTO addMiniSkinCarePlan(String description,MiniSkinCarePlanDTO miniSkinCarePlanDTO ) {
+    public MiniSkinCarePlan addMiniSkinCarePlan(String description,MiniSkinCarePlanDTO miniSkinCarePlanDTO ) {
         SkinCaresPlan skinCaresPlan = planSkinCareRepository.findByDescription(description);
         if (skinCaresPlan == null) {
             throw new RuntimeException("Không có lộ trình chăm sóc da này!");
         }
-        MiniSkinCarePlan miniSkinCarePlan = mapper.toMiniSkinCarePlan(miniSkinCarePlanDTO);
+
+        MiniSkinCarePlan miniSkinCarePlan = new MiniSkinCarePlan();
+        miniSkinCarePlan = mapper.toMiniSkinCarePlan(miniSkinCarePlanDTO);
+//        miniSkinCarePlan.setStepNumber(miniSkinCarePlanDTO.getStepNumber());
+//        miniSkinCarePlan.setAction(miniSkinCarePlanDTO.getAction());
 
         miniSkinCarePlan.setSkinCarePlan(skinCaresPlan);
-
-        return miniSkinCarePlanDTO;
+        skinCaresPlan.getMiniSkinCarePlans().add(miniSkinCarePlan);
+        planSkinCareRepository.save(skinCaresPlan);
+        return miniSkinCarePlan;
     }
 
     public MiniSkinCarePlan getMiniSkinCarePlan(String actions) {
