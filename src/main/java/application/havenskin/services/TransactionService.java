@@ -122,57 +122,5 @@ public class TransactionService {
             //   sendOrderConfirmationEmail(email, orderId, order.getTotalAmount());
         }
     }
-//        private void sendOrderConfirmationEmail(String to, String orderId, double totalAmount) {
-//            // Tiêu đề email
-//            String subject = "Haven Skin - Xác nhận thanh toán thành công đơn hàng #" + orderId;
-//
-//            // Nội dung email được format đẹp
-////    String emailContent =
-////            "=============================================\n" +
-////                    "               HAVEN SKIN                    \n" +
-////                    "=============================================\n\n" +
-////                    "          XÁC NHẬN THANH TOÁN THÀNH CÔNG          \n\n" +
-////                    "Cảm ơn bạn đã đặt hàng tại Haven Skin!\n" +
-////                    "Đơn hàng của bạn đã được thanh toán thành công.\n\n" +
-////                    "---------------------------------------------\n" +
-////                    "THÔNG TIN ĐƠN HÀNG:\n" +
-////                    "---------------------------------------------\n" +
-////                    "• Mã đơn hàng: #" + orderId + "\n" +
-////                    "• Tổng tiền:   " + String.format("%,.0f VND", totalAmount) + "\n\n" +
-////                    "---------------------------------------------\n" +
-////                    "Nếu có bất kỳ thắc mắc nào, vui lòng liên hệ:\n" +
-////                    "• Hotline: 0966340303\n" +
-////                    "• Email: havenskin032025@gmail.com\n\n" +
-////                    "Trân trọng,\n" +
-////                    "Đội ngũ Haven Skin\n" +
-////                    "=============================================";
-//            String emailContent =
-//                    "╔══════════════════════════════════════════╗\n" +
-//                            "║              HAVEN SKIN                                                                       ║\n" +
-//                            "╠══════════════════════════════════════════╣\n" +
-//                            "║     XÁC NHẬN THANH TOÁN THÀNH CÔNG                                  ║\n" +
-//                            "╚══════════════════════════════════════════╝\n\n" +
-//                            "Cảm ơn quý khách đã lựa chọn Haven Skin!\n" +
-//                            "Đơn hàng của bạn đã được xử lý thành công.\n\n" +
-//
-//                            "┌──────────────────────────────────────────┐\n" +
-//                            "│          THÔNG TIN ĐƠN HÀNG                                                         │\n" +
-//                            "├──────────────────────────────────────────┤\n" +
-//                            "│  ▪ Mã đơn hàng: #" + String.format("%-36s", orderId) +"         │\n" +
-//                            "│  ▪ Tổng thanh toán: " + String.format("%,.0f VND%-15s", totalAmount,"                                                        │") + "\n" +
-//                            "└──────────────────────────────────────────┘\n\n" +
-//
-//                            "Hỗ trợ khách hàng:\n" +
-//                            "• Hotline: 0966 340 303 (8:00-21:00)\n" +
-//                            "• Email: havenskin032025@gmail.com\n" +
-//                            "• Website: localhost:5173/\n\n" +
-//
-//                            "════════════════════════════════════════════\n" +
-//                            "Trân trọng,\n" +
-//                            "Đội ngũ chăm sóc khách hàng Haven Skin\n" +
-//                            "════════════════════════════════════════════";
-//            // Gửi email
-//            emailService.sendEmail(to, subject, emailContent);
-//        }
 
 }

@@ -169,34 +169,6 @@ public class OrderDetailsService {
         return "Successfully removed product from cart";
     }
 
-//    public List<CartItemDTO> getCartItems(String email) {
-//
-//        Users users = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User Not Found!"));
-//
-//        // tim  don hang chua thanh toan cua nguoi dung
-//        Orders orders = ordersRepository.findByUserIdAndStatus(users.getUserId(), OrderEnums.UNORDERED.getOrder_status()).orElseThrow(() -> new RuntimeException("Order Not Found!"));
-//
-//        // lay ds cac sp trong gio hang
-//        List<OrderDetails> orderDetails = orderDetailsRepository.findByOrderId(orders.getOrderId());
-//
-//        return orderDetails.stream()
-//                .map(this::convertCartItemsDTO)
-//                .collect(Collectors.toList());
-//    }
-//    // chuyen Order Detail -> cart Items
-//    private CartItemDTO convertCartItemsDTO(OrderDetails orderDetails) {
-//        Products products = productsRepository.findById(orderDetails.getProductId()).orElseThrow(() -> new RuntimeException("Product Not Found!"));
-//
-//        // tra ve thong tin sp trong gio
-//        return new CartItemDTO(
-//                products.getProductName(),
-//                orderDetails.getQuantity(),
-//                products.getDiscountPrice(),
-//                products.getProductImages()
-//        );
-//    }
-
-
     public double calculateTotalPrice(String email) {
         Users users = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User Not Found!"));
         Orders orders = ordersRepository.findByUserIdAndStatus(users.getUserId(), OrderEnums.UNORDERED.getOrder_status()).orElseThrow(() -> new RuntimeException("Order Not Found!"));
@@ -211,54 +183,6 @@ public class OrderDetailsService {
         }
         return totalPrice;
     }
-
-//    public void checkout(String email) {
-//        Users user = userRepository.findByEmail(email)
-//                .orElseThrow(() -> new RuntimeException("User Not Found!"));
-//        Orders order = ordersRepository.findByUserIdAndStatus(user.getUserId(), OrderEnums.UNORDERED.getOrder_status())
-//                .orElseThrow(() -> new RuntimeException("Cart Not Found!"));
-//
-//        // Cập nhật trạng thái đơn hàng
-//        order.setStatus(OrderEnums.PENDING.getOrder_status());
-//        ordersRepository.save(order);
-//    }
-//
-//
-//  public OrderDetails getProductsCartDetails(String email) {
-//        Orders x = orderService.findCartByUserId(email);
-//        if (x == null) {
-//            throw new RuntimeException("Order Not Found!");
-//        }
-//        else{
-//            String orderId = x.getOrderId();
-//            List<OrderDetails> orderDetails = orderDetailsRepository.findByOrderId(orderId);
-//        }
-//  }
-//public Map<String, Object> getProductsCartDetails(String email) {
-//    Orders x = orderService.findCartByUserId(email);
-//    if (x == null) {
-//        throw new RuntimeException("Order Not Found!");
-//    }
-//    String orderId = x.getOrderId();
-//}
-
-
-
-
-
-
-
-
-
-//    public OrderDetails updateQuantity(String orderDetailId,String productName, int quantity) {
-//        OrderDetails x = orderDetailsRepository.findById(orderDetailId).orElseThrow(()-> new RuntimeException("Order not found"));
-//        Orders orders = ordersRepository.findById(x.getOrderId()).orElseThrow(()-> new RuntimeException("Order not found"));
-//        if(orders.getStatus() != OrderEnums.UNORDERED.getOrder_status()){
-//            throw new RuntimeException("Cannot update product to cart after order is placed");
-//        }
-//        x.setQuantity(quantity);
-//        return orderDetailsRepository.save(x);
-//    }
 
     public OrderDetails getOrderDetailsByID(String orderDetailId) {
         return orderDetailsRepository.findById(orderDetailId)

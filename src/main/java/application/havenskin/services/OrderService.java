@@ -46,6 +46,15 @@ public class OrderService {
     @Autowired
     private TransactionsRepository transactionsRepository;
 
+    public void saveOrder(Orders order) {
+        ordersRepository.save(order);
+    }
+
+    public List<Orders> getAllPendingOrders() {
+        return ordersRepository.findByStatus(OrderEnums.PENDING.getOrder_status());
+    }
+
+
     // hàm này khi khách hàng bấm nút đặt hàng!
     public CheckOutResponseDTO checkout(CheckoutRequestDTO checkoutRequestDTO) {
 
@@ -273,28 +282,62 @@ public class OrderService {
         OrderEnums currentStatus = OrderEnums.fromOrderStatus(order.getStatus());
         OrderEnums newStatus = OrderEnums.fromOrderStatus(newStatusByte);
 
-        // Kiểm tra trạng thái hợp lệ
-        if (!isValidStatusTransition(currentStatus, newStatus)) {
+        if (!isValidStatusOrder(currentStatus, newStatus)) {
             log.warn("Chuyển trạng thái không hợp lệ: {} → {}", currentStatus, newStatus);
             return false;
         }
 
-        // Lock đơn hàng nếu cần
+        // Lock chi tiết đơn hàng nếu cần
         if (currentStatus == OrderEnums.UNORDERED && newStatus != OrderEnums.UNORDERED) {
             lockOrderDetails(order.getOrderId());
         }
 
-        // Cộng tiền thưởng vào ví nếu giao hàng thành công
+        // Tạo transaction và cập nhật kho khi chuyển từ UNORDERED -> PROCESSING
+        if (currentStatus == OrderEnums.UNORDERED && newStatus == OrderEnums.PROCESSING) {
+            // Tạo giao dịch
+            String transactionCode = UUID.randomUUID().toString(); // hoặc lấy từ request nếu có
+            transactionService.createTransaction(
+                    orderId,
+                    order.getTotalAmount(),
+                    (byte) TransactionsEnums.PAID.getValue(),
+                    transactionCode
+            );
+
+            // Lấy chi tiết đơn hàng
+            List<OrderDetails> orderDetailsList = orderDetailsRepository.findByOrderId(orderId);
+            for (OrderDetails detail : orderDetailsList) {
+                Optional<Products> productOpt = productsRepository.findById(detail.getProductId());
+                if (productOpt.isPresent()) {
+                    Products product = productOpt.get();
+                    int orderedQuantity = detail.getQuantity();
+
+                    // Trừ tồn kho
+                    if (product.getQuantity() < orderedQuantity) {
+                        log.warn("Sản phẩm {} không đủ hàng. Tồn kho: {}, yêu cầu: {}",
+                                product.getProductName(), product.getQuantity(), orderedQuantity);
+                        throw new IllegalStateException("Sản phẩm không đủ hàng để xử lý đơn.");
+                    }
+
+                    product.setQuantity(product.getQuantity() - orderedQuantity);
+                    product.setSoldQuantity(product.getSoldQuantity() + orderedQuantity);
+                    productsRepository.save(product);
+                } else {
+                    log.warn("Không tìm thấy sản phẩm với ID: {}", detail.getProductId());
+                }
+            }
+        }
+
+        // Cộng tiền vào ví khi giao thành công
         if (newStatus == OrderEnums.DELIVERED) {
             Optional<CoinWallets> coinWalletOpt = coinWalletsRepository.findByUserId(order.getUserId());
-            double rewardAmount = order.getTotalAmount() * 0.01; // 1% thưởng
+            double rewardAmount = order.getTotalAmount() * 0.01;
 
             CoinWallets coinWallet = coinWalletOpt.orElseGet(() -> {
                 log.info("Không tìm thấy ví cho userId: {}, tạo ví mới.", order.getUserId());
                 CoinWallets newWallet = new CoinWallets();
                 newWallet.setUserId(order.getUserId());
-                newWallet.setBalance(0.0); // Khởi tạo số dư = 0
-                return coinWalletsRepository.save(newWallet); // Lưu ví mới vào DB
+                newWallet.setBalance(0.0);
+                return coinWalletsRepository.save(newWallet);
             });
 
             coinWallet.setBalance(coinWallet.getBalance() + rewardAmount);
@@ -308,6 +351,7 @@ public class OrderService {
         return true;
     }
 
+
     // Hàm khóa OrderDetails
     private void lockOrderDetails(String orderId) {
         List<OrderDetails> orderDetailsList = orderDetailsRepository.findByOrderId(orderId);
@@ -317,24 +361,10 @@ public class OrderService {
         orderDetailsRepository.saveAll(orderDetailsList);
     }
 
-    private boolean isValidStatusTransition(OrderEnums currentStatus, OrderEnums newStatus) {
-        Map<OrderEnums, List<OrderEnums>> validTransitions = new HashMap<>();
-
-        validTransitions.put(OrderEnums.UNORDERED, List.of(OrderEnums.PENDING, OrderEnums.CANCELLED));
-        validTransitions.put(OrderEnums.PENDING, List.of(OrderEnums.PROCESSING, OrderEnums.CANCELLED));
-        validTransitions.put(OrderEnums.PROCESSING, List.of(OrderEnums.SHIPPING, OrderEnums.CANCELLED));
-        validTransitions.put(OrderEnums.SHIPPING, List.of(OrderEnums.DELIVERED, OrderEnums.RETURNED));
-        validTransitions.put(OrderEnums.DELIVERED, List.of());
-        validTransitions.put(OrderEnums.CANCELLED, List.of());
-        validTransitions.put(OrderEnums.RETURNED, List.of());
-
-        return validTransitions.getOrDefault(currentStatus, List.of()).contains(newStatus);
-    }
-
     public boolean isValidStatusOrder(OrderEnums currentStatus, OrderEnums newStatus) {
         Map<OrderEnums, List<OrderEnums>> validTransitions = new HashMap<>();
 
-        validTransitions.put(OrderEnums.UNORDERED, List.of(OrderEnums.PENDING, OrderEnums.CANCELLED));
+        validTransitions.put(OrderEnums.UNORDERED, List.of(OrderEnums.PENDING, OrderEnums.PROCESSING, OrderEnums.CANCELLED));
         validTransitions.put(OrderEnums.PENDING, List.of(OrderEnums.PROCESSING, OrderEnums.CANCELLED));
         validTransitions.put(OrderEnums.PROCESSING, List.of(OrderEnums.SHIPPING, OrderEnums.CANCELLED));
         validTransitions.put(OrderEnums.SHIPPING, List.of(OrderEnums.DELIVERED, OrderEnums.RETURNED));
@@ -374,9 +404,6 @@ public class OrderService {
                 .collect(Collectors.toList());
     }
 
-//    public List<Orders> getOrdersByEmailAndStatus(String email, byte status) {
-//        return ordersRepository.findByEmailAndStatus(email, status);
-//    }
 
     public List<HistoryOrderDTO> getHistoryOrder(String email) {
         Optional<Users> userOpt = userRepository.findByEmail(email);
