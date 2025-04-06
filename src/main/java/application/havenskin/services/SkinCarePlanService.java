@@ -77,6 +77,7 @@ public class SkinCarePlanService {
 
         mapper.updateSkincaresPlan(skinCaresPlan, x);
 
+        skinCaresPlan.setSkinType(skinTypes);
         planSkinCareRepository.save(skinCaresPlan);
 
         return skinCaresPlan;

@@ -33,7 +33,7 @@ public class SkinCaresPlan {
     private SkinTypes skinType;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "skinCarePlan", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "skinCarePlan", cascade = CascadeType.ALL)
     private List<MiniSkinCarePlan> miniSkinCarePlans;
 
     @NotNull

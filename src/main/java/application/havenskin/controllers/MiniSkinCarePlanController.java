@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/haven-skin/mini-skin-care")
+@RequestMapping("/haven-skin/mini-skin-cares")
 public class MiniSkinCarePlanController {
     @Autowired
     private MiniSkinCareService miniSkinCareService;
