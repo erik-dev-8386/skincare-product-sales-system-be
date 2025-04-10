@@ -44,9 +44,9 @@ public class SkinCarePlanService {
                 x.getDescription(),
                 skinTypes.getSkinTypeId()
         );
-        if (planExists) {
-            throw new RuntimeException("Loại da này đã có lộ trình với description tương tự");
-        }
+//        if (planExists) {
+//            throw new RuntimeException("Loại da này đã có lộ trình với description tương tự");
+//        }
 
         SkinCaresPlan skinCaresPlan = mapper.toSkinCaresPlan(x);
         skinCaresPlan.setSkinType(skinTypes);
@@ -89,9 +89,9 @@ public class SkinCarePlanService {
                     skinCaresPlan.getDescription(),
                     newSkinTypes.getSkinTypeId()
             );
-            if(exists) {
-                throw new RuntimeException("Loại da mới đã có lộ trình với description tương tự");
-            }
+//            if(exists) {
+//                throw new RuntimeException("Loại da mới đã có lộ trình với description tương tự");
+//            }
 
             // Cập nhật loại da mới
             skinCaresPlan.setSkinType(newSkinTypes);
