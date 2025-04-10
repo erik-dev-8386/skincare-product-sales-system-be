@@ -18,7 +18,7 @@ public class MiniSkinCarePlan {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String miniSkinCarePlanId;
 
-    @JsonIgnore
+    //@JsonIgnore
     @ToString.Exclude
     @NotNull
     @ManyToOne

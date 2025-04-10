@@ -13,6 +13,8 @@ import application.havenskin.repositories.SkinTestsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -81,8 +83,14 @@ public class SkintestsService {
                 .orElseThrow(() -> new RuntimeException("Skin Test not found"));
 
         List<Questions> questions = questionsRepository.findBySkinTestId(skinTestId);
-
-        List<QuestionsResponseDto> questionDTOs = questions.stream().map(q -> {
+        List<Questions> randomQuestion;
+        if(questions.size() <= 10) {
+            randomQuestion = getRandomQuestions(questions, questions.size());
+        }
+        else{
+            randomQuestion = getRandomQuestions(questions, 10);
+        }
+        List<QuestionsResponseDto> questionDTOs = randomQuestion.stream().map(q -> {
             QuestionsResponseDto qDto = new QuestionsResponseDto();
             qDto.setQuestionId(q.getQuestionId());
             qDto.setQuestionContent(q.getQuestionContent());
@@ -110,5 +118,11 @@ public class SkintestsService {
         dto.setQuestions(questionDTOs);
 
         return dto;
+    }
+    private List<Questions> getRandomQuestions(List<Questions> questions, int count) {
+        List<Questions> x = new ArrayList<>(questions); // tạo bản sao cho question chứ ko thao tác trưc tiếp trên db
+        Collections.shuffle(x); // hàm này là xử lý random
+        // Nếu số câu hỏi ít hơn count, trả về tất cả
+        return x.subList(0, Math.min(count, x.size()));
     }
 }

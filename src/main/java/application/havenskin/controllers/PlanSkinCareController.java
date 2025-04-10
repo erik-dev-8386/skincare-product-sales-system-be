@@ -50,5 +50,9 @@ public class PlanSkinCareController {
         return skinCarePlanService.searchSkinCarePlan(description);
     }
 
+    @GetMapping("/show")
+    public List<SkinCaresPlan> showSkinCare() {
+        return skinCarePlanService.getAllSkinCarePlanDescriptions();
+    }
 
 }

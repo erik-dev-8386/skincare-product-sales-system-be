@@ -1,7 +1,7 @@
 package application.havenskin.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import application.havenskin.enums.SkinCarePlanEnum;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -27,17 +27,22 @@ public class SkinCaresPlan {
     @Nationalized
     private String description;
 
+    @ToString.Exclude
 //    @JsonIgnore
+//    @JsonManagedReference
+    //@JsonBackReference
+//    @JsonIgnoreProperties("planSkinCare")
     @ManyToOne
     @JoinColumn(name = "skin_type_id", referencedColumnName = "skin_type_id")
     private SkinTypes skinType;
 
+    @JsonIgnore
     @ToString.Exclude
     @OneToMany(mappedBy = "skinCarePlan", cascade = CascadeType.ALL)
     private List<MiniSkinCarePlan> miniSkinCarePlans;
 
     @NotNull
     @Column(name = "status")
-    private Byte status;
+    private byte status = SkinCarePlanEnum.ACTIVE.getSkinCarePlan_status();
 
 }

@@ -12,6 +12,7 @@ import java.util.List;
 public class PlanSkinCareDTO {
 //    private String skinTypeId;
 
+    private String skinName;
     private String description;
 
     private SkinTypes skinType;
@@ -19,5 +20,5 @@ public class PlanSkinCareDTO {
 
     private List<MiniSkinCarePlan> miniSkinCarePlans;
 
-    private Byte status = SkinCarePlanEnum.ACTIVE.getSkinCarePlan_status();
+    private byte status;
 }

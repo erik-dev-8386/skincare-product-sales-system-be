@@ -44,6 +44,11 @@ public class SkinTypeController {
     public SkinTypes getSkinTypeById(@PathVariable String id) {
         return skinTypeService.getSkinTypeById(id);
     }
+
+    @GetMapping("/info/{name}")
+    public SkinTypes getSkinTypeByName(@PathVariable String name) {
+        return skinTypeService.getSkinTypeByName(name);
+    }
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @PutMapping("/{id}")
     public SkinTypes updateSkinType(@PathVariable String id,@RequestPart("skinTypeDTO") SkinTypeDTO skinTypeDTO,@RequestParam(value = "images", required = false) List<MultipartFile> images) throws IOException {

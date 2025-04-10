@@ -15,13 +15,11 @@ import org.hibernate.annotations.Nationalized;
 import java.util.List;
 @Data
 public class MiniSkinCarePlanDTO {
-    private SkinCaresPlan skinCarePlan;
+//    private SkinCaresPlan skinCarePlan;
 
     private int stepNumber;
 
     private String action;
 
     private byte status = MiniSkinCarePlanEnum.ACTIVE.getMini_skin_care_plan_status();
-
-
 }

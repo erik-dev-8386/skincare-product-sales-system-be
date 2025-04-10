@@ -76,8 +76,28 @@ public class SkinCarePlanService {
         }
 
         mapper.updateSkincaresPlan(skinCaresPlan, x);
+//        if(x.getSkinName() == null || x.getSkinName().trim().isEmpty()) {
+//            skinCaresPlan.setSkinType(skinTypes);
+//        }
+////        skinCaresPlan.setSkinType(skinTypes);
+        if(x.getSkinName() != null) {
+            SkinTypes newSkinTypes = skinTypesRepository.findBySkinName(x.getSkinName())
+                    .orElseThrow(() -> new RuntimeException("New Skin Type Not Found"));
 
-        skinCaresPlan.setSkinType(skinTypes);
+            // Kiểm tra xem lộ trình với description này đã tồn tại cho loại da mới chưa
+            boolean exists = planSkinCareRepository.existsByDescriptionAndSkinType_SkinTypeId(
+                    skinCaresPlan.getDescription(),
+                    newSkinTypes.getSkinTypeId()
+            );
+            if(exists) {
+                throw new RuntimeException("Loại da mới đã có lộ trình với description tương tự");
+            }
+
+            // Cập nhật loại da mới
+            skinCaresPlan.setSkinType(newSkinTypes);
+            skinTypesRepository.save(newSkinTypes);
+        }
+
         planSkinCareRepository.save(skinCaresPlan);
 
         return skinCaresPlan;

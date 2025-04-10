@@ -39,6 +39,11 @@ public class SkinTypeService {
         return skinTypeRepository.findBySkinTypeId(id);
     }
 
+    public SkinTypes getSkinTypeByName(String name) {
+        SkinTypes skinType = skinTypeRepository.findBySkinName(name).orElseThrow(()-> new RuntimeException("Không có loại da này"));
+        return skinType;
+    }
+
     public SkinTypes createSkinType(SkinTypeDTO skinType, List<MultipartFile> images) throws IOException {
         if(skinTypeRepository.existsBySkinName(skinType.getSkinName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Loại da này đã tồn tại!");

@@ -31,19 +31,19 @@ public class MiniSkinCarePlanController {
         return miniSkinCareService.addMiniSkinCarePlan(description, miniSkinCarePlanDTO);
     }
 
-    @GetMapping("/{action}")
-    public MiniSkinCarePlan getCarePlan(@PathVariable String action) {
-        return miniSkinCareService.getMiniSkinCarePlan(action);
+//    @GetMapping("/{action}")
+//    public MiniSkinCarePlan getCarePlan(@PathVariable String action) {
+//        return miniSkinCareService.getMiniSkinCarePlan(action);
+//    }
+
+    @PutMapping("/{action}/{description}")
+    public MiniSkinCarePlan updateMiniSkinCarePlan(@PathVariable String action,@PathVariable String description, @RequestBody MiniSkinCarePlanDTO miniSkinCarePlan) {
+        return miniSkinCareService.updateMiniSkinCarePlan(action, description,miniSkinCarePlan);
     }
 
-    @PutMapping("/{action}")
-    public MiniSkinCarePlan updateMiniSkinCarePlan(@PathVariable String action, @RequestBody MiniSkinCarePlanDTO miniSkinCarePlan) {
-        return miniSkinCareService.updateMiniSkinCarePlan(action, miniSkinCarePlan);
-    }
-
-    @DeleteMapping("/{action}")
-    public MiniSkinCarePlan deleteCarePlan(@PathVariable String action) {
-        return miniSkinCareService.deleteMiniSkinCarePlan(action);
+    @DeleteMapping("/{action}/{description}")
+    public MiniSkinCarePlan deleteCarePlan(@PathVariable String action, @PathVariable String description) {
+        return miniSkinCareService.deleteMiniSkinCarePlan(action, description);
     }
     // lấy theo description của skincareplan
     @GetMapping("/{description}")
