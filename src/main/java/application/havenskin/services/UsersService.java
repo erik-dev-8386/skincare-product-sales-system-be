@@ -65,7 +65,7 @@ public class UsersService {
         Orders orders = ordersRepository.findByOrderIdAndUserId(orderId, x.getUserId()).orElseThrow(() -> new RuntimeException("Order not found"));
         if (x.getFirstName() == null || userDTO.getFirstName() != null) {
             if (userDTO.getFirstName() != null) {
-                String firstNameRegrex = "^[a-zA-ZÀ-ỹ][a-zA-ZÀ-ỹ0-9 '\\-.,&+/()]*$";
+                String firstNameRegrex = "^[a-zA-ZÀ-ỹ(][a-zA-ZÀ-ỹ0-9 '\\-.,&+/()]*$";
                 if(!userDTO.getFirstName().matches(firstNameRegrex)) {
                     throw new RuntimeException("Chữ cái đầu trong tên của bạn không được là ký tự đặc biệt! Bạn vui lòng thử lại:");
                 }
@@ -77,7 +77,7 @@ public class UsersService {
         }
         if (x.getLastName() == null || userDTO.getLastName() != null) {
             if (userDTO.getLastName() != null) {
-                String lastNameRegrex = "^[a-zA-ZÀ-ỹ][a-zA-ZÀ-ỹ0-9 '\\-.,&+/()]*$";
+                String lastNameRegrex = "^[a-zA-ZÀ-ỹ(][a-zA-ZÀ-ỹ0-9 '\\-.,&+/()]*$";
                 if(!userDTO.getLastName().matches(lastNameRegrex)) {
                     throw new RuntimeException("Chữ cái đầu trong tên của bạn không được là ký tự đặc biệt! Bạn vui lòng thử lại:");
                 }

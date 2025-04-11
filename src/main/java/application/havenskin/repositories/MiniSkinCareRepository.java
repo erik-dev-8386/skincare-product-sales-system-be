@@ -11,7 +11,7 @@ public interface MiniSkinCareRepository extends JpaRepository<MiniSkinCarePlan, 
     @Query("SELECT m FROM MiniSkinCarePlan m where m.action = :action and m.skinCarePlan.SkinCarePlanId = :skinCarePlanId")
     MiniSkinCarePlan findByActionAndSkinCarePlanId(String action, String skinCarePlanId);
     @Query("SELECT m FROM MiniSkinCarePlan  m where m.action like %:action%")
-    List<MiniSkinCarePlan> findAllMiniSkinCarePlanByAction(String aciton);
+    List<MiniSkinCarePlan> findAllMiniSkinCarePlanByAction(String action);
     @Query("SELECT m FROM MiniSkinCarePlan m where m.status = 1")
     List<MiniSkinCarePlan> findAllMiniSkinCarePlanByStatus();
 

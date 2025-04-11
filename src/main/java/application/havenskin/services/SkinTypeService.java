@@ -111,7 +111,7 @@ public class SkinTypeService {
         Optional<SkinTypes> x = skinTypeRepository.findById(id);
         if (x.isPresent()) {
             SkinTypes skinType = x.get();
-            skinType.setStatus(SkinTypeEnums.DELETED.getSkin_type_status());
+            skinType.setStatus(SkinTypeEnums.INACTIVE.getSkin_type_status());
             return skinTypeRepository.save(skinType);
         }
         return null;
