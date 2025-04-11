@@ -130,6 +130,7 @@ public class MomoService {
                 log.warn("Cập nhật trạng thái đơn hàng thất bại: {}", orderId);
             }
         } else {
+            boolean updated = orderService.updateOrderStatus(orderId, OrderEnums.CANCELLED.getOrder_status());
             log.warn("Cập nhật trạng thái đơn hàng thất bại: {}", orderId);
         }
 

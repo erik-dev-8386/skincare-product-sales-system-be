@@ -55,7 +55,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.POST, "/haven-skin/momo/ipn-handler-new").permitAll()
                                 .requestMatchers("/haven-skin/momo/**").permitAll() // Bỏ xác thực cho API MoMo
                                 .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS).permitAll()
-                                .requestMatchers(HttpMethod.POST, "/haven-skin/feedbacks//{email}/{productName}").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/haven-skin/feedbacks/{email}/{productName}").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/haven-skin/cart/checkout").permitAll()
                                 .anyRequest().authenticated())
                 .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable())

@@ -175,6 +175,9 @@ public class OrderService {
             if (products.getQuantity() <= 0) {
                 products.setStatus(ProductEnums.OUT_OF_STOCK.getValue());
             }
+            if(products.getQuantity() > 0){
+                products.setStatus(ProductEnums.AVAILABLE.getValue());
+            }
             productsRepository.save(products);
         }
         orders.setStatus(OrderEnums.CANCELLED.getOrder_status());
@@ -197,7 +200,8 @@ public class OrderService {
     }
 
     public List<Orders> getAllOrders() {
-        return ordersRepository.findAll();
+//        return ordersRepository.findAll();
+        return ordersRepository.findByAll();
     }
 
     public Orders getOrderById(String id) {

@@ -20,9 +20,6 @@ public class AnswersService {
     @Autowired
     private QuestionsRepository questionsRepository;
 
-//    public List<Answers> getAllAnswers() {
-//        return answerRepository.findAll();
-//    }
 
     public List<AnswersDto> getAllAnswers() {
         List<Answers> answers = answerRepository.findAll();
