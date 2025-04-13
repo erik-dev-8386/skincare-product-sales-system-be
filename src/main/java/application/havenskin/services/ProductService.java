@@ -142,7 +142,7 @@ public class ProductService {
         Optional<Products> products = productsRepository.findById(id);
         if (products.isPresent()) {
             Products x = products.get();
-            x.setStatus(ProductEnums.OUT_OF_STOCK.getValue());
+            x.setStatus(ProductEnums.DELETE.getValue());
             return productsRepository.save(x);
         }
         return null;

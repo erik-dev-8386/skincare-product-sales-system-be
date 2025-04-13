@@ -20,9 +20,6 @@ public class AnswersService {
     @Autowired
     private QuestionsRepository questionsRepository;
 
-//    public List<Answers> getAllAnswers() {
-//        return answerRepository.findAll();
-//    }
 
     public List<AnswersDto> getAllAnswers() {
         List<Answers> answers = answerRepository.findAll();
@@ -108,7 +105,7 @@ public class AnswersService {
         answer.setMark(answerDto.getMark());
         answer.setQuestion(question);  // Gán câu hỏi vào đáp án
         answer.setQuestionId(question.getQuestionId());
-
+        answer.setStatus(AnswerEnum.ACTIVE.getStatus());
         // 3. Lưu đáp án vào database
         answer = answerRepository.save(answer);
 

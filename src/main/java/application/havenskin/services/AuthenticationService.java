@@ -26,8 +26,6 @@ public class AuthenticationService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private UserRepository usersRepository;
     @NonFinal
     private static final String SIGN_KEY = "U0Ec+zdBMdxc7lSoSXfeXCKphSZkUT2GIqhHQBxgirb0Psm2uneOCeuV4/K7X46s";
     public AuthencationResponse authenticate(AuthencationRequest x) {

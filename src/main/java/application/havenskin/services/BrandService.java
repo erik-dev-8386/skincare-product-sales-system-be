@@ -95,6 +95,7 @@ public class BrandService {
         return brandsRepository.findByCountry(country);
     }
 
+    // lấy các brand theo status là Active
     public List<Brands> getAllBrandByName(){
 
         //return  brandsRepository.findAllByBrandName();

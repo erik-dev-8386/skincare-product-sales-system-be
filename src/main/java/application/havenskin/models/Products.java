@@ -23,8 +23,7 @@ public class  Products {
 
     @NotBlank(message = "Tên sản phẩm không được để trống!")
     @Pattern(
-            regexp = "^(?![0-9])[a-zA-ZÀ-ỹ0-9 ]+$",
-            message = "Tên sản phẩm không hợp lệ. Không được bắt đầu bằng số hoặc chứa ký tự đặc biệt"
+            regexp = "^[a-zA-ZÀ-ỹ][a-zA-ZÀ-ỹ0-9 '\\-.,&+/()]*$",            message = "Tên sản phẩm không hợp lệ. Không được bắt đầu bằng số hoặc chứa ký tự đặc biệt"
     )
     @Column(name = "product_name", length = 10000)
     @Nationalized

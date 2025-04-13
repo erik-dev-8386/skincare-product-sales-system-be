@@ -18,8 +18,6 @@ public class WebSocketService {
 
     @Autowired
     private OrderDetailsRepository orderDetailsRepository;
-//    @Autowired
-//    private ProductsRepository productsRepository;
 
     @Autowired
     private SimpMessagingTemplate messagingTemplate;

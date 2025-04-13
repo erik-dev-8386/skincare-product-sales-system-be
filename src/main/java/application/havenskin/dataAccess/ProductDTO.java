@@ -14,14 +14,13 @@
         @NotBlank(message = "Tên sản phẩm không được để trống!")
         @Pattern(
 //                regexp = "^(?![0-9])[a-zA-ZÀ-ỹ0-9 ]+$",
-                regexp = "^(?![0-9\\s])[a-zA-ZÀ-ỹ0-9][a-zA-ZÀ-ỹ0-9 ]{4,}$",
-                message = "Tên sản phẩm không hợp lệ. Không được bắt đầu bằng số hoặc chứa ký tự đặc biệt"
+                regexp = "^[a-zA-ZÀ-ỹ][a-zA-ZÀ-ỹ0-9 '\\-.,&+/()]*$",                message = "Tên sản phẩm không hợp lệ. Không được bắt đầu bằng số hoặc chứa ký tự đặc biệt"
         )
         @Nationalized
         private String productName;
 
         @Positive(message = "Giá của sản phẩm phải là số dương!")
-        @Min(value = 1000, message = "Giá sản phẩm tối thiểu là 1000")
+        @Min(value = 1, message = "Giá sản phẩm tối thiểu là 1")
         private double unitPrice;
 
         @PositiveOrZero(message = "Giá giảm phải là số dương!")

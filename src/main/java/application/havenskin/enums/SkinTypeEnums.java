@@ -2,8 +2,7 @@ package application.havenskin.enums;
 
 public enum SkinTypeEnums {
     ACTIVE ((byte) 1),
-    INACTIVE ((byte) 2),
-    DELETED ((byte) 3);
+    INACTIVE ((byte) 2);
     private final byte skin_type_status;
 
     SkinTypeEnums(byte skin_type_status) {

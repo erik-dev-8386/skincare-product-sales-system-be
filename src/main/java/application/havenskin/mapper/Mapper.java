@@ -33,4 +33,8 @@ public interface Mapper {
     Users toUsers(UserDTO userDTO);
     CoinWallets toCoinWallets(CoinWalletDTO coinWalletDTO);
     void updateCoinWallets(@MappingTarget CoinWallets coinWallets, CoinWalletDTO coinWalletDTO);
+    SkinCaresPlan toSkinCaresPlan(PlanSkinCareDTO planSkinCareDTO);
+    void updateSkincaresPlan(@MappingTarget SkinCaresPlan skinCaresPlan, PlanSkinCareDTO planSkinCareDTO);
+    MiniSkinCarePlan toMiniSkinCarePlan(MiniSkinCarePlanDTO miniSkinCarePlanDTO);
+    void updateMiniSkinCarePlan(@MappingTarget MiniSkinCarePlan miniSkinCarePlan, MiniSkinCarePlanDTO miniSkinCarePlanDTO);
 }

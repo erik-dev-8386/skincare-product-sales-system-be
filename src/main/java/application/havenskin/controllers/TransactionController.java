@@ -50,5 +50,4 @@ public class TransactionController {
         return transactionService.addListOfTransactions(transactions);
     }
 
-
 }

@@ -2,9 +2,9 @@ package application.havenskin.enums;
 
 public enum CategoryEnums {
     INACTIVE((byte) 0),
-    PENDING((byte) 1),
-    ACTIVE((byte) 2),
-    DELETED((byte) 3);
+//    PENDING((byte) 1),
+    ACTIVE((byte) 2);
+//    DELETED((byte) 3);
 
     private final byte status;
 

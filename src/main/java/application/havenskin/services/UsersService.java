@@ -34,6 +34,9 @@ public class UsersService {
     @Autowired
     private OrderDetailsRepository orderDetailsRepository;
 
+    @Autowired
+    private EmailService emailService;
+
     public UsersService(UserRepository usersRepository) {
         this.usersRepository = usersRepository;
     }
@@ -65,6 +68,10 @@ public class UsersService {
         Orders orders = ordersRepository.findByOrderIdAndUserId(orderId, x.getUserId()).orElseThrow(() -> new RuntimeException("Order not found"));
         if (x.getFirstName() == null || userDTO.getFirstName() != null) {
             if (userDTO.getFirstName() != null) {
+                String firstNameRegrex = "^[a-zA-ZÀ-ỹ(][a-zA-ZÀ-ỹ0-9 '\\-.,&+/()]*$";
+                if(!userDTO.getFirstName().matches(firstNameRegrex)) {
+                    throw new RuntimeException("Chữ cái đầu trong tên của bạn không được là ký tự đặc biệt! Bạn vui lòng thử lại:");
+                }
 //                x.setFirstName(userDTO.getFirstName());
                 orders.setCustomerFirstName(userDTO.getFirstName());
             } else {
@@ -73,7 +80,10 @@ public class UsersService {
         }
         if (x.getLastName() == null || userDTO.getLastName() != null) {
             if (userDTO.getLastName() != null) {
-                //        x.setLastName(userDTO.getLastName());
+                String lastNameRegrex = "^[a-zA-ZÀ-ỹ(][a-zA-ZÀ-ỹ0-9 '\\-.,&+/()]*$";
+                if(!userDTO.getLastName().matches(lastNameRegrex)) {
+                    throw new RuntimeException("Chữ cái đầu trong tên của bạn không được là ký tự đặc biệt! Bạn vui lòng thử lại:");
+                }
                 orders.setCustomerLastName(userDTO.getLastName());
             } else {
                 throw new RuntimeException("Last name is missing for user with email: " + email);
@@ -88,7 +98,10 @@ public class UsersService {
         }
         if (x.getPhone() == null || userDTO.getPhone() != null) {
             if (userDTO.getPhone() != null) {
-                //    x.setPhone(userDTO.getPhone());
+                String phoneRegex = "^[0-9]{10}$";
+                if(!userDTO.getPhone().matches(phoneRegex)) {
+                    throw new RuntimeException("Phone number must be 10 digits with no special character or letters");
+                }
                 orders.setCustomerPhone(userDTO.getPhone());
             } else {
                 throw new RuntimeException("Phone number is missing for user with email: " + email);
@@ -96,14 +109,14 @@ public class UsersService {
         }
         if (x.getAddress() == null || userDTO.getAddress() != null) {
             if (userDTO.getAddress() != null) {
-                //    x.setAddress(userDTO.getAddress());
+                if(userDTO.getAddress().length() <= 5){
+                    throw new RuntimeException("Address must be at least 5 characters long");
+                }
                 orders.setAddress(userDTO.getAddress());
             } else {
                 throw new RuntimeException("Address is missing for user with email: " + email);
             }
         }
-//        System.out.println("Saved user: " +x);
-//        usersRepository.save(x);
         ordersRepository.save(orders);
         return orders;
     }
@@ -130,14 +143,90 @@ public class UsersService {
 
     public Users saveUser(Users user) {
         user.setRole(user.getRole());
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        String rawPassword = "123456";
+        user.setPassword(passwordEncoder.encode(rawPassword));
+
+        sendAccountCreationEmail(user,rawPassword);
         return usersRepository.save(user);
     }
+    private void sendAccountCreationEmail(Users user, String rawPassword) {
+        String to = user.getEmail();
+        String subject = "Haven Skin - Tạo tài khoản thành công";
+        String emailContent =
+                "╔════════════════════════════════════════════════════╗\n" +
+                        "║                   HAVEN SKIN - CHÀO MỪNG BẠN                  ║\n" +
+                        "╠══════════════════════════════════════════════════════════════╣\n" +
+                        "║     TÀI KHOẢN CỦA BẠN ĐÃ ĐƯỢC TẠO THÀNH CÔNG!                ║\n" +
+                        "╚══════════════════════════════════════════════════════════════╝\n\n" +
+
+                        "Xin chào " + user.getLastName() + " " + user.getFirstName() + ",\n\n" +
+                        "Cảm ơn bạn đã đăng ký tài khoản tại Haven Skin. Dưới đây là thông tin tài khoản của bạn:\n\n" +
+
+                        "┌──────────────────────────────────────────────────────────────┐\n" +
+                        "│                  THÔNG TIN TÀI KHOẢN                         │\n" +
+                        "├──────────────────────────────────────────────────────────────┤\n" +
+                        "│  • Họ và tên: " + String.format("%-45s", user.getLastName() + " " + user.getFirstName()) + "│\n" +
+                        "│  • Email đăng nhập: " + String.format("%-40s", user.getEmail()) + "│\n" +
+                        "│  • Mật khẩu: " + String.format("%-47s", rawPassword) + "│\n" +
+                        "└──────────────────────────────────────────────────────────────┘\n\n" +
+
+                        "LƯU Ý QUAN TRỌNG:\n" +
+                        "   - Vui lòng đổi mật khẩu ngay sau khi đăng nhập lần đầu.\n" +
+                        "   - Không chia sẻ thông tin đăng nhập với bất kỳ ai\n\n" +
+
+                        "HỖ TRỢ KHÁCH HÀNG:\n" +
+                        "   • Hotline: 0966 340 303 (8:00 - 21:00 hàng ngày)\n" +
+                        "   • Email: havenskin032025@gmail.com\n" +
+
+                        "══════════════════════════════════════════════════════════════\n" +
+                        "Trân trọng,\n" +
+                        "Đội ngũ chăm sóc khách hàng Haven Skin\n" +
+                        "══════════════════════════════════════════════════════════════";
+
+        emailService.sendEmail(to, subject, emailContent);
+    }
+//    private void sendAccountCreationEmail(Users user, String rawPassword) {
+//        String to = user.getEmail();
+//        String subject = "Haven Skin - Tạo tài khoản thành công";
+//        String emailContent =
+//                "╔══════════════════════════════════════════╗\n" +
+//                        "║              HAVEN SKIN                 ║\n" +
+//                        "╠══════════════════════════════════════════╣\n" +
+//                        "║     TẠO TÀI KHOẢN THÀNH CÔNG             ║\n" +
+//                        "╚══════════════════════════════════════════╝\n\n" +
+//                        "Xin chào " + user.getLastName() + " " + user.getFirstName() + ",\n\n" +
+//                        "Tài khoản của bạn tại Haven Skin đã được tạo thành công.\n\n" +
+//
+//                        "┌──────────────────────────────────────────┐\n" +
+//                        "│          THÔNG TIN TÀI KHOẢN         " +
+//                        "    │\n" +
+//                        "├──────────────────────────────────────────┤\n" +
+//                        "│  ▪ Họ và tên: " + String.format("%-30s", user.getLastName() + " " + user.getFirstName()) +
+//                        "│\n" +
+//                        "│  ▪ Email: " + String.format("%-34s", user.getEmail()) +
+//
+//                        "│\n" +
+//                        "│  ▪ Mật khẩu: " + String.format("%-32s", rawPassword) +
+//
+//                        "│\n" +
+//                        "└──────────────────────────────────────────┘\n\n" +
+//
+//                        "Lưu ý: Vui lòng đổi mật khẩu sau khi đăng nhập.\n\n" +
+//
+//                        "Hỗ trợ khách hàng:\n" +
+//                        "• Hotline: 0966 340 303 (8:00-21:00)\n" +
+//                        "• Email: havenskin032025@gmail.com\n" +
+//
+//                        "════════════════════════════════════════════\n" +
+//                        "Trân trọng,\n" +
+//                        "Đội ngũ chăm sóc khách hàng Haven Skin\n" +
+//                        "════════════════════════════════════════════";
+//
+//        emailService.sendEmail(to, subject, emailContent);
+//    }
 
     public Users createUser(UserDTO user) {
-//        Users x = mapper.toUsers(user);
-//        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-//        x.setPassword(passwordEncoder.encode(user.getPassword()));
-//        return userRepository.save(x);
         Users x = new Users();
         x.setFirstName(user.getFirstName());
         x.setLastName(user.getLastName());

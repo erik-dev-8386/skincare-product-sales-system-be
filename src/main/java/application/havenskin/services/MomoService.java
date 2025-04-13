@@ -5,12 +5,14 @@ import application.havenskin.dataAccess.CreateMomoRequest;
 import application.havenskin.dataAccess.CreateMomoResponse;
 import application.havenskin.dataAccess.MomoIPNResponse;
 import application.havenskin.enums.OrderEnums;
+import application.havenskin.enums.ProductEnums;
 import application.havenskin.enums.TransactionsEnums;
+import application.havenskin.models.OrderDetails;
+import application.havenskin.models.Products;
 import application.havenskin.models.Users;
-import application.havenskin.repositories.MomoRepository;
+import application.havenskin.repositories.*;
 import application.havenskin.models.Orders;
-import application.havenskin.repositories.OrdersRepository;
-import application.havenskin.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +25,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -35,18 +39,19 @@ public class MomoService {
     private OrderService orderService;
     @Autowired
     private TransactionService transactionService;
-
     @Autowired
     private EmailService emailService;
-
     @Autowired
     private OrdersRepository ordersRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private OrderDetailsRepository orderDetailsRepository;
+    @Autowired
+    private ProductsRepository productsRepository;
     public void testConfig() {
         log.info("SECRET_KEY: {}", momoConfig.getSecretKey());
     }
-
     public CreateMomoResponse createQR(String orderId) {
         // Lấy thông tin đơn hàng từ orderId
         Orders order = orderService.getOrderById(orderId);
@@ -97,21 +102,7 @@ public class MomoService {
         return momoRepository.createMomoQR(request);
     }
 
-    private String signHmacSHA256(String data, String key) throws Exception {
-        Mac hmacSHA256 = Mac.getInstance("HmacSHA256");
-        SecretKeySpec secretkey = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
-        hmacSHA256.init(secretkey);
-        byte[] hash = hmacSHA256.doFinal(data.getBytes(StandardCharsets.UTF_8));
-        StringBuilder hexString = new StringBuilder();
-        for (byte b : hash) {
-            String hex = Integer.toHexString(0xff & b);
-            if (hex.length() == 1)
-                hexString.append('0');
-            hexString.append(hex);
-        }
-        return hexString.toString();
-    }
-
+    @Transactional
     public boolean handleMomoIPN(MomoIPNResponse ipnResponse) {
         log.info("Nhận IPN từ MoMo: {}", ipnResponse);
 
@@ -122,77 +113,32 @@ public class MomoService {
 
         String orderId = ipnResponse.getOrderId();
         double amount = ipnResponse.getAmount();
-        String requestId = ipnResponse.getRequestId(); // transactionCode
-        String partnerCode = momoConfig.getPartnerCode();
+        String transactionCode = ipnResponse.getRequestId();
 
-        // Xác định trạng thái thanh toán
         boolean isPaid = ipnResponse.getResultCode() == 0;
-        TransactionsEnums transactionStatus = isPaid ? TransactionsEnums.PAID : TransactionsEnums.NOT_PAID;
+        byte status = isPaid ? TransactionsEnums.PAID.getValue() : TransactionsEnums.NOT_PAID.getValue();
 
-        // Tạo Transaction
-        transactionService.createTransaction(
-                orderId,
-                amount,
-                transactionStatus.getValue(),
-                requestId // transactionCode
-        );
         List<Orders> orders = ordersRepository.findByOrderId(orderId);
         Optional<Users> users = userRepository.findById(orders.get(0).getUserId());
         String email = users.get().getEmail();
+        List<OrderDetails> orderDetails = orderDetailsRepository.findByOrderId(orderId);
 
-        // Nếu thanh toán thành công, cập nhật trạng thái đơn hàng
         if (isPaid) {
             boolean updated = orderService.updateOrderStatus(orderId, OrderEnums.PROCESSING.getOrder_status());
             sendOrderConfirmationEmail(email, orderId, amount);
-
             if (!updated) {
-                log.warn("Cập nhật trạng thái đơn hàng thất bại cho orderId: {}", orderId);
+                log.warn("Cập nhật trạng thái đơn hàng thất bại: {}", orderId);
             }
+        } else {
+            boolean updated = orderService.updateOrderStatus(orderId, OrderEnums.CANCELLED.getOrder_status());
+            log.warn("Cập nhật trạng thái đơn hàng thất bại: {}", orderId);
         }
 
         return true;
     }
-//    private void sendOrderConfirmationEmail(String to, String orderId, double totalAmount) {
-//        String subject = "Haven Skin - Xác nhận bạn đã thanh toán thành công cho đơn hàng #" + orderId;
-//
-//        String emailContent =
-//                "Cảm ơn bạn đã đặt hàng tại Haven Skin!\n\n" +
-//                        "Đơn hàng của bạn đã được thanh toán thành công.\n\n" +
-//                        "Thông tin đơn hàng:\n" +
-//                        "- Mã đơn hàng: #" + orderId + "\n" +
-//                        "- Tổng tiền: " + String.format("%,.0f VND", totalAmount) + "\n\n" +
-//                        "Nếu có bất kỳ thắc mắc nào, vui lòng liên hệ:\n" +
-//                        "- Hotline: 0966340303\n" +
-//                        "- Email: havenskin032025@gmail.com\n\n" +
-//                        "Trân trọng,\n" +
-//                        "Đội ngũ Haven Skin";
-//
-//        emailService.sendEmail(to, subject, emailContent);
-//    }
-private void sendOrderConfirmationEmail(String to, String orderId, double totalAmount) {
-    // Tiêu đề email
-    String subject = "Haven Skin - Xác nhận thanh toán thành công đơn hàng #" + orderId;
 
-    // Nội dung email được format đẹp
-//    String emailContent =
-//            "=============================================\n" +
-//                    "               HAVEN SKIN                    \n" +
-//                    "=============================================\n\n" +
-//                    "          XÁC NHẬN THANH TOÁN THÀNH CÔNG          \n\n" +
-//                    "Cảm ơn bạn đã đặt hàng tại Haven Skin!\n" +
-//                    "Đơn hàng của bạn đã được thanh toán thành công.\n\n" +
-//                    "---------------------------------------------\n" +
-//                    "THÔNG TIN ĐƠN HÀNG:\n" +
-//                    "---------------------------------------------\n" +
-//                    "• Mã đơn hàng: #" + orderId + "\n" +
-//                    "• Tổng tiền:   " + String.format("%,.0f VND", totalAmount) + "\n\n" +
-//                    "---------------------------------------------\n" +
-//                    "Nếu có bất kỳ thắc mắc nào, vui lòng liên hệ:\n" +
-//                    "• Hotline: 0966340303\n" +
-//                    "• Email: havenskin032025@gmail.com\n\n" +
-//                    "Trân trọng,\n" +
-//                    "Đội ngũ Haven Skin\n" +
-//                    "=============================================";
+    private void sendOrderConfirmationEmail(String to, String orderId, double totalAmount) {
+    String subject = "Haven Skin - Xác nhận thanh toán thành công đơn hàng #" + orderId;
     String emailContent =
             "╔══════════════════════════════════════════╗\n" +
                     "║              HAVEN SKIN                                                                       ║\n" +
@@ -222,5 +168,19 @@ private void sendOrderConfirmationEmail(String to, String orderId, double totalA
     emailService.sendEmail(to, subject, emailContent);
 }
 
+    private String signHmacSHA256(String data, String key) throws Exception {
+        Mac hmacSHA256 = Mac.getInstance("HmacSHA256");
+        SecretKeySpec secretkey = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+        hmacSHA256.init(secretkey);
+        byte[] hash = hmacSHA256.doFinal(data.getBytes(StandardCharsets.UTF_8));
+        StringBuilder hexString = new StringBuilder();
+        for (byte b : hash) {
+            String hex = Integer.toHexString(0xff & b);
+            if (hex.length() == 1)
+                hexString.append('0');
+            hexString.append(hex);
+        }
+        return hexString.toString();
+    }
 
 }
