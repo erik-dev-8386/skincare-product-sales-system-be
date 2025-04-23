@@ -99,12 +99,12 @@ public class BrandService {
     public List<Brands> getAllBrandByName(){
 
         //return  brandsRepository.findAllByBrandName();
-        return  brandsRepository.findAllByBrandName();
+        return  brandsRepository.findByStatusOrderByBrandName((byte) 1);
     }
 
     public List<Brands> searchBrand(String brandName)
     {
-        return brandsRepository.findByBrandsNameContaining(brandName);
+        return brandsRepository.findByBrandNameContaining(brandName);
     }
 
 }

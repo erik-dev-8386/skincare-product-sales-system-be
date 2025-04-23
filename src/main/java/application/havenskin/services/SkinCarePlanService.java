@@ -31,7 +31,7 @@ public class SkinCarePlanService {
 
     // hàm này gọi bên giao diện người dùng
     public List<SkinCaresPlan> getAllSkinCarePlansByStatus() {
-        return planSkinCareRepository.findAllSkinCarePlanByStatus();
+        return planSkinCareRepository.findByStatus((byte) 1);
     }
 
     public SkinCaresPlan createPlanSkinCare(String skinCareName, PlanSkinCareDTO x) {
@@ -119,11 +119,11 @@ public class SkinCarePlanService {
     }
 
     public List<SkinCaresPlan> searchSkinCarePlan(String description) {
-        return planSkinCareRepository.findAllSkinCarePlanByDescription(description);
+        return planSkinCareRepository.findByDescriptionContaining(description);
     }
 
     public List<SkinCaresPlan> getAllSkinCarePlanDescriptions() {
-        return planSkinCareRepository.findAllSkinCarePlanByStatus();
+        return planSkinCareRepository.findByStatus((byte) 1);
     }
 
 }

@@ -13,14 +13,14 @@ import java.util.List;
 public interface DiscountsRepository extends JpaRepository<Discounts, String> {
     Discounts findByDiscountId(String discountId);
     Discounts findByDiscountName(String discountName);
-    @Query("SELECT d FROM Discounts d where d.status = 2")
-    List<Discounts> findAllDiscountByName();
-    @Query("SELECT d FROM Discounts d WHERE d.status = 2 ORDER BY d.createdTime ASC")
-    List<Discounts> findActiveDiscountsSortedByName();
+//    @Query("SELECT d FROM Discounts d where d.status = 2")
+//    List<Discounts> findAllDiscountByName();
+    List<Discounts> findByStatusOrderByCreatedTimeAsc(byte status);
 
+//    @Query("SELECT d FROM Discounts d WHERE d.discountName LIKE %:discountsName%")
+//    List<Discounts> findByDiscountsNameContaining(@Param("discountsName") String discountsName);
 
-    @Query("SELECT d FROM Discounts d WHERE d.discountName LIKE %:discountsName%")
-    List<Discounts> findByDiscountsNameContaining(@Param("discountsName") String discountsName);
+    List<Discounts> findByDiscountNameContaining(String discountName);
 
     boolean existsByDiscountName(String discountName);
 }

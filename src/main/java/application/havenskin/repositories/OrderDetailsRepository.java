@@ -15,8 +15,6 @@ public interface OrderDetailsRepository extends JpaRepository<OrderDetails, Stri
     //Optional<OrderDetails> findByOrderId(String id);
     List<OrderDetails> findByOrderId(String id);
 
-
-    Optional<OrderDetails> findByOrderIdAndProductId(@NotNull String orderId, @NotNull String productId);
 //    Optional<OrderDetails> findByOrderIdAndCustomerId(String orderId, String customerId);
 
 //    @Query("SELECT p.productName AS productName, SUM(od.quantity) AS totalQuantitySold " +

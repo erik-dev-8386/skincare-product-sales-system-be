@@ -31,7 +31,7 @@ public class QuestionService {
             qDto.setQuestionContent(q.getQuestionContent());
             qDto.setMaxMark(q.getMaxMark());
             qDto.setStatus(q.getStatus());
-            List<Answers> ansList = answerRepository.findByQuestionId(q.getQuestionId());
+            List<Answers> ansList = answerRepository.findByQuestionIdAndStatus(q.getQuestionId(), QuestionEnum.ACTIVE.getStatus());
             List<AnswersDto> ansDtoList = ansList.stream().map(a -> {
                 AnswersDto ad = new AnswersDto();
                 ad.setAnswerId(a.getAnswerId());
@@ -56,7 +56,7 @@ public class QuestionService {
         dto.setMaxMark(questions.getMaxMark());
 
         // Lấy answers
-        List<Answers> answers = answerRepository.findByQuestionId(questionId);
+        List<Answers> answers = answerRepository.findByQuestionIdAndStatus(questions.getQuestionId(), QuestionEnum.ACTIVE.getStatus());
         List<AnswersDto> answerDTOs = answers.stream().map(a -> {
             AnswersDto aDto = new AnswersDto();
             aDto.setAnswerId(a.getAnswerId());
@@ -82,7 +82,7 @@ public class QuestionService {
             // List<Answers> ans = answersRepository.findByQuestionId(q.getQuestionId());
             // dto.setAnswers(... map sang AnswerDTO ...);
 
-            List<Answers> answers = answerRepository.findByQuestionId(q.getQuestionId());
+            List<Answers> answers = answerRepository.findByQuestionIdAndStatus(q.getQuestionId(), QuestionEnum.ACTIVE.getStatus());
             List<AnswersDto> answerDTOs = answers.stream().map(a -> {
                 AnswersDto aDto = new AnswersDto();
                 aDto.setAnswerId(a.getAnswerId());

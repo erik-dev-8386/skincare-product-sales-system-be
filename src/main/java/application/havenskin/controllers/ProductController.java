@@ -117,7 +117,7 @@ public class ProductController {
 
     @GetMapping("/search/{productName}")
     public List<Products> getProductByProductName(@PathVariable String productName) {
-        return productService.searchProduct(productName);
+        return productService.searchProducts(productName);
     }
 
     @GetMapping("/sort/{startPrice}/{endPrice}")

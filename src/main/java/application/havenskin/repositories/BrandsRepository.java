@@ -13,14 +13,12 @@ import java.util.List;
 public interface BrandsRepository extends JpaRepository<Brands, String> {
     Brands findByBrandName(String name);
     List<Brands> findByCountry(String country);
-    List<Brands> findByStatus(byte status);
-    @Query("select b from Brands b where b.status = 1")
-    List<Brands> findAllByBrandName();
-    @Query("SELECT b FROM Brands b WHERE b.status = 1 ORDER BY b.brandName ASC")
-    List<Brands> findActiveBrandsSortedByName();
+//    @Query("select b from Brands b where b.status = 1")
+//    List<Brands> findAllByBrandName();
+    List<Brands> findByStatusOrderByBrandName(byte status);
 
-    @Query("SELECT b FROM Brands b WHERE b.brandName LIKE %:brandName%")
-    List<Brands> findByBrandsNameContaining(@Param("brandName") String brandName);
+
+    List<Brands> findByBrandNameContaining(@Param("brandName") String brandName);
 
     boolean existsByBrandName(String brandName);
 }

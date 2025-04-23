@@ -11,6 +11,9 @@ import java.util.Optional;
 @Repository
 public interface BlogHashtagRepository extends JpaRepository<BlogHashtag, String> {
 //    BlogHashtag findByBlogHashtagName(String blogHashtagName);
-@Query("SELECT h FROM BlogHashtag h WHERE h.blogHashtagName = :hashtagName")
-Optional<BlogHashtag> findHashtagByName(@Param("hashtagName") String hashtagName);
+//@Query("SELECT h FROM BlogHashtag h WHERE h.blogHashtagName = :hashtagName")
+//Optional<BlogHashtag> findHashtagByName(@Param("hashtagName") String hashtagName);
+
+    Optional<BlogHashtag> findByBlogHashtagName(String blogHashtagName);
+
 }
