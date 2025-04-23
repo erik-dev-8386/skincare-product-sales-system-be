@@ -201,7 +201,7 @@ public class OrderService {
 
     public List<Orders> getAllOrders() {
 //        return ordersRepository.findAll();
-        return ordersRepository.findByAll();
+        return ordersRepository.findByStatusNot((byte) OrderEnums.UNORDERED.getOrder_status());
     }
 
     public Orders getOrderById(String id) {
@@ -549,7 +549,7 @@ public class OrderService {
         String userId = user.getUserId();
 
         // Lấy danh sách đơn hàng đã sắp xếp
-        List<Orders> sortedOrders = ordersRepository.sortOrdersByUserIdAndOrderTimeDesc(userId);
+        List<Orders> sortedOrders = ordersRepository.findByUserIdAndStatusNotOrderByOrderTimeDesc(userId, OrderEnums.UNORDERED.getOrder_status());
 //        List<Orders> sortedOrders = ordersRepository.findByUserIdAndStatusNotOrderByOrderTimeDesc(userId, OrderEnums.UNORDERED.getOrder_status());
 
         // Chuyển đổi sang DTO với thông tin sản phẩm
@@ -595,7 +595,7 @@ public class OrderService {
         String userId = user.getUserId();
 
         // Lấy danh sách đơn hàng đã sắp xếp
-        List<Orders> sortedOrders = ordersRepository.sortOrdersByUserIdAndOrderTimeAsc(userId);
+        List<Orders> sortedOrders = ordersRepository.findByUserIdAndStatusNotOrderByOrderTimeDesc(userId, OrderEnums.UNORDERED.getOrder_status());
 
         // Chuyển đổi sang DTO với thông tin sản phẩm
         return sortedOrders.stream().map(order -> {

@@ -9,7 +9,9 @@ import application.havenskin.models.Products;
 import application.havenskin.repositories.DiscountsRepository;
 import application.havenskin.repositories.ProductImagesRepository;
 import application.havenskin.repositories.ProductsRepository;
+import application.havenskin.specification.ProductSpec;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -152,8 +154,13 @@ public class ProductService {
         return productsRepository.findTop10ByOrderBySoldQuantityDesc();
     }
 
-    public List<Products> searchProduct(String productName) {
-        return productsRepository.findByProductNameContaining(productName);
+//    public List<Products> searchProduct(String productName) {
+//        return productsRepository.findByProductNameContaining(productName);
+//    }
+
+    public List<Products> searchProducts(String productName) {
+        Specification<Products> productsSpecification = ProductSpec.searchProductName(productName);
+        return productsRepository.findAll(productsSpecification);
     }
 
     //    public List<Products> getProductsByCategoryName(String categoryName) {
@@ -247,7 +254,16 @@ public class ProductService {
 //    return productsRepository.findAll(pageable);
 //}
 
+//    public List<Products> findByAllProducts() {
+//        return productsRepository.findByStatusProduct();
+//    }
+
+//    public List<Products> findByAllProducts() {
+//        return productsRepository.findByStatusProduct();
+//    }
+
     public List<Products> findByAllProducts() {
-        return productsRepository.findByStatusProduct();
+        Specification<Products> specification = ProductSpec.findByStatusProduct();
+        return productsRepository.findAll(specification);
     }
 }

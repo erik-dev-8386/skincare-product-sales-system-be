@@ -14,8 +14,11 @@ public interface BlogRepository extends JpaRepository<Blogs, String> {
     List<Blogs> findByHashtagName(@Param("hashtagName") String hashtagName);
 
 
-    @Query("SELECT b FROM Blogs b WHERE LOWER(b.blogTitle) = LOWER(:title)")
-    Blogs  findByTitle(@Param("title") String title);
+//    @Query("SELECT b FROM Blogs b WHERE LOWER(b.blogTitle) = LOWER(:title)")
+//    Blogs  findByTitle(@Param("title") String title);
+
+    Blogs findByBlogTitleIgnoreCase(String title);
+
 
 
 

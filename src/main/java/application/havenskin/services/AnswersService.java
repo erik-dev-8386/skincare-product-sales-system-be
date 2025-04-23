@@ -2,6 +2,7 @@ package application.havenskin.services;
 
 import application.havenskin.dataAccess.AnswersDto;
 import application.havenskin.enums.AnswerEnum;
+import application.havenskin.enums.QuestionEnum;
 import application.havenskin.models.Answers;
 import application.havenskin.models.Questions;
 import application.havenskin.repositories.AnswerRepository;
@@ -48,7 +49,7 @@ public class AnswersService {
 
     // Tìm Answers gần đúng theo nội dung
     public List<Answers> searchAnswersByContent(String keyword) {
-        return answerRepository.searchByContent(keyword);
+        return answerRepository.findByAnswerContentContainingIgnoreCase(keyword);
     }
 
     public Answers addAnswer(Answers answer) {
@@ -85,7 +86,7 @@ public class AnswersService {
     }
 
     public List<Answers> searchAnswersByQuestionId(String questionId) {
-        return answerRepository.findByQuestionId(questionId);
+        return answerRepository.findByQuestionIdAndStatus(questionId, QuestionEnum.ACTIVE.getStatus());
     }
 
     public AnswersDto addAnswerByQuestionContent(String questionContent, AnswersDto answerDto) {

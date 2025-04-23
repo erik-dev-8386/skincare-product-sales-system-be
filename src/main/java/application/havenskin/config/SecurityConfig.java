@@ -77,8 +77,10 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173")); // Đảm bảo trùng với FE
+        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
+        // cho phép trang web nào truy cập vào BE
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        // METHOD nào cho phép go các methods
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
         configuration.addExposedHeader("Authorization");
@@ -88,7 +90,9 @@ public class SecurityConfig {
         // Thêm header này để tránh lỗi COOP
         configuration.addExposedHeader("Cross-Origin-Resource-Policy");
 
+        // Khai báo cái này theo endpoint
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        // apply h ết
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }

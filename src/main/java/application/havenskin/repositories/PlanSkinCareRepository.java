@@ -10,14 +10,15 @@ import java.util.List;
 
 @Repository
 public interface PlanSkinCareRepository extends JpaRepository<SkinCaresPlan, String> {
-    @Query("SELECT s FROM SkinCaresPlan s where s.description = :description and s.status = 1")
-    SkinCaresPlan findByDescription(String description);
 
-    @Query("SELECT m FROM SkinCaresPlan m where m.description like %:description%")
-    List<SkinCaresPlan> findAllSkinCarePlanByDescription(String description);
+    SkinCaresPlan findByDescriptionAndStatus(String description, byte status);
 
-    @Query("SELECT m FROM SkinCaresPlan m where m.status = 1")
-    List<SkinCaresPlan> findAllSkinCarePlanByStatus();
+
+    List<SkinCaresPlan> findByDescriptionContaining(String description);
+
+
+
+    List<SkinCaresPlan> findByStatus(byte status);
 
 //    SkinCaresPlan findByDescriptionAndSkinType_Id(String description, String status);
 

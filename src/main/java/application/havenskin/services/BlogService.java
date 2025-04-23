@@ -62,7 +62,7 @@ public class BlogService {
     }
 
     public Blogs getBlogByTitle(String title) {
-        return blogRepository.findByTitle(title);
+        return blogRepository.findByBlogTitleIgnoreCase(title);
     }
 
 //    public Blogs createBlog(Blogs blog) {
@@ -84,7 +84,7 @@ public class BlogService {
         List<BlogHashtag> hashtags = new ArrayList<>();
         if (blog.getHashtags() != null && !blog.getHashtags().isEmpty()) {
             for (BlogHashtag ht : blog.getHashtags()) {
-                BlogHashtag existingHashtag = blogHashtagRepository.findHashtagByName(ht.getBlogHashtagName())
+                BlogHashtag existingHashtag = blogHashtagRepository.findByBlogHashtagName(ht.getBlogHashtagName())
                         .orElseThrow(() -> new RuntimeException("Hashtag not found: " + ht.getBlogHashtagName()));
                 hashtags.add(existingHashtag);
             }
@@ -234,7 +234,7 @@ public class BlogService {
 //}
 
 public Blogs updateBlogByTitle(String blogTitle, Blogs blog, String email, List<MultipartFile> images) throws IOException {
-    Blogs existingBlog = blogRepository.findByTitle(blogTitle);
+    Blogs existingBlog = blogRepository.findByBlogTitleIgnoreCase(blogTitle);
     if (existingBlog == null) {
         throw new RuntimeException("Blog not found with title: " + blogTitle);
     }
@@ -269,7 +269,7 @@ public Blogs updateBlogByTitle(String blogTitle, Blogs blog, String email, List<
         List<BlogHashtag> savedHashtags = new ArrayList<>();
         for (BlogHashtag hashtag : blog.getHashtags()) {
             BlogHashtag existingHashtag = blogHashtagRepository
-                    .findHashtagByName(hashtag.getBlogHashtagName())
+                    .findByBlogHashtagName(hashtag.getBlogHashtagName())
                     .orElseGet(() -> blogHashtagRepository.save(hashtag));
             savedHashtags.add(existingHashtag);
         }
@@ -316,7 +316,7 @@ public Blogs updateBlogByTitle(String blogTitle, Blogs blog, String email, List<
 //    }
 
     public String deleteBlogByTitle(String blogTitle) {
-        Blogs existingBlog = blogRepository.findByTitle(blogTitle);
+        Blogs existingBlog = blogRepository.findByBlogTitleIgnoreCase(blogTitle);
         if (existingBlog == null) {
             throw new RuntimeException("Blog not found with title: " + blogTitle);
         }

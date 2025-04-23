@@ -60,7 +60,7 @@ public class CategoryService {
         return categoriesRepository.findByCategoryName(name).getCategoryId();
     }
     public List<Categories> getAllCategoriesNames() {
-        return categoriesRepository.findAllByCategoryName();
+        return categoriesRepository.findByStatusOrderByCategoryNameAsc((byte) 2);
     }
 
     public List<Categories> searchByName(String name) {

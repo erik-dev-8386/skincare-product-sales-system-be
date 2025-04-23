@@ -63,10 +63,10 @@ public class DiscountService {
     }
 
     public List<Discounts> getDiscountsByName() {
-        return discountsRepository.findAllDiscountByName();
+        return discountsRepository.findByStatusOrderByCreatedTimeAsc((byte) 2);
     }
 
     public List<Discounts> searchDiscountName(String categoryName) {
-        return discountsRepository.findByDiscountsNameContaining(categoryName);
+        return discountsRepository.findByDiscountNameContaining(categoryName);
     }
 }

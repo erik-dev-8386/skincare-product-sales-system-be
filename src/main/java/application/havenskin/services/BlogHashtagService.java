@@ -22,7 +22,7 @@ public class BlogHashtagService {
     }
 
     public Optional<BlogHashtag> getByHashtagName(String hashtagName) {
-        return blogHashtagRepository.findHashtagByName(hashtagName);
+        return blogHashtagRepository.findByBlogHashtagName(hashtagName);
     }
 
     public BlogHashtag addBlogHashtag(BlogHashtag blogHashtag) {
@@ -30,7 +30,7 @@ public class BlogHashtagService {
     }
 
     public BlogHashtag updateBlogHashtagByHashtagName(String blogHashtagName, BlogHashtag blogHashtag) {
-        Optional<BlogHashtag> optionalBlogHashtag = blogHashtagRepository.findHashtagByName(blogHashtagName);
+        Optional<BlogHashtag> optionalBlogHashtag = blogHashtagRepository.findByBlogHashtagName(blogHashtagName);
         BlogHashtag existingBlogHashtag = optionalBlogHashtag.orElseThrow(() -> new RuntimeException("No hashtag found with name: " + blogHashtagName));
 
         if (blogHashtag.getBlogHashtagName() != null) {
@@ -46,7 +46,7 @@ public class BlogHashtagService {
     }
 
     public String deleteBlogHashtagByHashtagName(String blogHashtagName) {
-        Optional<BlogHashtag> optionalBlogHashtag = blogHashtagRepository.findHashtagByName(blogHashtagName);
+        Optional<BlogHashtag> optionalBlogHashtag = blogHashtagRepository.findByBlogHashtagName(blogHashtagName);
         BlogHashtag existingBlogHashtag = optionalBlogHashtag.orElseThrow(() -> new RuntimeException("No hashtag found with name: " + blogHashtagName));
         existingBlogHashtag.setStatus((byte) 0);
         blogHashtagRepository.save(existingBlogHashtag);

@@ -3,6 +3,7 @@ package application.havenskin.repositories;
 import application.havenskin.models.Brands;
 import application.havenskin.models.Products;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.jetbrains.annotations.NotNull;
@@ -11,12 +12,8 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 
-public interface ProductsRepository extends JpaRepository<Products, String> {
-    List<Products> findByQuantity(Integer quantiy);
+public interface ProductsRepository extends JpaRepository<Products, String>, JpaSpecificationExecutor<Products> {
 
-    List<Products> findByCategoryId(String id);
-
-    List<Products> findByBrandId(String id);
 
     Products findByProductName(String productName);
 
@@ -37,10 +34,7 @@ public interface ProductsRepository extends JpaRepository<Products, String> {
     //lấy danh sách sản phẩm theo categoryName
     List<Products> findProductsByCategories_CategoryName(String categoryName);
 
-    List<Products> findByStatus(byte status);
 
-    @Query("SELECT p FROM Products p WHERE p.status = 1 ORDER BY p.productName ASC")
-    List<Brands> findActiveBrandsSortedByName();
 
     // Lấy id theo tên của sản phẩm
     @Query("SELECT p.productId FROM Products p WHERE p.productName = :name")
@@ -54,13 +48,10 @@ public interface ProductsRepository extends JpaRepository<Products, String> {
     List<Products> findByProductNameContaining(@Param("productName") String productName);
 
 
-    @Query("SELECT p FROM Products p WHERE p.discountPrice BETWEEN :startPrice AND :endPrice")
-    List<Products> findByDiscountPriceBetween(@Param("startPrice") Double startPrice, @Param("endPrice") Double endPrice);
+    List<Products> findByDiscountPriceBetween(Double startPrice,Double endPrice);
 
     Page<Products> findAll(Pageable pageable);
 
     boolean existsByProductName(String productName);
 
-    @Query("SELECT p FROM Products p where p.status= 1")
-    List<Products> findByStatusProduct();
 }

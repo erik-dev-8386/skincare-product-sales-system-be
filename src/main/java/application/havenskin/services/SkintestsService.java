@@ -3,6 +3,7 @@ package application.havenskin.services;
 import application.havenskin.dataAccess.AnswersDto;
 import application.havenskin.dataAccess.QuestionsResponseDto;
 import application.havenskin.dataAccess.SkinTestsDto;
+import application.havenskin.enums.QuestionEnum;
 import application.havenskin.mapper.Mapper;
 import application.havenskin.models.Answers;
 import application.havenskin.models.Questions;
@@ -82,7 +83,7 @@ public class SkintestsService {
         SkinTests st = skinTestRepository.findById(skinTestId)
                 .orElseThrow(() -> new RuntimeException("Skin Test not found"));
 
-        List<Questions> questions = questionsRepository.findBySkinTestId(skinTestId);
+        List<Questions> questions = questionsRepository.findBySkinTestIdAndStatus(skinTestId, (byte) 1);
         List<Questions> randomQuestion;
         if(questions.size() <= 10) {
             randomQuestion = getRandomQuestions(questions, questions.size());
@@ -97,7 +98,7 @@ public class SkintestsService {
             qDto.setMaxMark(q.getMaxMark());
 
             // Lấy answers theo questionId
-            List<Answers> ansList = answerRepository.findByQuestionId(q.getQuestionId());
+            List<Answers> ansList = answerRepository.findByQuestionIdAndStatus(q.getQuestionId(), QuestionEnum.ACTIVE.getStatus());
 
             List<AnswersDto> answerDTOs = ansList.stream().map(a -> {
                 AnswersDto aDto = new AnswersDto();

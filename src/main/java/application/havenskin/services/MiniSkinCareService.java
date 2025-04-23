@@ -32,15 +32,14 @@ public class MiniSkinCareService {
 
     // hàm này gọi bên users thường
     public List<MiniSkinCarePlan> getAllMiniSkinCarePlansByStatus() {
-        return miniSkinCareRepository.findAllMiniSkinCarePlanByStatus();
+        return miniSkinCareRepository.findByStatus((byte) 1);
     }
     public MiniSkinCarePlan addMiniSkinCarePlan(String description,MiniSkinCarePlanDTO miniSkinCarePlanDTO ) {
-        SkinCaresPlan skinCaresPlan = planSkinCareRepository.findByDescription(description);
+        SkinCaresPlan skinCaresPlan = planSkinCareRepository.findByDescriptionAndStatus(description, (byte) 1);
         if (skinCaresPlan == null) {
             throw new RuntimeException("Không có lộ trình chăm sóc da này!");
         }
-        List<MiniSkinCarePlan> existingSteps = miniSkinCareRepository
-                .findByStepNumberAndSkinCarePlanIdAndStatus(
+        List<MiniSkinCarePlan> existingSteps = miniSkinCareRepository.findByStepNumberAndSkinCarePlanIdAndStatus(
                         miniSkinCarePlanDTO.getStepNumber(),
                         skinCaresPlan.getSkinCarePlanId(),
                         MiniSkinCarePlanEnum.ACTIVE.getMini_skin_care_plan_status()
@@ -66,7 +65,7 @@ public class MiniSkinCareService {
 //    }
 
     public MiniSkinCarePlan updateMiniSkinCarePlan(String actions, String description,MiniSkinCarePlanDTO miniSkinCarePlanDTO) {
-        SkinCaresPlan skinCaresPlan = planSkinCareRepository.findByDescription(description);
+        SkinCaresPlan skinCaresPlan = planSkinCareRepository.findByDescriptionAndStatus(description, (byte) 1);
         MiniSkinCarePlan x = miniSkinCareRepository.findByActionAndSkinCarePlanId(actions, skinCaresPlan.getSkinCarePlanId());
         if (x == null) {
             throw new RuntimeException("Không có lộ trình chăm sóc da này!");
@@ -85,7 +84,7 @@ public class MiniSkinCareService {
     }
 
     public MiniSkinCarePlan deleteMiniSkinCarePlan(String actions, String description) {
-        SkinCaresPlan skinCaresPlan = planSkinCareRepository.findByDescription(description);
+        SkinCaresPlan skinCaresPlan = planSkinCareRepository.findByDescriptionAndStatus(description, (byte) 1);
         MiniSkinCarePlan x = miniSkinCareRepository.findByActionAndSkinCarePlanId(actions, skinCaresPlan.getSkinCarePlanId());
         if (x == null) {
             throw new RuntimeException("Không có lộ trình chăm sóc da này!");
@@ -96,7 +95,7 @@ public class MiniSkinCareService {
     }
 
     public List<MiniSkinCarePlan> getMiniPlansByDescription(String description) {
-        SkinCaresPlan skinCaresPlan = planSkinCareRepository.findByDescription(description);
+        SkinCaresPlan skinCaresPlan = planSkinCareRepository.findByDescriptionAndStatus(description, (byte) 1);
         if (skinCaresPlan == null) {
             throw new RuntimeException("Không tìm thấy lộ trình da với description: " + description);
         }
@@ -105,7 +104,7 @@ public class MiniSkinCareService {
                 .collect(Collectors.toList());
     }
     public List<MiniSkinCarePlan> searchMiniSkinCarePlan(String actions) {
-        return miniSkinCareRepository.findAllMiniSkinCarePlanByAction(actions);
+        return miniSkinCareRepository.findByActionContaining(actions);
     }
 
 

@@ -13,14 +13,17 @@ import java.util.List;
 public interface CategoriesRepository extends JpaRepository<Categories, String> {
     Categories getById(String id);
     Categories findByCategoryName(String name);
-    List<Categories> findByStatus(byte status);
-    @Query("SELECT c FROM Categories c where c.status = 2")
-    List<Categories> findAllByCategoryName();
-    @Query("SELECT c FROM Categories c WHERE c.status = 2 ORDER BY c.categoryName ASC")
-    List<Categories> findActiveCategorySortedByName();
+//    @Query("SELECT c FROM Categories c where c.status = 2")
+//    List<Categories> findAllByCategoryName();
 
-    @Query("SELECT c FROM Categories c WHERE c.categoryName LIKE %:categoryName%")
-    List<Categories> findByCategoryNameContaining(@Param("categoryName") String categoryName);
+    List<Categories> findByStatusOrderByCategoryNameAsc(byte status);
+
+
+//    @Query("SELECT c FROM Categories c WHERE c.categoryName LIKE %:categoryName%")
+//    List<Categories> findByCategoryNameContaining(@Param("categoryName") String categoryName);
+
+    List<Categories> findByCategoryNameContaining(String categoryName);
+
 
     boolean existsByCategoryName(String categoryName);
 }
